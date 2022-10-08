@@ -47,11 +47,13 @@ public class AdicionarContaActivity extends AppCompatActivity {
                         conta.setCodigo(codigo);
                         conta.setDescricao(descricao);
                         conta.setDataValidade(data);
+                        conta.setStatus(0);
                         conta.setValor(valor);
                         conta.setDataPagamento("null");
 
-                        contaDAO.adicionarConta(conta);
+                        contaDAO.salvar(conta);
                         Toast.makeText(this, "Conta adicionada com sucesso", Toast.LENGTH_SHORT).show();
+                        finish();
                     }else {
                         Toast.makeText(this, "Você não colocou uma descrição para sua conta", Toast.LENGTH_SHORT).show();
                     }

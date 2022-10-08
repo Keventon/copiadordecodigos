@@ -21,9 +21,15 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        String QUERY_COLUNA = "CREATE TABLE tb_conta(id INTEGER PRIMARY KEY AUTOINCREMENT, codigo VARCHAR(55), valor DOUBLE(10), data_validade VARCHAR(15), data_pagamento VARCHAR(15), status INTEGER(5), descricao VARCHAR(45))";
+        String QUERY_COLUNA = "CREATE TABLE IF NOT EXISTS tb_conta(id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                " codigo VARCHAR(55), valor DOUBLE(10), data_validade VARCHAR(15)," +
+                " data_pagamento VARCHAR(15), status INTEGER(5), descricao VARCHAR(45))";
 
-        db.execSQL(QUERY_COLUNA);
+        try {
+            db.execSQL(QUERY_COLUNA);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 

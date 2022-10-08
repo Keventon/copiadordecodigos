@@ -1,5 +1,8 @@
 package br.com.appco.copiadordecodigos.fragment;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -7,28 +10,41 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import br.com.appco.copiadordecodigos.R;
 import br.com.appco.copiadordecodigos.activity.AdicionarContaActivity;
+import br.com.appco.copiadordecodigos.activity.EditarContaActivity;
+import br.com.appco.copiadordecodigos.adapter.ContaPendenteAdapter;
 import br.com.appco.copiadordecodigos.database.ContaDAO;
 import br.com.appco.copiadordecodigos.databinding.FragmentContasPendentesBinding;
+import br.com.appco.copiadordecodigos.listener.RecyclerItemClickListener;
 import br.com.appco.copiadordecodigos.model.Conta;
 
 public class ContasPendentesFragment extends Fragment {
 
     private List<Conta> contas = new ArrayList<>();
     private List<Conta> contasFiltradas = new ArrayList<>();
+    private ContaPendenteAdapter contaPendenteAdapter;
     private ContaDAO dao;
+    private Context context;
+    private View viewLayout;
 
     FragmentContasPendentesBinding binding;
 
@@ -37,12 +53,6 @@ public class ContasPendentesFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         binding = FragmentContasPendentesBinding.inflate(inflater, container, false);
-
-        dao = new ContaDAO(getContext());
-        contas = dao.listarContas();
-        contasFiltradas.addAll(contas);
-        ArrayAdapter<Conta> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, contasFiltradas);
-        binding.listContas.setAdapter(adapter);
 
         binding.searchViewContasPendentes.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -57,7 +67,85 @@ public class ContasPendentesFragment extends Fragment {
             }
         });
 
+        binding.recycleContas.addOnItemTouchListener(
+                new RecyclerItemClickListener(
+                        getContext(),
+                        binding.recycleContas,
+                        new RecyclerItemClickListener.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                Conta conta = contas.get(position);
+                                detalhesConta(conta);
+                            }
+
+                            @Override
+                            public void onLongItemClick(View view, int position) {
+                                Conta conta = contas.get(position);
+                                menuOpcoes(conta);
+
+                            }
+
+                            @Override
+                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                            }
+                        }
+                )
+        );
+
         return binding.getRoot();
+    }
+
+    private void menuOpcoes(Conta conta) {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
+                getContext(), R.style.BottomSheetTheme
+        );
+
+        View bottomSheetView = LayoutInflater.from(getContext())
+                .inflate(
+                        R.layout.menu_opcoes_layout,
+                        (LinearLayout) binding.getRoot().findViewById(R.id.bottomSheetContainer)
+                );
+
+        //Iniciando layouts
+        Button buttonEditar = bottomSheetView.findViewById(R.id.buttonEditar);
+        Button buttonExcluir = bottomSheetView.findViewById(R.id.buttonExcluir);
+
+        buttonEditar.setOnClickListener(view ->  {
+            bottomSheetDialog.dismiss();
+            Intent intent = new Intent(getContext(), EditarContaActivity.class);
+            intent.putExtra("contaSelecionada", conta);
+            startActivity(intent);
+        });
+
+        buttonExcluir.setOnClickListener(view ->  {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Confirmar exclusão");
+            builder.setMessage("Deseja realmente apagar a conta: " + conta.getDescricao() + "?");
+            builder.setCancelable(false);
+            builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    ContaDAO contaDAO = new ContaDAO(getContext());
+
+                    if (contaDAO.deletar(conta)) {
+                        bottomSheetDialog.dismiss();
+                        carregarContas();
+                        Toast.makeText(context, "Conta excluída com sucesso", Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(context, "Erro ao excluir conta", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+            builder.setNegativeButton("Cancelar", null);
+
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        });
+
+        bottomSheetDialog.setContentView(bottomSheetView);
+        bottomSheetDialog.show();
+
     }
 
     @Override
@@ -69,24 +157,102 @@ public class ContasPendentesFragment extends Fragment {
         });
     }
 
+    public void detalhesConta(Conta conta) {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
+                getContext(), R.style.BottomSheetTheme
+        );
+
+        View bottomSheetView = LayoutInflater.from(getContext())
+                .inflate(
+                        R.layout.conta_pendente_layout,
+                        (LinearLayout) binding.getRoot().findViewById(R.id.bottomSheetContainer)
+                );
+
+        //Iniciando layouts
+        TextView textDescricao = bottomSheetView.findViewById(R.id.textDescricaoConta);
+        TextView textValor = bottomSheetView.findViewById(R.id.textValorConta);
+        TextView textDataValidade = bottomSheetView.findViewById(R.id.textDataVencimentoConta);
+        TextView textStatus = bottomSheetView.findViewById(R.id.textStatusConta);
+        TextView textCodigo = bottomSheetView.findViewById(R.id.textCodigoBarraConta);
+        Button buttonCopiar = bottomSheetView.findViewById(R.id.buttonCopiarCodigoConta);
+        Button buttonContaPaga = bottomSheetView.findViewById(R.id.buttonContaPaga);
+
+        textDescricao.setText(conta.getDescricao());
+
+        String valorString = String.valueOf(conta.getValor()).replace(".", ",");
+
+        textValor.setText("Valor: R$" + valorString);
+        textDataValidade.setText("Vencimento: " + conta.getDataValidade());
+        textCodigo.setText(conta.getCodigo());
+
+        if (conta.getStatus() == 0) {
+            textStatus.setText("Não pago");
+        }
+
+        buttonCopiar.setOnClickListener(view ->  {
+            Toast.makeText(context, "Clicou", Toast.LENGTH_SHORT).show();
+        });
+
+        buttonContaPaga.setOnClickListener(view ->  {
+            Toast.makeText(context, "Clicou no outro", Toast.LENGTH_SHORT).show();
+        });
+
+        bottomSheetDialog.setContentView(bottomSheetView);
+        bottomSheetDialog.show();
+    }
+
     public void buscarConta(String nome) {
-        contasFiltradas.clear();
+
+        List<Conta> contaFiltro = new ArrayList<>();
         for (Conta c : contas) {
             if (c.getDescricao().toLowerCase().contains(nome.toLowerCase())) {
-                contasFiltradas.add(c);
+                contaFiltro.add(c);
             }
         }
 
-        binding.listContas.invalidateViews();
+        if (contaFiltro.isEmpty()) {
+            Toast.makeText(context, "Nenhuma conta encontrada", Toast.LENGTH_SHORT).show();
+        }else {
+            contaPendenteAdapter.setFilteredList(contaFiltro);
+        }
+    }
+
+    public void carregarContas() {
+
+        ContaDAO contaDAO = new ContaDAO(getContext());
+        contas = contaDAO.listar();
+
+        contaPendenteAdapter = new ContaPendenteAdapter(contas, getContext());
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        binding.recycleContas.setLayoutManager(layoutManager);
+        binding.recycleContas.setHasFixedSize(true);
+        binding.recycleContas.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
+        binding.recycleContas.setAdapter(contaPendenteAdapter);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        contas.clear();
+        carregarContas();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        contas = dao.listarContas();
-        contasFiltradas.clear();
-        contasFiltradas.addAll(contas);
-        binding.listContas.invalidateViews();
+        if (contas.isEmpty()) {
+            carregarContas();
+            binding.textContas.setVisibility(View.VISIBLE);
+        }else {
+            carregarContas();
+            binding.textContas.setVisibility(View.GONE);
+        }
+    }
+
+    public void onAttach(Context context) {
+        this.context = context;
+        super.onAttach(context);
     }
 
     @Override
