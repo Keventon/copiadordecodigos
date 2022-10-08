@@ -15,6 +15,13 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="SearchViewTheme">
+        <item name="colorControlNormal">@color/black</item>
+        <item name="android:textColorHint">#2E2E2D</item>
+        <item name="editTextColor">@color/black</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
     <style name="parent">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
