@@ -15,6 +15,7 @@ import br.com.appco.copiadordecodigos.R;
 import br.com.appco.copiadordecodigos.databinding.ActivityContasBinding;
 import br.com.appco.copiadordecodigos.fragment.ContasPagasFragment;
 import br.com.appco.copiadordecodigos.fragment.ContasPendentesFragment;
+import br.com.appco.copiadordecodigos.fragment.SobreFragment;
 
 public class ContasActivity extends AppCompatActivity {
 
@@ -35,6 +36,9 @@ public class ContasActivity extends AppCompatActivity {
                     break;
                 case R.id.conta_paga:
                     mudarFragment(new ContasPagasFragment());
+                    break;
+                case R.id.sobre:
+                    mudarFragment(new SobreFragment());
                     break;
             }
 
