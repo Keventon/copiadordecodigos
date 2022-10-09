@@ -34,7 +34,7 @@
         android:id="@+id/textContas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sem contas cadastradas..."
+        android:text="Sem contas não pagas..."
         android:textColor="#4D4D4D"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"

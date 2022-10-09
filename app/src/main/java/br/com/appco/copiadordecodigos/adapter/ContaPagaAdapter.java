@@ -14,12 +14,12 @@ import java.util.List;
 import br.com.appco.copiadordecodigos.R;
 import br.com.appco.copiadordecodigos.model.Conta;
 
-public class ContaPendenteAdapter extends RecyclerView.Adapter<ContaPendenteAdapter.MyViewHolder> {
+public class ContaPagaAdapter extends RecyclerView.Adapter<ContaPagaAdapter.MyViewHolder> {
 
     private List<Conta> listaContas;
     private Context context;
 
-    public ContaPendenteAdapter(List<Conta> contas, Context context) {
+    public ContaPagaAdapter(List<Conta> contas, Context context) {
         this.listaContas = contas;
         this.context = context;
     }
@@ -34,7 +34,7 @@ public class ContaPendenteAdapter extends RecyclerView.Adapter<ContaPendenteAdap
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View itemLista = LayoutInflater.from(parent.getContext())
-                                        .inflate(R.layout.conta_pendente, parent, false);
+                                        .inflate(R.layout.conta_paga, parent, false);
 
         return new MyViewHolder(itemLista);
     }
@@ -44,10 +44,10 @@ public class ContaPendenteAdapter extends RecyclerView.Adapter<ContaPendenteAdap
         Conta conta = listaContas.get(position);
 
         holder.descricao.setText(conta.getDescricao());
-        holder.dataVencimento.setText("Vencimento: " + conta.getDataValidade());
+        holder.dataVencimento.setText("Conta paga no dia: " + conta.getDataPagamento());
 
-        if (conta.getStatus() == 0) {
-            holder.status.setText("Não pago");
+        if (conta.getStatus() == 1) {
+            holder.status.setText("Pago");
         }
     }
 
@@ -113,9 +113,9 @@ public class ContaPendenteAdapter extends RecyclerView.Adapter<ContaPendenteAdap
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            descricao = itemView.findViewById(R.id.textDescricao);
-            status = itemView.findViewById(R.id.textStatusContaPendente);
-            dataVencimento = itemView.findViewById(R.id.dataVencimento);
+            descricao = itemView.findViewById(R.id.textDescricaoContaPaga);
+            status = itemView.findViewById(R.id.textStatusContaPaga);
+            dataVencimento = itemView.findViewById(R.id.dataPagamentoContaPaga);
         }
     }
 }

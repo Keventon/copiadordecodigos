@@ -10,4 +10,5 @@ public interface IContaDAO {
     public boolean atualizar(Conta conta);
     public boolean deletar(Conta conta);
     public List<Conta> listar();
+    public List<Conta> listarContasPagas();
 }

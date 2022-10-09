@@ -6,11 +6,47 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.ContasPagasFragment">
 
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchViewContasPagas"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/pesquisa_rounded"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:focusable="false"
+        android:padding="10dp"
+        android:focusableInTouchMode="false"
+        android:keyboardNavigationCluster="false"
+        android:theme="@style/SearchViewTheme"
+        app:iconifiedByDefault="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.019"
+        app:queryBackground="@android:color/transparent"
+        app:queryHint="Buscar uma conta..."
+        app:searchIcon="@drawable/ic_pesquisar_24dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycleContaPaga"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchViewContasPagas"
+        tools:listitem="@layout/conta_paga" />
+
     <TextView
+        android:id="@+id/textContasPagas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Contas pagas"
-        android:textSize="20sp"
+        android:text="Sem contas pagas..."
+        android:textColor="#4D4D4D"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

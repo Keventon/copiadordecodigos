@@ -1,6 +1,8 @@
 package br.com.appco.copiadordecodigos.fragment;
 
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -36,6 +38,7 @@ import br.com.appco.copiadordecodigos.database.ContaDAO;
 import br.com.appco.copiadordecodigos.databinding.FragmentContasPendentesBinding;
 import br.com.appco.copiadordecodigos.listener.RecyclerItemClickListener;
 import br.com.appco.copiadordecodigos.model.Conta;
+import br.com.appco.copiadordecodigos.util.DataAtual;
 
 public class ContasPendentesFragment extends Fragment {
 
@@ -44,7 +47,6 @@ public class ContasPendentesFragment extends Fragment {
     private ContaPendenteAdapter contaPendenteAdapter;
     private ContaDAO dao;
     private Context context;
-    private View viewLayout;
 
     FragmentContasPendentesBinding binding;
 
@@ -190,11 +192,32 @@ public class ContasPendentesFragment extends Fragment {
         }
 
         buttonCopiar.setOnClickListener(view ->  {
-            Toast.makeText(context, "Clicou", Toast.LENGTH_SHORT).show();
+            ClipboardManager clipboardManager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clipData = ClipData.newPlainText("Copy", conta.getCodigo());
+            clipboardManager.setPrimaryClip(clipData);
+            Toast.makeText(getContext(), "Código copiado com sucesso", Toast.LENGTH_SHORT).show();
+            bottomSheetDialog.dismiss();
         });
 
         buttonContaPaga.setOnClickListener(view ->  {
-            Toast.makeText(context, "Clicou no outro", Toast.LENGTH_SHORT).show();
+            dao = new ContaDAO(getContext());
+
+            conta.setCodigo(conta.getCodigo());
+            conta.setDescricao(conta.getDescricao());
+            conta.setId(conta.getId());
+            conta.setStatus(1);
+            conta.setDataValidade(conta.getDataValidade());
+            conta.setValor(conta.getValor());
+            conta.setDataPagamento(DataAtual.dataAtual());
+
+            if (dao.atualizar(conta)) {
+                bottomSheetDialog.dismiss();
+                Toast.makeText(getContext(), "Conta paga com sucesso", Toast.LENGTH_SHORT).show();
+                contaPendenteAdapter.notifyDataSetChanged();
+                carregarContas();
+            }else {
+                Toast.makeText(getContext(), "Erro ao pagar conta", Toast.LENGTH_SHORT).show();
+            }
         });
 
         bottomSheetDialog.setContentView(bottomSheetView);
@@ -229,6 +252,7 @@ public class ContasPendentesFragment extends Fragment {
         binding.recycleContas.setHasFixedSize(true);
         binding.recycleContas.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
         binding.recycleContas.setAdapter(contaPendenteAdapter);
+        contaPendenteAdapter.notifyDataSetChanged();
     }
 
     @Override

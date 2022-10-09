@@ -99,7 +99,29 @@ public class ContaDAO implements IContaDAO{
     public List<Conta> listar() {
         List<Conta> contas = new ArrayList<>();
 
-        String sql = "SELECT * FROM tb_conta;";
+        String sql = "SELECT * FROM tb_conta WHERE status = 0;";
+
+        Cursor cursor = lerDB.rawQuery(sql, null);
+        while (cursor.moveToNext()) {
+            Conta conta = new Conta();
+            conta.setId(cursor.getInt(0));
+            conta.setCodigo(cursor.getString(1));
+            conta.setValor(cursor.getDouble(2));
+            conta.setDataValidade(cursor.getString(3));
+            conta.setDataPagamento(cursor.getString(4));
+            conta.setStatus(cursor.getInt(5));
+            conta.setDescricao(cursor.getString(6));
+            contas.add(conta);
+        }
+
+        return contas;
+    }
+
+    @Override
+    public List<Conta> listarContasPagas() {
+        List<Conta> contas = new ArrayList<>();
+
+        String sql = "SELECT * FROM tb_conta WHERE status = 1;";
 
         Cursor cursor = lerDB.rawQuery(sql, null);
         while (cursor.moveToNext()) {
