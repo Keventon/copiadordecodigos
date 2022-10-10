@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/conta_pendente" android:title="Contas pendentes" android:icon="@drawable/ic_contas_pendentes_24dp"/>
-    <item android:id="@+id/conta_paga" android:title="Contas pagas" android:icon="@drawable/ic_contas_finlaizadas_24dp"/>
+    <item android:id="@+id/conta_pendente" android:title="Boletos pendentes" android:icon="@drawable/ic_contas_pendentes_24dp"/>
+    <item android:id="@+id/conta_paga" android:title="Boletos pagos" android:icon="@drawable/ic_contas_finlaizadas_24dp"/>
     <item android:id="@+id/sobre" android:title="Sobre" android:icon="@drawable/ic_sobre_24dp"/>
 
 </menu>

@@ -33,9 +33,14 @@ public class EditarContaActivity extends AppCompatActivity {
             Double contaConvertida = contaAtual.getValor() * 10;
 
             binding.editDescricaoContaEditar.setText(contaAtual.getDescricao());
-            binding.editCodigoBarraEditar.setText(contaAtual.getCodigo());
             binding.editValorContaEditar.setText(String.valueOf(contaConvertida));
             binding.editDataValidadeEditar.setText(contaAtual.getDataValidade());
+
+            if (contaAtual.getCodigo().equals("null")) {
+                binding.editCodigoBarraEditar.setText("");
+                binding.editCodigoBarraEditar.setHint("");
+                binding.editCodigoBarraEditar.setEnabled(false);
+            }
         }
 
         binding.buttonConfirmarEdicao.setOnClickListener(view ->  {

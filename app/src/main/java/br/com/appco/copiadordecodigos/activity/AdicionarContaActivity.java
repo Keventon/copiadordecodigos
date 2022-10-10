@@ -1,18 +1,16 @@
 package br.com.appco.copiadordecodigos.activity;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import br.com.appco.copiadordecodigos.R;
 import br.com.appco.copiadordecodigos.database.ContaDAO;
 import br.com.appco.copiadordecodigos.database.SQLiteHelper;
 import br.com.appco.copiadordecodigos.databinding.ActivityAdicionarContaBinding;
-import br.com.appco.copiadordecodigos.databinding.ActivityContasBinding;
 import br.com.appco.copiadordecodigos.model.Conta;
 
 public class AdicionarContaActivity extends AppCompatActivity {
@@ -33,35 +31,71 @@ public class AdicionarContaActivity extends AppCompatActivity {
         });
 
         binding.floatingAdicionarConta.setOnClickListener(view -> {
-            if (binding.editCodigoBarra.length() == 51) {
+            if (binding.checkAdicionarConta.isChecked()) {
                 if (binding.editDataValidade.length() == 10) {
                     if (!binding.editDescricaoConta.getText().toString().isEmpty()) {
                         double valor = (double) binding.editValorConta.getRawValue() / 100;
-                        String data = binding.editDataValidade.getText().toString();
-                        String codigo = binding.editCodigoBarra.getText().toString();
-                        String descricao = binding.editDescricaoConta.getText().toString();
+                        if (valor > 0) {
+                            String data = binding.editDataValidade.getText().toString();
+                            String descricao = binding.editDescricaoConta.getText().toString();
 
-                        contaDAO = new ContaDAO(this);
+                            contaDAO = new ContaDAO(this);
 
-                        Conta conta = new Conta();
-                        conta.setCodigo(codigo);
-                        conta.setDescricao(descricao);
-                        conta.setDataValidade(data);
-                        conta.setStatus(0);
-                        conta.setValor(valor);
-                        conta.setDataPagamento("null");
+                            Conta conta = new Conta();
+                            conta.setCodigo("null");
+                            conta.setDescricao(descricao);
+                            conta.setDataValidade(data);
+                            conta.setStatus(0);
+                            conta.setValor(valor);
+                            conta.setDataPagamento("null");
 
-                        contaDAO.salvar(conta);
-                        Toast.makeText(this, "Conta adicionada com sucesso", Toast.LENGTH_SHORT).show();
-                        finish();
+                            contaDAO.salvar(conta);
+                            Toast.makeText(this, "Conta adicionada com sucesso", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }else {
+                            Toast.makeText(this, "Defina o valor da seu boleto", Toast.LENGTH_SHORT).show();
+                        }
                     }else {
-                        Toast.makeText(this, "Você não colocou uma descrição para sua conta", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Você não colocou uma descrição para seu boleto", Toast.LENGTH_SHORT).show();
                     }
                 }else {
                     Toast.makeText(this, "Você não definiu uma data", Toast.LENGTH_SHORT).show();
                 }
             }else {
-                Toast.makeText(this, "Código inválido", Toast.LENGTH_SHORT).show();
+                if (binding.editCodigoBarra.length() == 51) {
+                    if (binding.editDataValidade.length() == 10) {
+                        if (!binding.editDescricaoConta.getText().toString().isEmpty()) {
+                            double valor = (double) binding.editValorConta.getRawValue() / 100;
+                            if (valor > 0) {
+                                String data = binding.editDataValidade.getText().toString();
+                                String codigo = binding.editCodigoBarra.getText().toString();
+                                String descricao = binding.editDescricaoConta.getText().toString();
+
+                                contaDAO = new ContaDAO(this);
+
+                                Conta conta = new Conta();
+                                conta.setCodigo(codigo);
+                                conta.setDescricao(descricao);
+                                conta.setDataValidade(data);
+                                conta.setStatus(0);
+                                conta.setValor(valor);
+                                conta.setDataPagamento("null");
+
+                                contaDAO.salvar(conta);
+                                Toast.makeText(this, "Boleto adicionada com sucesso", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }else {
+                                Toast.makeText(this, "Defina o valor da seu boleto", Toast.LENGTH_SHORT).show();
+                            }
+                        }else {
+                            Toast.makeText(this, "Você não colocou uma descrição para seu boleto", Toast.LENGTH_SHORT).show();
+                        }
+                    }else {
+                        Toast.makeText(this, "Você não definiu uma data", Toast.LENGTH_SHORT).show();
+                    }
+                }else {
+                    Toast.makeText(this, "Código inválido", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

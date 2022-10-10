@@ -185,18 +185,27 @@ public class ContasPendentesFragment extends Fragment {
 
         textValor.setText("Valor: R$" + valorString);
         textDataValidade.setText("Vencimento: " + conta.getDataValidade());
-        textCodigo.setText(conta.getCodigo());
+
+        if (conta.getCodigo().equals("null")) {
+            textCodigo.setVisibility(View.GONE);
+        }else {
+            textCodigo.setText(conta.getCodigo());
+        }
 
         if (conta.getStatus() == 0) {
             textStatus.setText("Não pago");
         }
 
         buttonCopiar.setOnClickListener(view ->  {
-            ClipboardManager clipboardManager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clipData = ClipData.newPlainText("Copy", conta.getCodigo());
-            clipboardManager.setPrimaryClip(clipData);
-            Toast.makeText(getContext(), "Código copiado com sucesso", Toast.LENGTH_SHORT).show();
-            bottomSheetDialog.dismiss();
+            if (!conta.getCodigo().equals("null")) {
+                ClipboardManager clipboardManager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clipData = ClipData.newPlainText("Copy", conta.getCodigo());
+                clipboardManager.setPrimaryClip(clipData);
+                Toast.makeText(getContext(), "Código copiado com sucesso", Toast.LENGTH_SHORT).show();
+                bottomSheetDialog.dismiss();
+            }else {
+                Toast.makeText(getContext(), "Você não pode copiar", Toast.LENGTH_SHORT).show();
+            }
         });
 
         buttonContaPaga.setOnClickListener(view ->  {
