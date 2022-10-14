@@ -119,8 +119,8 @@
             android:id="@+id/_icone_valor_conta"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_centerVertical="true"
             android:layout_marginLeft="17dp"
+            android:layout_centerVertical="true"
             android:src="@drawable/ic_dinheiro" />
 
     </RelativeLayout>
@@ -129,32 +129,29 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
         android:text="Data de validade do boleto"
         android:textColor="@color/black"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/relativeLayout2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.183"
+        app:layout_constraintHorizontal_bias="0.09"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.968" />
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayoutValorConta" />
 
     <RelativeLayout
         android:id="@+id/relativeLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="25dp"
-        android:layout_marginTop="344dp"
+        android:layout_marginTop="10dp"
         android:layout_marginRight="25dp"
         android:background="@drawable/blue_border_rounded_cornwe"
         android:backgroundTint="@color/cinza_background"
         android:padding="2dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.491">
+        app:layout_constraintTop_toBottomOf="@+id/textView3">
 
         <com.santalu.maskedittext.MaskEditText
             android:id="@+id/editDataValidade"
@@ -187,22 +184,22 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginBottom="300dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
         android:text="Que boleto é esse?"
         android:textColor="@color/black"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.155"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.066"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout2" />
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="25dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginRight="25dp"
         android:background="@drawable/blue_border_rounded_cornwe"
         android:backgroundTint="@color/cinza_background"
@@ -251,15 +248,15 @@
         android:id="@+id/checkAdicionarConta"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="32dp"
-        android:text="Sem código de barras"
         android:backgroundTint="@color/verde"
         android:buttonTint="@color/verde"
+        android:text="Sem código de barras"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.121"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayoutCodigoBarra" />
 
