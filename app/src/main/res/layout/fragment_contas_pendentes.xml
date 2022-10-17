@@ -45,13 +45,16 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycleContas"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
-        tools:listitem="@layout/conta_pendente"
+        android:layout_marginTop="16dp"
+        android:layout_height="600dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchViewContasPendentes" />
+        app:layout_constraintTop_toBottomOf="@+id/searchViewContasPendentes"
+        app:layout_constraintVertical_bias="0.0"
+        tools:listitem="@layout/conta_pendente" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingAddConta"
