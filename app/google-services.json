@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "687678487991",
+    "project_id": "app-minhas-contas-br193021",
+    "storage_bucket": "app-minhas-contas-br193021.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:687678487991:android:4ee802504734acc2e07c32",
+        "android_client_info": {
+          "package_name": "br.com.appco.copiadordecodigos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "687678487991-28vcrkpqala94e9qinfqhvch69e091dl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.appco.copiadordecodigos",
+            "certificate_hash": "bc4e51b946242457866885fb15c1093e8945bdd4"
+          }
+        },
+        {
+          "client_id": "687678487991-ad3r4quhr5390f7i3ijhm3d1qn430jn7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbrm4-16TLppkiZH2WQ-ikAFh6Vu_Wj4Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "687678487991-ad3r4quhr5390f7i3ijhm3d1qn430jn7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

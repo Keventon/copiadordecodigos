@@ -26,6 +26,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +38,8 @@ import br.com.appco.copiadordecodigos.R;
 import br.com.appco.copiadordecodigos.activity.AdicionarContaActivity;
 import br.com.appco.copiadordecodigos.activity.EditarContaActivity;
 import br.com.appco.copiadordecodigos.adapter.ContaPendenteAdapter;
+import br.com.appco.copiadordecodigos.controller.ConfiguracoesFirebase;
+import br.com.appco.copiadordecodigos.controller.UsuarioFirebase;
 import br.com.appco.copiadordecodigos.database.ContaDAO;
 import br.com.appco.copiadordecodigos.databinding.FragmentContasPendentesBinding;
 import br.com.appco.copiadordecodigos.listener.RecyclerItemClickListener;
@@ -49,12 +55,15 @@ public class ContasPendentesFragment extends Fragment {
     private Context context;
 
     FragmentContasPendentesBinding binding;
+    DatabaseReference reference = ConfiguracoesFirebase.getFirebase();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         binding = FragmentContasPendentesBinding.inflate(inflater, container, false);
+
+        recuperarNomeUsuario();
 
         binding.searchViewContasPendentes.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -96,6 +105,26 @@ public class ContasPendentesFragment extends Fragment {
         );
 
         return binding.getRoot();
+    }
+
+    private void recuperarNomeUsuario() {
+        DatabaseReference nomeRef = reference
+                .child("usuario")
+                .child(UsuarioFirebase.getIdentificadorUsuario())
+                .child("nome");
+
+        nomeRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String nome = snapshot.getValue().toString();
+                binding.textNomeUsuario.setText("Olá, " + nome);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void menuOpcoes(Conta conta) {

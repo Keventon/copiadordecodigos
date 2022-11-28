@@ -7,25 +7,65 @@
     android:background="@color/white"
     tools:context=".fragment.ContasPendentesFragment">
 
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textNomeUsuario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="16dp"
+            android:text="Olá,"
+            android:textColor="@color/verde"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sair"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="end"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:layout_weight="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.879"
+            app:layout_constraintStart_toEndOf="@+id/textNomeUsuario"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </LinearLayout>
+
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchViewContasPendentes"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/pesquisa_rounded"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:background="@drawable/pesquisa_rounded"
         android:focusable="false"
-        android:padding="10dp"
         android:focusableInTouchMode="false"
         android:keyboardNavigationCluster="false"
+        android:padding="10dp"
         android:theme="@style/SearchViewTheme"
         app:iconifiedByDefault="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.019"
+        app:layout_constraintTop_toBottomOf="@+id/linear"
+        app:layout_constraintVertical_bias="0.039"
         app:queryBackground="@android:color/transparent"
         app:queryHint="Buscar um boleto..."
         app:searchIcon="@drawable/ic_pesquisar_24dp" />
@@ -34,7 +74,7 @@
         android:id="@+id/textContas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sem contas não pagas..."
+        android:text="Sem boletos não pagos..."
         android:textColor="#4D4D4D"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -46,7 +86,7 @@
         android:id="@+id/recycleContas"
         android:layout_width="match_parent"
         android:layout_marginTop="16dp"
-        android:layout_height="600dp"
+        android:layout_height="0dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
