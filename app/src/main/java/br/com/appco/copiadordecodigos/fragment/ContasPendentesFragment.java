@@ -1,6 +1,7 @@
 package br.com.appco.copiadordecodigos.fragment;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -37,6 +38,7 @@ import java.util.List;
 import br.com.appco.copiadordecodigos.R;
 import br.com.appco.copiadordecodigos.activity.AdicionarContaActivity;
 import br.com.appco.copiadordecodigos.activity.EditarContaActivity;
+import br.com.appco.copiadordecodigos.activity.LoginActivity;
 import br.com.appco.copiadordecodigos.adapter.ContaPendenteAdapter;
 import br.com.appco.copiadordecodigos.controller.ConfiguracoesFirebase;
 import br.com.appco.copiadordecodigos.controller.UsuarioFirebase;
@@ -53,6 +55,7 @@ public class ContasPendentesFragment extends Fragment {
     private ContaPendenteAdapter contaPendenteAdapter;
     private ContaDAO dao;
     private Context context;
+    private ProgressDialog progressDialog;
 
     FragmentContasPendentesBinding binding;
     DatabaseReference reference = ConfiguracoesFirebase.getFirebase();
@@ -108,6 +111,13 @@ public class ContasPendentesFragment extends Fragment {
     }
 
     private void recuperarNomeUsuario() {
+
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.progress_dialog);
+        progressDialog.setCancelable(false);
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
         DatabaseReference nomeRef = reference
                 .child("usuario")
                 .child(UsuarioFirebase.getIdentificadorUsuario())
@@ -116,6 +126,7 @@ public class ContasPendentesFragment extends Fragment {
         nomeRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                progressDialog.dismiss();
                 String nome = snapshot.getValue().toString();
                 binding.textNomeUsuario.setText("Olá, " + nome);
             }

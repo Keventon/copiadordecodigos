@@ -2,4 +2,15 @@
     <string name="app_name">Minhas Contas</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string-array name="farmacias">
+
+        <item>Escolha uma fármacia</item>
+        <item>Fármacia 1</item>
+        <item>Fármacia 2</item>
+        <item>Fármacia 3</item>
+
+    </string-array>
+
 </resources>
