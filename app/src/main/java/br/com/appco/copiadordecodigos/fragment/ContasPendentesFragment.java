@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,6 +39,7 @@ import java.util.List;
 import br.com.appco.copiadordecodigos.R;
 import br.com.appco.copiadordecodigos.activity.AdicionarContaActivity;
 import br.com.appco.copiadordecodigos.activity.EditarContaActivity;
+import br.com.appco.copiadordecodigos.activity.EscolherBoletoActivity;
 import br.com.appco.copiadordecodigos.activity.LoginActivity;
 import br.com.appco.copiadordecodigos.adapter.ContaPendenteAdapter;
 import br.com.appco.copiadordecodigos.controller.ConfiguracoesFirebase;
@@ -56,6 +58,7 @@ public class ContasPendentesFragment extends Fragment {
     private ContaDAO dao;
     private Context context;
     private ProgressDialog progressDialog;
+    private FirebaseAuth auth = ConfiguracoesFirebase.getFirebaseAutenticacao();
 
     FragmentContasPendentesBinding binding;
     DatabaseReference reference = ConfiguracoesFirebase.getFirebase();
@@ -66,7 +69,7 @@ public class ContasPendentesFragment extends Fragment {
 
         binding = FragmentContasPendentesBinding.inflate(inflater, container, false);
 
-        recuperarNomeUsuario();
+        recuperarNomeFarmacia();
 
         binding.searchViewContasPendentes.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -80,6 +83,8 @@ public class ContasPendentesFragment extends Fragment {
                 return false;
             }
         });
+
+        binding.buttonEscolherFarmacia.setOnClickListener(view -> startActivity(new Intent(context, EscolherBoletoActivity.class)));
 
         binding.recycleContas.addOnItemTouchListener(
                 new RecyclerItemClickListener(
@@ -107,10 +112,15 @@ public class ContasPendentesFragment extends Fragment {
                 )
         );
 
+        binding.textSairContaPendente.setOnClickListener(view -> {
+            auth.signOut();
+            startActivity(new Intent(context, LoginActivity.class));
+        });
+
         return binding.getRoot();
     }
 
-    private void recuperarNomeUsuario() {
+    private void recuperarNomeFarmacia() {
 
         progressDialog = new ProgressDialog(getContext());
         progressDialog.show();
@@ -121,14 +131,14 @@ public class ContasPendentesFragment extends Fragment {
         DatabaseReference nomeRef = reference
                 .child("usuario")
                 .child(UsuarioFirebase.getIdentificadorUsuario())
-                .child("nome");
+                .child("nomeFarmacia");
 
         nomeRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 progressDialog.dismiss();
-                String nome = snapshot.getValue().toString();
-                binding.textNomeUsuario.setText("Olá, " + nome);
+                String nomeFarmacia = snapshot.getValue().toString();
+                binding.textNomeUsuario.setText("Você está na " + nomeFarmacia);
             }
 
             @Override

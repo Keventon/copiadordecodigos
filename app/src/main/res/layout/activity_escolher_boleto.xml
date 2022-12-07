@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".activity.EscolherBoletoActivity">
 
+    <ImageView
+        android:id="@+id/imageVoltarEscolherBoleto"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_voltar_24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.043"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/textView6"
         android:layout_width="match_parent"
@@ -13,7 +24,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="76dp"
         android:layout_marginEnd="32dp"
-        android:text="Escolha qual fármacia você quer verificar seus boletos."
+        android:text="Clique e escolha qual fármacia você quer verificar seus boletos."
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -27,12 +38,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="104dp"
-        android:padding="30dp"
+        android:padding="25dp"
+        android:background="@drawable/borda_verde"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+    <Button
+        android:id="@+id/buttonContinuarEscolherBoleto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="132dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:text="Continuar"
+        android:visibility="gone"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:background="@drawable/button_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerEscolherFarmacia" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

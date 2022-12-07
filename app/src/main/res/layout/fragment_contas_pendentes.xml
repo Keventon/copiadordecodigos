@@ -23,13 +23,15 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginStart="16dp"
-            android:text="Olá,"
+            android:text=""
+            android:textStyle="bold"
             android:textColor="@color/verde"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/textSairContaPendente"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Sair"
@@ -47,6 +49,23 @@
 
     </LinearLayout>
 
+    <Button
+        android:id="@+id/buttonEscolherFarmacia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/button_background"
+        android:text="Escolher farmácia"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linear" />
+
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchViewContasPendentes"
         android:layout_width="0dp"
@@ -62,11 +81,11 @@
         app:iconifiedByDefault="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linear"
-        app:layout_constraintVertical_bias="0.039"
+        app:layout_constraintTop_toBottomOf="@+id/buttonEscolherFarmacia"
+        app:layout_constraintVertical_bias="0.106"
         app:queryBackground="@android:color/transparent"
         app:queryHint="Buscar um boleto..."
         app:searchIcon="@drawable/ic_pesquisar_24dp" />

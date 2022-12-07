@@ -1,5 +1,6 @@
 package br.com.appco.copiadordecodigos.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,15 +9,26 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
+import br.com.appco.copiadordecodigos.controller.ConfiguracoesFirebase;
+import br.com.appco.copiadordecodigos.controller.UsuarioFirebase;
 import br.com.appco.copiadordecodigos.database.ContaDAO;
 import br.com.appco.copiadordecodigos.database.SQLiteHelper;
 import br.com.appco.copiadordecodigos.databinding.ActivityAdicionarContaBinding;
+import br.com.appco.copiadordecodigos.model.Boleto;
 import br.com.appco.copiadordecodigos.model.Conta;
 
 public class AdicionarContaActivity extends AppCompatActivity {
 
     ActivityAdicionarContaBinding binding;
     private ContaDAO contaDAO;
+
+    DatabaseReference reference = ConfiguracoesFirebase.getFirebase();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,19 +51,33 @@ public class AdicionarContaActivity extends AppCompatActivity {
                             String data = binding.editDataValidade.getText().toString();
                             String descricao = binding.editDescricaoConta.getText().toString();
 
-                            contaDAO = new ContaDAO(this);
+                            DatabaseReference npmeFarmaciaRef = reference
+                                    .child("usuario")
+                                    .child(UsuarioFirebase.getIdentificadorUsuario())
+                                    .child("nomeFarmacia");
 
-                            Conta conta = new Conta();
-                            conta.setCodigo("null");
-                            conta.setDescricao(descricao);
-                            conta.setDataValidade(data);
-                            conta.setStatus(0);
-                            conta.setValor(valor);
-                            conta.setDataPagamento("null");
+                            npmeFarmaciaRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    String nomeFarmacia = snapshot.getValue().toString();
+                                    Boleto boleto = new Boleto();
+                                    boleto.setCodigo("null");
+                                    boleto.setDataPagamento(data);
+                                    boleto.setDescricao(descricao);
+                                    boleto.setStatus(0);
+                                    boleto.setDataPagamento("");
+                                    boleto.setValor(valor);
+                                    boleto.setNomeFarmacia(nomeFarmacia);
+                                    //boleto.setValorMulta();
+                                    Toast.makeText(getApplicationContext(), "Conta adicionada com sucesso", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
 
-                            contaDAO.salvar(conta);
-                            Toast.makeText(this, "Conta adicionada com sucesso", Toast.LENGTH_SHORT).show();
-                            finish();
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
                         }else {
                             Toast.makeText(this, "Defina o valor da seu boleto", Toast.LENGTH_SHORT).show();
                         }

@@ -9,11 +9,9 @@ public class Boleto {
     private String id;
     private String descricao;
     private String codigo;
-    private String nomePagador;
     private String dataPagamento;
     private String dataValidade;
     private String nomeFarmacia;
-    private String nomeBanco;
     private Double valor;
     private Double valorMulta;
     private int status;
@@ -66,14 +64,6 @@ public class Boleto {
         this.codigo = codigo;
     }
 
-    public String getNomePagador() {
-        return nomePagador;
-    }
-
-    public void setNomePagador(String nomePagador) {
-        this.nomePagador = nomePagador;
-    }
-
     public String getDataPagamento() {
         return dataPagamento;
     }
@@ -96,14 +86,6 @@ public class Boleto {
 
     public void setNomeFarmacia(String nomeFarmacia) {
         this.nomeFarmacia = nomeFarmacia;
-    }
-
-    public String getNomeBanco() {
-        return nomeBanco;
-    }
-
-    public void setNomeBanco(String nomeBanco) {
-        this.nomeBanco = nomeBanco;
     }
 
     public Double getValor() {

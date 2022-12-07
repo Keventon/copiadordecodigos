@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void recuperarCampos() {
 
-        progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog = new ProgressDialog(getApplicationContext());
         progressDialog.show();
         progressDialog.setContentView(R.layout.progress_dialog);
         progressDialog.setCancelable(false);
@@ -72,7 +72,9 @@ public class LoginActivity extends AppCompatActivity {
     public void autenticarUsuario(String email, String senha) {
         autenticacao.signInWithEmailAndPassword(email, senha).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                startActivity(new Intent(LoginActivity.this, ContasActivity.class));
+                startActivity(new Intent(getApplicationContext(), ContasActivity.class));
+            } else {
+                Toast.makeText(this, "Email ou senha incorretos", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -20,6 +20,8 @@ public class Usuario {
         firebase.child("usuario").child(this.id).setValue(this);
     }
 
+
+
     public String getNome() {
         return nome;
     }
