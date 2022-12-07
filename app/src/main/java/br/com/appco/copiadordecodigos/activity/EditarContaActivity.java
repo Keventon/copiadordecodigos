@@ -2,6 +2,7 @@ package br.com.appco.copiadordecodigos.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -9,13 +10,14 @@ import android.widget.Toast;
 import br.com.appco.copiadordecodigos.R;
 import br.com.appco.copiadordecodigos.database.ContaDAO;
 import br.com.appco.copiadordecodigos.databinding.ActivityEditarContaBinding;
+import br.com.appco.copiadordecodigos.model.Boleto;
 import br.com.appco.copiadordecodigos.model.Conta;
 
 public class EditarContaActivity extends AppCompatActivity {
 
     ActivityEditarContaBinding binding;
     private ContaDAO contaDAO;
-    private Conta contaAtual;
+    private Boleto contaAtual;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,13 +29,15 @@ public class EditarContaActivity extends AppCompatActivity {
             finish();
         });
 
-        contaAtual = (Conta) getIntent().getSerializableExtra("contaSelecionada");
+        contaAtual = (Boleto) getIntent().getSerializableExtra("contaSelecionada");
 
         if (contaAtual != null) {
             Double contaConvertida = contaAtual.getValor() * 10;
+            Double contaConvertidaMulta = contaAtual.getValorMulta() * 10;
 
             binding.editDescricaoContaEditar.setText(contaAtual.getDescricao());
             binding.editValorContaEditar.setText(String.valueOf(contaConvertida));
+            binding.editValorMulta.setText(String.valueOf(contaConvertidaMulta));
             binding.editDataValidadeEditar.setText(contaAtual.getDataValidade());
 
             if (contaAtual.getCodigo().equals("null")) {
@@ -44,31 +48,30 @@ public class EditarContaActivity extends AppCompatActivity {
         }
 
         binding.buttonConfirmarEdicao.setOnClickListener(view ->  {
-            if (binding.editCodigoBarraEditar.length() == 51) {
+            if (binding.editCodigoBarraEditar.length() == 51 || contaAtual.getCodigo().equals("null")){
                 if (binding.editDataValidadeEditar.length() == 10) {
                     if (!binding.editDescricaoContaEditar.getText().toString().isEmpty()) {
                         double valor = (double) binding.editValorContaEditar.getRawValue() / 100;
+                        double valorMulta = (double) binding.editValorMulta.getRawValue() / 100;
                         String data = binding.editDataValidadeEditar.getText().toString();
                         String codigo = binding.editCodigoBarraEditar.getText().toString();
                         String descricao = binding.editDescricaoContaEditar.getText().toString();
 
-                        contaDAO = new ContaDAO(this);
+                        Boleto boleto = new Boleto();
+                        boleto.setCodigo("null");
+                        boleto.setDataPagamento("");
+                        boleto.setDescricao(descricao);
+                        boleto.setStatus(0);
+                        boleto.setNomeFarmacia(contaAtual.getNomeFarmacia());
+                        boleto.setValor(valor);
+                        boleto.setValorMulta(valorMulta);
+                        boleto.setDataValidade(data);
+                        boleto.setId(contaAtual.getId());
+                        boleto.atualizar();
+                        Toast.makeText(this, "Boleto editado com sucesso", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(), ContasActivity.class));
 
-                        Conta conta = new Conta();
-                        conta.setCodigo(codigo);
-                        conta.setDescricao(descricao);
-                        conta.setId(contaAtual.getId());
-                        conta.setDataValidade(data);
-                        conta.setStatus(0);
-                        conta.setValor(valor);
-                        conta.setDataPagamento("null");
 
-                        if (contaDAO.atualizar(conta)) {
-                            Toast.makeText(this, "Conta atualizada com sucesso", Toast.LENGTH_SHORT).show();
-                            finish();
-                        }else {
-                            Toast.makeText(this, "Erro ao atualizar conta", Toast.LENGTH_SHORT).show();
-                        }
                     }else {
                         Toast.makeText(this, "Você não colocou uma descrição para sua conta", Toast.LENGTH_SHORT).show();
                     }

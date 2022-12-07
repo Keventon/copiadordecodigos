@@ -185,7 +185,34 @@ public class ContasPendentesFragment extends Fragment {
             builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    //
+
+                    DatabaseReference identificadorRef = reference
+                            .child("usuario")
+                            .child(UsuarioFirebase.getIdentificadorUsuario())
+                            .child("identificador");
+                    identificadorRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            String identificador = snapshot.getValue().toString();
+
+                            if (identificador.equals("A")) {
+                                DatabaseReference contaRef = reference
+                                        .child("boletos")
+                                        .child(boleto.getNomeFarmacia())
+                                        .child(boleto.getId());
+                                contaRef.removeValue();
+                                Toast.makeText(context, "Boleto removido com sucesso", Toast.LENGTH_SHORT).show();
+                                bottomSheetDialog.dismiss();
+                            }else {
+                                Toast.makeText(context, "Você não tem permissão para reover boletos", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
                 }
             });
             builder.setNegativeButton("Cancelar", null);

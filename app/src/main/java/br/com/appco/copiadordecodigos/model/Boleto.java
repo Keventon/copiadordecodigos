@@ -28,6 +28,12 @@ public class Boleto implements Serializable {
         firebase.setValue(this);
     }
 
+    public void atualizar() {
+        DatabaseReference firebaseRef = ConfiguracoesFirebase.getFirebase();
+        DatabaseReference firebase = firebaseRef.child("boletos").child(nomeFarmacia).child(getId());
+        firebase.setValue(this);
+    }
+
     public Double getValorMulta() {
         return valorMulta;
     }
