@@ -47,13 +47,14 @@ import br.com.appco.copiadordecodigos.controller.UsuarioFirebase;
 import br.com.appco.copiadordecodigos.database.ContaDAO;
 import br.com.appco.copiadordecodigos.databinding.FragmentContasPendentesBinding;
 import br.com.appco.copiadordecodigos.listener.RecyclerItemClickListener;
+import br.com.appco.copiadordecodigos.model.Boleto;
 import br.com.appco.copiadordecodigos.model.Conta;
 import br.com.appco.copiadordecodigos.util.DataAtual;
 
 public class ContasPendentesFragment extends Fragment {
 
-    private List<Conta> contas = new ArrayList<>();
-    private List<Conta> contasFiltradas = new ArrayList<>();
+    private List<Boleto> boletos = new ArrayList<>();
+    private List<Boleto> contasFiltradas = new ArrayList<>();
     private ContaPendenteAdapter contaPendenteAdapter;
     private ContaDAO dao;
     private Context context;
@@ -70,6 +71,12 @@ public class ContasPendentesFragment extends Fragment {
         binding = FragmentContasPendentesBinding.inflate(inflater, container, false);
 
         recuperarNomeFarmacia();
+
+        //Configura recycleView
+        binding.recycleContas.setLayoutManager(new LinearLayoutManager(context));
+        binding.recycleContas.setHasFixedSize(true);
+        contaPendenteAdapter = new ContaPendenteAdapter(boletos, context);
+        binding.recycleContas.setAdapter(contaPendenteAdapter);
 
         binding.searchViewContasPendentes.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -93,14 +100,14 @@ public class ContasPendentesFragment extends Fragment {
                         new RecyclerItemClickListener.OnItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
-                                Conta conta = contas.get(position);
-                                detalhesConta(conta);
+                                Boleto boleto = boletos.get(position);
+                                detalhesConta(boleto);
                             }
 
                             @Override
                             public void onLongItemClick(View view, int position) {
-                                Conta conta = contas.get(position);
-                                menuOpcoes(conta);
+                                Boleto boleto = boletos.get(position);
+                                menuOpcoes(boleto);
 
                             }
 
@@ -148,7 +155,7 @@ public class ContasPendentesFragment extends Fragment {
         });
     }
 
-    private void menuOpcoes(Conta conta) {
+    private void menuOpcoes(Boleto boleto) {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
                 getContext(), R.style.BottomSheetTheme
         );
@@ -166,27 +173,19 @@ public class ContasPendentesFragment extends Fragment {
         buttonEditar.setOnClickListener(view ->  {
             bottomSheetDialog.dismiss();
             Intent intent = new Intent(getContext(), EditarContaActivity.class);
-            intent.putExtra("contaSelecionada", conta);
+            intent.putExtra("contaSelecionada", boleto);
             startActivity(intent);
         });
 
         buttonExcluir.setOnClickListener(view ->  {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle("Confirmar exclusão");
-            builder.setMessage("Deseja realmente apagar a conta: " + conta.getDescricao() + "?");
+            builder.setMessage("Deseja realmente apagar a conta: " + boleto.getDescricao() + "?");
             builder.setCancelable(false);
             builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    ContaDAO contaDAO = new ContaDAO(getContext());
-
-                    if (contaDAO.deletar(conta)) {
-                        bottomSheetDialog.dismiss();
-                        carregarContas();
-                        Toast.makeText(context, "Conta excluída com sucesso", Toast.LENGTH_SHORT).show();
-                    }else {
-                        Toast.makeText(context, "Erro ao excluir conta", Toast.LENGTH_SHORT).show();
-                    }
+                    //
                 }
             });
             builder.setNegativeButton("Cancelar", null);
@@ -209,7 +208,7 @@ public class ContasPendentesFragment extends Fragment {
         });
     }
 
-    public void detalhesConta(Conta conta) {
+    public void detalhesConta(Boleto boleto) {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
                 getContext(), R.style.BottomSheetTheme
         );
@@ -229,27 +228,27 @@ public class ContasPendentesFragment extends Fragment {
         Button buttonCopiar = bottomSheetView.findViewById(R.id.buttonCopiarCodigoConta);
         Button buttonContaPaga = bottomSheetView.findViewById(R.id.buttonContaPaga);
 
-        textDescricao.setText(conta.getDescricao());
+        textDescricao.setText(boleto.getDescricao());
 
-        String valorString = String.valueOf(conta.getValor()).replace(".", ",");
+        String valorString = String.valueOf(boleto.getValor()).replace(".", ",");
 
         textValor.setText("Valor: R$" + valorString);
-        textDataValidade.setText("Vencimento: " + conta.getDataValidade());
+        textDataValidade.setText("Vencimento: " + boleto.getDataValidade());
 
-        if (conta.getCodigo().equals("null")) {
+        if (boleto.getCodigo().equals("null")) {
             textCodigo.setVisibility(View.GONE);
         }else {
-            textCodigo.setText(conta.getCodigo());
+            textCodigo.setText(boleto.getCodigo());
         }
 
-        if (conta.getStatus() == 0) {
+        if (boleto.getStatus() == 0) {
             textStatus.setText("Não pago");
         }
 
         buttonCopiar.setOnClickListener(view ->  {
-            if (!conta.getCodigo().equals("null")) {
+            if (!boleto.getCodigo().equals("null")) {
                 ClipboardManager clipboardManager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clipData = ClipData.newPlainText("Copy", conta.getCodigo());
+                ClipData clipData = ClipData.newPlainText("Copy", boleto.getCodigo());
                 clipboardManager.setPrimaryClip(clipData);
                 Toast.makeText(getContext(), "Código copiado com sucesso", Toast.LENGTH_SHORT).show();
                 bottomSheetDialog.dismiss();
@@ -259,24 +258,7 @@ public class ContasPendentesFragment extends Fragment {
         });
 
         buttonContaPaga.setOnClickListener(view ->  {
-            dao = new ContaDAO(getContext());
-
-            conta.setCodigo(conta.getCodigo());
-            conta.setDescricao(conta.getDescricao());
-            conta.setId(conta.getId());
-            conta.setStatus(1);
-            conta.setDataValidade(conta.getDataValidade());
-            conta.setValor(conta.getValor());
-            conta.setDataPagamento(DataAtual.dataAtual());
-
-            if (dao.atualizar(conta)) {
-                bottomSheetDialog.dismiss();
-                Toast.makeText(getContext(), "Conta paga com sucesso", Toast.LENGTH_SHORT).show();
-                contaPendenteAdapter.notifyDataSetChanged();
-                carregarContas();
-            }else {
-                Toast.makeText(getContext(), "Erro ao pagar conta", Toast.LENGTH_SHORT).show();
-            }
+            //
         });
 
         bottomSheetDialog.setContentView(bottomSheetView);
@@ -285,10 +267,10 @@ public class ContasPendentesFragment extends Fragment {
 
     public void buscarConta(String nome) {
 
-        List<Conta> contaFiltro = new ArrayList<>();
-        for (Conta c : contas) {
-            if (c.getDescricao().toLowerCase().contains(nome.toLowerCase())) {
-                contaFiltro.add(c);
+        List<Boleto> contaFiltro = new ArrayList<>();
+        for (Boleto b : boletos) {
+            if (b.getDescricao().toLowerCase().contains(nome.toLowerCase())) {
+                contaFiltro.add(b);
             }
         }
 
@@ -301,30 +283,61 @@ public class ContasPendentesFragment extends Fragment {
 
     public void carregarContas() {
 
-        ContaDAO contaDAO = new ContaDAO(getContext());
-        contas = contaDAO.listar();
+        DatabaseReference nomeFarmacia = reference
+                .child("usuario")
+                .child(UsuarioFirebase.getIdentificadorUsuario())
+                .child("nomeFarmacia");
 
-        contaPendenteAdapter = new ContaPendenteAdapter(contas, getContext());
+        nomeFarmacia.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String nomeFarmacia = snapshot.getValue().toString();
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        binding.recycleContas.setLayoutManager(layoutManager);
-        binding.recycleContas.setHasFixedSize(true);
-        binding.recycleContas.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
-        binding.recycleContas.setAdapter(contaPendenteAdapter);
-        contaPendenteAdapter.notifyDataSetChanged();
+                DatabaseReference produtosRef = reference
+                        .child("boletos")
+                        .child(nomeFarmacia);
+                produtosRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        boletos.clear();
+
+                        if (dataSnapshot.getValue() != null) {
+                            for (DataSnapshot ds: dataSnapshot.getChildren()) {
+                                boletos.add(ds.getValue(Boleto.class));
+                                binding.textContas.setText("");
+
+                            }
+                            contaPendenteAdapter.notifyDataSetChanged();
+                        }else {
+                            binding.textContas.setText("Sem boletos pendentes");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        contas.clear();
+        boletos.clear();
         carregarContas();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (contas.isEmpty()) {
+        if (boletos.isEmpty()) {
             carregarContas();
             binding.textContas.setVisibility(View.VISIBLE);
         }else {

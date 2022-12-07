@@ -6,13 +6,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.ktx.Firebase;
+
+import java.util.Base64;
 
 import br.com.appco.copiadordecodigos.R;
 import br.com.appco.copiadordecodigos.activity.ContasActivity;
+import br.com.appco.copiadordecodigos.controller.ConfiguracoesFirebase;
+import br.com.appco.copiadordecodigos.model.Usuario;
+import br.com.appco.copiadordecodigos.util.Base64Custom;
 import br.com.appco.copiadordecodigos.util.FirebaseHelper;
+import br.com.appco.copiadordecodigos.util.Util;
 
 public class MainActivity extends AppCompatActivity {
+
+    private FirebaseAuth auth = ConfiguracoesFirebase.getFirebaseAutenticacao();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         new Handler().postDelayed(this::abrirAutenticacao, 2000);
+
+        //auth.signOut();
 
     }
 

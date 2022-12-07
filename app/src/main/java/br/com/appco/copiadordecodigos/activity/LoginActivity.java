@@ -44,26 +44,20 @@ public class LoginActivity extends AppCompatActivity {
 
     public void recuperarCampos() {
 
-        progressDialog = new ProgressDialog(getApplicationContext());
-        progressDialog.show();
-        progressDialog.setContentView(R.layout.progress_dialog);
-        progressDialog.setCancelable(false);
-        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
         String email = binding.editCampoEmail.getText().toString();
         String senha = binding.editCampoSenha.getText().toString();
 
         if (!email.isEmpty()) {
             if (!senha.isEmpty()) {
-                progressDialog.dismiss();
+                //progressDialog.dismiss();
                 autenticarUsuario(email, senha);
             }else {
-                progressDialog.dismiss();
+                //progressDialog.dismiss();
                 binding.editCampoSenha.requestFocus();
                 binding.editCampoSenha.setError("Preencha este campo.");
             }
         }else {
-            progressDialog.dismiss();
+            //progressDialog.dismiss();
             binding.editCampoEmail.requestFocus();
             binding.editCampoEmail.setError("Preencha este campo.");
         }

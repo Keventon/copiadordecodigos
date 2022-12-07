@@ -2,9 +2,11 @@ package br.com.appco.copiadordecodigos.model;
 
 import com.google.firebase.database.DatabaseReference;
 
+import java.io.Serializable;
+
 import br.com.appco.copiadordecodigos.controller.ConfiguracoesFirebase;
 
-public class Boleto {
+public class Boleto implements Serializable {
     private String nome;
     private String id;
     private String descricao;
@@ -20,8 +22,10 @@ public class Boleto {
     }
 
     public void salvar() {
-        DatabaseReference firebase = ConfiguracoesFirebase.getFirebase();
-        firebase.child("boletos").child(nomeFarmacia).child(this.id).push().setValue(this);
+        DatabaseReference firebaseRef = ConfiguracoesFirebase.getFirebase();
+        DatabaseReference firebase = firebaseRef.child("boletos").child(nomeFarmacia).push();
+        setId(firebase.getKey());
+        firebase.setValue(this);
     }
 
     public Double getValorMulta() {

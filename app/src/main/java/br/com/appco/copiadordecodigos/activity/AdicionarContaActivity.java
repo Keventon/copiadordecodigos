@@ -48,36 +48,43 @@ public class AdicionarContaActivity extends AppCompatActivity {
                     if (!binding.editDescricaoConta.getText().toString().isEmpty()) {
                         double valor = (double) binding.editValorConta.getRawValue() / 100;
                         if (valor > 0) {
-                            String data = binding.editDataValidade.getText().toString();
-                            String descricao = binding.editDescricaoConta.getText().toString();
+                            double valorMulta = (double) binding.editValorMulta.getRawValue() / 100;
+                            if(valorMulta > 0) {
+                                String data = binding.editDataValidade.getText().toString();
+                                String descricao = binding.editDescricaoConta.getText().toString().trim();
 
-                            DatabaseReference npmeFarmaciaRef = reference
-                                    .child("usuario")
-                                    .child(UsuarioFirebase.getIdentificadorUsuario())
-                                    .child("nomeFarmacia");
+                                DatabaseReference npmeFarmaciaRef = reference
+                                        .child("usuario")
+                                        .child(UsuarioFirebase.getIdentificadorUsuario())
+                                        .child("nomeFarmacia");
 
-                            npmeFarmaciaRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    String nomeFarmacia = snapshot.getValue().toString();
-                                    Boleto boleto = new Boleto();
-                                    boleto.setCodigo("null");
-                                    boleto.setDataPagamento(data);
-                                    boleto.setDescricao(descricao);
-                                    boleto.setStatus(0);
-                                    boleto.setDataPagamento("");
-                                    boleto.setValor(valor);
-                                    boleto.setNomeFarmacia(nomeFarmacia);
-                                    //boleto.setValorMulta();
-                                    Toast.makeText(getApplicationContext(), "Conta adicionada com sucesso", Toast.LENGTH_SHORT).show();
-                                    finish();
-                                }
+                                npmeFarmaciaRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        String nomeFarmacia = snapshot.getValue().toString();
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
+                                        Boleto boleto = new Boleto();
+                                        boleto.setCodigo("null");
+                                        boleto.setDataValidade(data);
+                                        boleto.setDescricao(descricao);
+                                        boleto.setStatus(0);
+                                        boleto.setDataPagamento("");
+                                        boleto.setValor(valor);
+                                        boleto.setNomeFarmacia(nomeFarmacia);
+                                        boleto.setValorMulta(valorMulta);
+                                        boleto.salvar();
+                                        Toast.makeText(getApplicationContext(), "Conta adicionada com sucesso", Toast.LENGTH_SHORT).show();
+                                        startActivity(new Intent(getApplicationContext(), ContasActivity.class));
+                                    }
 
-                                }
-                            });
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+                            }else {
+                                Toast.makeText(this, "Coloque o valor de multa após o atraso do boleto", Toast.LENGTH_SHORT).show();
+                            }
                         }else {
                             Toast.makeText(this, "Defina o valor da seu boleto", Toast.LENGTH_SHORT).show();
                         }
@@ -93,23 +100,43 @@ public class AdicionarContaActivity extends AppCompatActivity {
                         if (!binding.editDescricaoConta.getText().toString().isEmpty()) {
                             double valor = (double) binding.editValorConta.getRawValue() / 100;
                             if (valor > 0) {
-                                String data = binding.editDataValidade.getText().toString();
-                                String codigo = binding.editCodigoBarra.getText().toString();
-                                String descricao = binding.editDescricaoConta.getText().toString();
+                                double valorMulta = (double) binding.editValorMulta.getRawValue() / 100;
+                                if(valorMulta > 0) {
+                                    String data = binding.editDataValidade.getText().toString();
+                                    String descricao = binding.editDescricaoConta.getText().toString().trim();
 
-                                contaDAO = new ContaDAO(this);
+                                    DatabaseReference npmeFarmaciaRef = reference
+                                            .child("usuario")
+                                            .child(UsuarioFirebase.getIdentificadorUsuario())
+                                            .child("nomeFarmacia");
 
-                                Conta conta = new Conta();
-                                conta.setCodigo(codigo);
-                                conta.setDescricao(descricao);
-                                conta.setDataValidade(data);
-                                conta.setStatus(0);
-                                conta.setValor(valor);
-                                conta.setDataPagamento("null");
+                                    npmeFarmaciaRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            String nomeFarmacia = snapshot.getValue().toString();
 
-                                contaDAO.salvar(conta);
-                                Toast.makeText(this, "Boleto adicionada com sucesso", Toast.LENGTH_SHORT).show();
-                                finish();
+                                            Boleto boleto = new Boleto();
+                                            boleto.setCodigo(binding.editCodigoBarra.getText().toString());
+                                            boleto.setDataValidade(data);
+                                            boleto.setDescricao(descricao);
+                                            boleto.setStatus(0);
+                                            boleto.setDataPagamento("");
+                                            boleto.setValor(valor);
+                                            boleto.setNomeFarmacia(nomeFarmacia);
+                                            boleto.setValorMulta(valorMulta);
+                                            boleto.salvar();
+                                            Toast.makeText(getApplicationContext(), "Conta adicionada com sucesso", Toast.LENGTH_SHORT).show();
+                                            startActivity(new Intent(getApplicationContext(), ContasActivity.class));
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
+                                }else {
+                                    Toast.makeText(this, "Coloque o valor de multa após o atraso do boleto", Toast.LENGTH_SHORT).show();
+                                }
                             }else {
                                 Toast.makeText(this, "Defina o valor da seu boleto", Toast.LENGTH_SHORT).show();
                             }
