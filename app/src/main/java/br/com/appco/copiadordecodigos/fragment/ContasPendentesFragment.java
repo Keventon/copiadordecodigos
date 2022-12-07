@@ -31,6 +31,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -285,7 +286,18 @@ public class ContasPendentesFragment extends Fragment {
         });
 
         buttonContaPaga.setOnClickListener(view ->  {
-            //
+            Boleto boleto1 = new Boleto();
+            boleto1.setStatus(1);
+            boleto1.setDataPagamento(DataAtual.dataAtual());
+            boleto1.setId(boleto.getId());
+            boleto1.setCodigo(boleto.getCodigo());
+            boleto1.setNomeFarmacia(boleto.getNomeFarmacia());
+            boleto1.setValorMulta(boleto.getValorMulta());
+            boleto1.setValor(boleto.getValor());
+            boleto1.setDataValidade(boleto.getDataValidade());
+            boleto1.setDescricao(boleto.getDescricao());
+            boleto1.atualizar();
+            Toast.makeText(context, "Boleto pago com sucesso", Toast.LENGTH_SHORT).show();
         });
 
         bottomSheetDialog.setContentView(bottomSheetView);
@@ -320,16 +332,16 @@ public class ContasPendentesFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String nomeFarmacia = snapshot.getValue().toString();
 
-                DatabaseReference produtosRef = reference
+                Query boletoRef = reference
                         .child("boletos")
-                        .child(nomeFarmacia);
-                produtosRef.addValueEventListener(new ValueEventListener() {
+                        .child(nomeFarmacia).orderByChild("status").equalTo(0);
+                boletoRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
                         boletos.clear();
 
-                        if (dataSnapshot.getValue() != null) {
-                            for (DataSnapshot ds: dataSnapshot.getChildren()) {
+                        if (snapshot.getValue() != null) {
+                            for (DataSnapshot ds: snapshot.getChildren()) {
                                 boletos.add(ds.getValue(Boleto.class));
                                 binding.textContas.setText("");
 
@@ -341,7 +353,7 @@ public class ContasPendentesFragment extends Fragment {
                     }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                    public void onCancelled(@NonNull DatabaseError error) {
 
                     }
                 });

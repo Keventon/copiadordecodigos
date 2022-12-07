@@ -34,6 +34,8 @@ public class EscolherBoletoActivity extends AppCompatActivity {
 
         carregarSpinnerFarmacias();
 
+        binding.imageVoltarEscolherBoleto.setOnClickListener(view -> finish());
+
         binding.spinnerEscolherFarmacia.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -63,6 +65,12 @@ public class EscolherBoletoActivity extends AppCompatActivity {
                 Toast.makeText(this, "Escolha uma fármacia", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 
     private void carregarSpinnerFarmacias() {
