@@ -141,7 +141,7 @@ public class ContasPendentesFragment extends Fragment {
                 .child(UsuarioFirebase.getIdentificadorUsuario())
                 .child("nomeFarmacia");
 
-        nomeRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        nomeRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 progressDialog.dismiss();
@@ -327,7 +327,7 @@ public class ContasPendentesFragment extends Fragment {
                 .child(UsuarioFirebase.getIdentificadorUsuario())
                 .child("nomeFarmacia");
 
-        nomeFarmacia.addListenerForSingleValueEvent(new ValueEventListener() {
+        nomeFarmacia.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String nomeFarmacia = snapshot.getValue().toString();
@@ -335,15 +335,15 @@ public class ContasPendentesFragment extends Fragment {
                 Query boletoRef = reference
                         .child("boletos")
                         .child(nomeFarmacia).orderByChild("status").equalTo(0);
-                boletoRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                boletoRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         boletos.clear();
 
                         if (snapshot.getValue() != null) {
+                            binding.textContas.setText("");
                             for (DataSnapshot ds: snapshot.getChildren()) {
                                 boletos.add(ds.getValue(Boleto.class));
-                                binding.textContas.setText("");
 
                             }
                             contaPendenteAdapter.notifyDataSetChanged();
