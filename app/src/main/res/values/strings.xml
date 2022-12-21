@@ -7,9 +7,9 @@
     <string-array name="farmacias">
 
         <item>Escolha uma farmácia</item>
-        <item>Farmácia 1</item>
-        <item>Farmácia 2</item>
-        <item>Farmácia 3</item>
+        <item>Farmácia Popular</item>
+        <item>Farmácia Mais Popular</item>
+        <item>Farmácia Mais Popular Bairro Novo</item>
 
     </string-array>
 

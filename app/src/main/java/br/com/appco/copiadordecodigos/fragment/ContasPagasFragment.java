@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.appco.copiadordecodigos.R;
+import br.com.appco.copiadordecodigos.activity.EscolherBoletoActivity;
 import br.com.appco.copiadordecodigos.activity.LoginActivity;
 import br.com.appco.copiadordecodigos.adapter.ContaPagaAdapter;
 import br.com.appco.copiadordecodigos.adapter.ContaPendenteAdapter;
@@ -62,17 +63,15 @@ public class ContasPagasFragment extends Fragment {
 
         binding = FragmentContasPagasBinding.inflate(inflater, container, false);
 
-        recuperarNomeFarmacia();
-
         //Configura recycleView
-        binding.recycleContaPaga.setLayoutManager(new LinearLayoutManager(context));
+        binding.recycleContaPaga.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.recycleContaPaga.setHasFixedSize(true);
         contaPagaAdapter = new ContaPagaAdapter(boletos, context);
         binding.recycleContaPaga.setAdapter(contaPagaAdapter);
 
         binding.textSairContaPaga.setOnClickListener(view -> {
             auth.signOut();
-            startActivity(new Intent(context, LoginActivity.class));
+            startActivity(new Intent(getContext(), LoginActivity.class));
         });
 
         binding.searchViewContasPagas.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -125,7 +124,7 @@ public class ContasPagasFragment extends Fragment {
         }
 
         if (contaFiltro.isEmpty()) {
-            Toast.makeText(getContext(), "Nenhuma conta encontrada", Toast.LENGTH_SHORT).show();
+
         }else {
             contaPagaAdapter.setFilteredList(contaFiltro);
         }
@@ -169,6 +168,13 @@ public class ContasPagasFragment extends Fragment {
     }
 
     public void carregarContas() {
+
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.progress_dialog);
+        progressDialog.setCancelable(false);
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
         DatabaseReference nomeFarmacia = reference
                 .child("usuario")
                 .child(UsuarioFirebase.getIdentificadorUsuario())
@@ -181,21 +187,23 @@ public class ContasPagasFragment extends Fragment {
 
                 Query boletoRef = reference
                         .child("boletos")
-                        .child(nomeFarmacia).orderByChild("status").equalTo(0);
+                        .child(nomeFarmacia).orderByChild("status").equalTo(1);
                 boletoRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         boletos.clear();
 
-                        if (snapshot.getValue() != null) {
+                        if (snapshot.exists()) {
+                            progressDialog.dismiss();
+                            //binding.textContasPagas.setVisibility(View.GONE);
                             for (DataSnapshot ds: snapshot.getChildren()) {
                                 boletos.add(ds.getValue(Boleto.class));
-                                binding.textContasPagas.setText("");
 
                             }
                             contaPagaAdapter.notifyDataSetChanged();
                         }else {
-                            binding.textContasPagas.setText("Sem boletos pendentes");
+                            progressDialog.dismiss();
+                            //binding.textContasPagas.setVisibility(View.VISIBLE);
                         }
                     }
 
@@ -215,23 +223,21 @@ public class ContasPagasFragment extends Fragment {
 
     private void recuperarNomeFarmacia() {
 
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.show();
-        progressDialog.setContentView(R.layout.progress_dialog);
-        progressDialog.setCancelable(false);
-        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
         DatabaseReference nomeRef = reference
                 .child("usuario")
                 .child(UsuarioFirebase.getIdentificadorUsuario())
                 .child("nomeFarmacia");
 
-        nomeRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        nomeRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                progressDialog.dismiss();
-                String nomeFarmacia = snapshot.getValue().toString();
-                binding.textNomeFarmacia.setText("Você está na " + nomeFarmacia);
+
+                if (snapshot.getValue() != null) {
+                    String nomeFarmacia = snapshot.getValue().toString();
+                    binding.textNomeFarmaciaContasPagas.setText("Você está na " + nomeFarmacia);
+                }else {
+                    Toast.makeText(context, "Erro", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -244,20 +250,14 @@ public class ContasPagasFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        boletos.clear();
+        contaPagaAdapter.notifyDataSetChanged();
         carregarContas();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (boletos.isEmpty()) {
-            carregarContas();
-            binding.textContasPagas.setVisibility(View.VISIBLE);
-        }else {
-            carregarContas();
-            binding.textContasPagas.setVisibility(View.GONE);
-        }
+        contaPagaAdapter.notifyDataSetChanged();
     }
 
     @Override

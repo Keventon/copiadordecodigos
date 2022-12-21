@@ -18,27 +18,29 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textNomeUsuario"
+            android:id="@+id/textNomeUsuarioContaPendente"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginStart="16dp"
             android:text=""
             android:textStyle="bold"
+            android:layout_weight="1"
             android:textColor="@color/verde"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textSairContaPendente"
-            android:layout_width="match_parent"
+            android:id="@+id/textCadastrarFuncionarioContaPendente"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sair"
+            android:text="Cadastrar funcionário"
             android:textStyle="bold"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="16dp"
             android:gravity="end"
+            android:visibility="gone"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:layout_weight="1"
@@ -91,11 +93,12 @@
         app:searchIcon="@drawable/ic_pesquisar_24dp" />
 
     <TextView
-        android:id="@+id/textContas"
+        android:id="@+id/textContasPendentes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sem boletos não pagos..."
+        android:text="Sem boletos pendentes"
         android:textColor="#4D4D4D"
+        android:visibility="gone"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

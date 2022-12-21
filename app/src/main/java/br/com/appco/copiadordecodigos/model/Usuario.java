@@ -10,6 +10,7 @@ public class Usuario {
     private String email;
     private String senha;
     private String id;
+    private String nomeFarmacia;
     private String identificador;
 
     public Usuario() {
@@ -20,7 +21,13 @@ public class Usuario {
         firebase.child("usuario").child(this.id).setValue(this);
     }
 
+    public String getNomeFarmacia() {
+        return nomeFarmacia;
+    }
 
+    public void setNomeFarmacia(String nomeFarmacia) {
+        this.nomeFarmacia = nomeFarmacia;
+    }
 
     public String getNome() {
         return nome;

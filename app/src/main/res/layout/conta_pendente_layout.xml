@@ -67,22 +67,37 @@
         app:layout_constraintTop_toBottomOf="@+id/textDataVencimentoConta" />
 
     <TextView
+        android:id="@+id/textValorComMulta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:text="Valor com a multa: "
+        android:textColor="@color/vermelho"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textValorConta" />
+
+    <TextView
         android:id="@+id/textCodigoBarraConta"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="16dp"
         android:gravity="center"
         android:text="12345678912345678912345678912345678912345678"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.516"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textDataVencimentoConta"
-        app:layout_constraintVertical_bias="0.368" />
+        app:layout_constraintTop_toBottomOf="@+id/textValorComMulta" />
 
     <Button
         android:id="@+id/buttonCopiarCodigoConta"

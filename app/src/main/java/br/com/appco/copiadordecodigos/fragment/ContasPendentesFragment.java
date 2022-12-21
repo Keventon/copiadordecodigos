@@ -7,6 +7,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -34,11 +35,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.appco.copiadordecodigos.R;
 import br.com.appco.copiadordecodigos.activity.AdicionarContaActivity;
+import br.com.appco.copiadordecodigos.activity.CadastrarFuncionarioActivity;
+import br.com.appco.copiadordecodigos.activity.ContasActivity;
 import br.com.appco.copiadordecodigos.activity.EditarContaActivity;
 import br.com.appco.copiadordecodigos.activity.EscolherBoletoActivity;
 import br.com.appco.copiadordecodigos.activity.LoginActivity;
@@ -50,6 +54,8 @@ import br.com.appco.copiadordecodigos.databinding.FragmentContasPendentesBinding
 import br.com.appco.copiadordecodigos.listener.RecyclerItemClickListener;
 import br.com.appco.copiadordecodigos.model.Boleto;
 import br.com.appco.copiadordecodigos.model.Conta;
+import br.com.appco.copiadordecodigos.model.Usuario;
+import br.com.appco.copiadordecodigos.util.Base64Custom;
 import br.com.appco.copiadordecodigos.util.DataAtual;
 
 public class ContasPendentesFragment extends Fragment {
@@ -70,8 +76,6 @@ public class ContasPendentesFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         binding = FragmentContasPendentesBinding.inflate(inflater, container, false);
-
-        recuperarNomeFarmacia();
 
         //Configura recycleView
         binding.recycleContas.setLayoutManager(new LinearLayoutManager(context));
@@ -120,21 +124,40 @@ public class ContasPendentesFragment extends Fragment {
                 )
         );
 
-        binding.textSairContaPendente.setOnClickListener(view -> {
+        binding.textCadastrarFuncionarioContaPendente.setOnClickListener(view -> {
             auth.signOut();
-            startActivity(new Intent(context, LoginActivity.class));
+            startActivity(new Intent(context, CadastrarFuncionarioActivity.class));
         });
 
         return binding.getRoot();
     }
 
+    private void verificarNivelAcesso() {
+        DatabaseReference acessoRef = reference
+                .child("usuario")
+                .child(UsuarioFirebase.getIdentificadorUsuario())
+                .child("identificador");
+        acessoRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String acesso = snapshot.getValue().toString();
+                if (acesso.equals("A")) {
+                    binding.textCadastrarFuncionarioContaPendente.setVisibility(View.VISIBLE);
+                }else {
+                    binding.textCadastrarFuncionarioContaPendente.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     private void recuperarNomeFarmacia() {
 
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.show();
-        progressDialog.setContentView(R.layout.progress_dialog);
-        progressDialog.setCancelable(false);
-        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        //verificarNivelAcesso();
 
         DatabaseReference nomeRef = reference
                 .child("usuario")
@@ -144,9 +167,11 @@ public class ContasPendentesFragment extends Fragment {
         nomeRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                progressDialog.dismiss();
-                String nomeFarmacia = snapshot.getValue().toString();
-                binding.textNomeUsuario.setText("Você está na " + nomeFarmacia);
+
+                if (snapshot.getValue() != null) {
+                    String nomeFarmacia = snapshot.getValue().toString();
+                    binding.textNomeUsuarioContaPendente.setText("Você está na " + nomeFarmacia);
+                }
             }
 
             @Override
@@ -252,16 +277,20 @@ public class ContasPendentesFragment extends Fragment {
         TextView textValor = bottomSheetView.findViewById(R.id.textValorConta);
         TextView textDataValidade = bottomSheetView.findViewById(R.id.textDataVencimentoConta);
         TextView textStatus = bottomSheetView.findViewById(R.id.textStatusConta);
+        TextView textValorComMulta = bottomSheetView.findViewById(R.id.textValorComMulta);
         TextView textCodigo = bottomSheetView.findViewById(R.id.textCodigoBarraConta);
         Button buttonCopiar = bottomSheetView.findViewById(R.id.buttonCopiarCodigoConta);
         Button buttonContaPaga = bottomSheetView.findViewById(R.id.buttonContaPaga);
 
         textDescricao.setText(boleto.getDescricao());
 
+        DecimalFormat format = new DecimalFormat("0.00");
+
         String valorString = String.valueOf(boleto.getValor()).replace(".", ",");
 
-        textValor.setText("Valor: R$" + valorString);
+        textValor.setText("Valor do boleto em R$: " + format.format(boleto.getValor()));
         textDataValidade.setText("Vencimento: " + boleto.getDataValidade());
+        textValorComMulta.setText("Valor dos juros por dia em R$: " + format.format(boleto.getValorMulta()));
 
         if (boleto.getCodigo().equals("null")) {
             textCodigo.setVisibility(View.GONE);
@@ -298,6 +327,8 @@ public class ContasPendentesFragment extends Fragment {
             boleto1.setDescricao(boleto.getDescricao());
             boleto1.atualizar();
             Toast.makeText(context, "Boleto pago com sucesso", Toast.LENGTH_SHORT).show();
+            bottomSheetDialog.dismiss();
+            startActivity(new Intent(getContext(), ContasActivity.class));
         });
 
         bottomSheetDialog.setContentView(bottomSheetView);
@@ -314,13 +345,19 @@ public class ContasPendentesFragment extends Fragment {
         }
 
         if (contaFiltro.isEmpty()) {
-            Toast.makeText(context, "Nenhuma conta encontrada", Toast.LENGTH_SHORT).show();
+
         }else {
             contaPendenteAdapter.setFilteredList(contaFiltro);
         }
     }
 
     public void carregarContas() {
+
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.progress_dialog);
+        progressDialog.setCancelable(false);
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
         DatabaseReference nomeFarmacia = reference
                 .child("usuario")
@@ -341,14 +378,18 @@ public class ContasPendentesFragment extends Fragment {
                         boletos.clear();
 
                         if (snapshot.getValue() != null) {
-                            binding.textContas.setText("");
+                            progressDialog.dismiss();
+                            //binding.textContasPendentes.setVisibility(View.GONE);
                             for (DataSnapshot ds: snapshot.getChildren()) {
                                 boletos.add(ds.getValue(Boleto.class));
+                                recuperarNomeFarmacia();
 
                             }
                             contaPendenteAdapter.notifyDataSetChanged();
                         }else {
-                            binding.textContas.setText("Sem boletos pendentes");
+                            progressDialog.dismiss();
+                            recuperarNomeFarmacia();
+                            //binding.textContasPendentes.setVisibility(View.VISIBLE);
                         }
                     }
 
@@ -369,20 +410,14 @@ public class ContasPendentesFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        boletos.clear();
+        contaPendenteAdapter.notifyDataSetChanged();
         carregarContas();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (boletos.isEmpty()) {
-            carregarContas();
-            binding.textContas.setVisibility(View.VISIBLE);
-        }else {
-            carregarContas();
-            binding.textContas.setVisibility(View.GONE);
-        }
+        contaPendenteAdapter.notifyDataSetChanged();
     }
 
     public void onAttach(Context context) {

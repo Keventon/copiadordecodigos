@@ -26,7 +26,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
     private FirebaseAuth autenticacao;
-    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +33,13 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        binding.progressBar.setVisibility(View.GONE);
+
         autenticacao = ConfiguracoesFirebase.getFirebaseAutenticacao();
 
         binding.buttonAcessar.setOnClickListener(view -> {
+            binding.editCampoEmail.setClickable(false);
+            binding.editCampoSenha.setClickable(false);
             recuperarCampos();
         });
 
@@ -44,20 +47,25 @@ public class LoginActivity extends AppCompatActivity {
 
     public void recuperarCampos() {
 
+        binding.progressBar.setVisibility(View.VISIBLE);
+
         String email = binding.editCampoEmail.getText().toString();
         String senha = binding.editCampoSenha.getText().toString();
 
         if (!email.isEmpty()) {
             if (!senha.isEmpty()) {
-                //progressDialog.dismiss();
                 autenticarUsuario(email, senha);
             }else {
-                //progressDialog.dismiss();
+                binding.editCampoEmail.setClickable(true);
+                binding.editCampoSenha.setClickable(true);
+                binding.progressBar.setVisibility(View.GONE);
                 binding.editCampoSenha.requestFocus();
                 binding.editCampoSenha.setError("Preencha este campo.");
             }
         }else {
-            //progressDialog.dismiss();
+            binding.editCampoEmail.setClickable(true);
+            binding.editCampoSenha.setClickable(true);
+            binding.progressBar.setVisibility(View.GONE);
             binding.editCampoEmail.requestFocus();
             binding.editCampoEmail.setError("Preencha este campo.");
         }
@@ -66,8 +74,12 @@ public class LoginActivity extends AppCompatActivity {
     public void autenticarUsuario(String email, String senha) {
         autenticacao.signInWithEmailAndPassword(email, senha).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
+                binding.progressBar.setVisibility(View.GONE);
                 startActivity(new Intent(getApplicationContext(), ContasActivity.class));
             } else {
+                binding.editCampoEmail.setClickable(true);
+                binding.editCampoSenha.setClickable(true);
+                binding.progressBar.setVisibility(View.GONE);
                 Toast.makeText(this, "Email ou senha incorretos", Toast.LENGTH_SHORT).show();
             }
         });

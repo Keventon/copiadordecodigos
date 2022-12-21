@@ -90,15 +90,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="25dp"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="24dp"
         android:layout_marginRight="25dp"
         android:background="@drawable/blue_border_rounded_cornwe"
         android:backgroundTint="@color/cinza_background"
         android:padding="2dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView25">
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayoutCodigoBarra">
 
         <com.blackcat.currencyedittext.CurrencyEditText
             android:id="@+id/editValorConta"
@@ -119,8 +118,8 @@
             android:id="@+id/_icone_valor_conta"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:layout_marginLeft="17dp"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="17dp"
             android:src="@drawable/ic_dinheiro" />
 
     </RelativeLayout>
@@ -169,7 +168,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="140dp"
         android:text="Data de validade do boleto"
         android:textColor="@color/black"
         android:textSize="18sp"
@@ -224,7 +223,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:text="Que boleto é esse?"
         android:textColor="@color/black"
         android:textSize="18sp"
@@ -238,7 +237,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:text="Valor da multa após atraso do boleto"
         android:textColor="@color/black"
         android:textSize="18sp"
@@ -286,6 +285,45 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/relativeLayoutNomeEmpresa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginRight="25dp"
+        android:background="@drawable/blue_border_rounded_cornwe"
+        android:backgroundTint="@color/cinza_background"
+        android:padding="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
+
+        <EditText
+            android:id="@+id/editNomeEmpresa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/_icone_nome_empresa"
+            android:background="@android:color/transparent"
+            android:hint="Nome da empresa"
+            android:inputType="textCapWords|textCapSentences"
+            android:maxLines="2"
+            android:paddingLeft="30dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:textCursorDrawable="@drawable/cursor_color_verde"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:id="@+id/_icone_nome_empresa"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="17dp"
+            android:src="@drawable/ic_descricao_receita_24dp" />
+
+    </RelativeLayout>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingAdicionarConta"
         android:layout_width="wrap_content"
@@ -296,21 +334,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/ic_confirmar_branco_24dp" />
-
-    <CheckBox
-        android:id="@+id/checkAdicionarConta"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="32dp"
-        android:backgroundTint="@color/verde"
-        android:buttonTint="@color/verde"
-        android:text="Sem código de barras"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayoutCodigoBarra" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

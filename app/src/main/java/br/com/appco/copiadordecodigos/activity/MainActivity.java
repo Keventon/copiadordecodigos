@@ -32,9 +32,11 @@ public class MainActivity extends AppCompatActivity {
 
         //auth.signOut();
 
+
     }
 
     private void abrirAutenticacao() {
+
         if (!FirebaseHelper.getAutenticado()) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         }else {

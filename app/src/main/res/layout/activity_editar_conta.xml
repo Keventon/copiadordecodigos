@@ -168,20 +168,20 @@
 
         <com.santalu.maskedittext.MaskEditText
             android:id="@+id/editCodigoBarraEditar"
+            style="@style/modifiedEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/modifiedEditText"
             android:layout_marginLeft="40dp"
             android:background="@android:color/transparent"
             android:hint="Digite o código de barras"
-            android:paddingStart="30dp"
-            android:textCursorDrawable="@drawable/cursor_color_verde"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
             android:inputType="number"
             android:maxLines="1"
+            android:paddingStart="30dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:textCursorDrawable="@drawable/cursor_color_verde"
             android:textSize="18sp"
-            app:met_mask="############ ############ ############ ############"/>
+            app:met_mask="############ ############ ############ ############" />
 
         <ImageView
             android:id="@+id/_icone_codigo_barra"

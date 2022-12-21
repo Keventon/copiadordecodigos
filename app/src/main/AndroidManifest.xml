@@ -17,6 +17,13 @@
         android:theme="@style/Theme.CopiadorDeCodigos"
         tools:targetApi="31">
         <activity
+            android:name=".activity.CadastrarFuncionarioActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".activity.EscolherBoletoActivity"
             android:exported="false">
             <meta-data

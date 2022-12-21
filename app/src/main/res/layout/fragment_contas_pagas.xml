@@ -24,8 +24,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.181"
+        app:layout_constraintTop_toBottomOf="@+id/linear"
+        app:layout_constraintVertical_bias="0.05"
         app:queryBackground="@android:color/transparent"
         app:queryHint="Buscar um boleto..."
         app:searchIcon="@drawable/ic_pesquisar_24dp" />
@@ -41,7 +41,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textNomeFarmacia"
+            android:id="@+id/textNomeFarmaciaContasPagas"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -72,23 +72,6 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/buttonEscolherFarmacia"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="32dp"
-        android:background="@drawable/button_background"
-        android:text="Escolher farmácia"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linear" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycleContaPaga"
         android:layout_width="match_parent"
@@ -106,8 +89,9 @@
         android:id="@+id/textContasPagas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sem contas pagas..."
+        android:text="Sem boletos pagos"
         android:textColor="#4D4D4D"
+        android:visibility="gone"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
