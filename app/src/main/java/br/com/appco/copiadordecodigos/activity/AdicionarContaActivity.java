@@ -51,38 +51,44 @@ public class AdicionarContaActivity extends AppCompatActivity {
                             if (valor > 0) {
                                 double valorMulta = (double) binding.editValorMulta.getRawValue() / 100;
                                 if(valorMulta > 0) {
-                                    String data = binding.editDataValidade.getText().toString();
-                                    String descricao = binding.editDescricaoConta.getText().toString().trim();
+                                    if(!binding.editNomeEmpresa.getText().toString().isEmpty()) {
+                                        String data = binding.editDataValidade.getText().toString();
+                                        String descricao = binding.editDescricaoConta.getText().toString().trim();
 
-                                    DatabaseReference npmeFarmaciaRef = reference
-                                            .child("usuario")
-                                            .child(UsuarioFirebase.getIdentificadorUsuario())
-                                            .child("nomeFarmacia");
+                                        DatabaseReference npmeFarmaciaRef = reference
+                                                .child("usuario")
+                                                .child(UsuarioFirebase.getIdentificadorUsuario())
+                                                .child("nomeFarmacia");
 
-                                    npmeFarmaciaRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                            String nomeFarmacia = snapshot.getValue().toString();
+                                        npmeFarmaciaRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                String nomeFarmacia = snapshot.getValue().toString();
 
-                                            Boleto boleto = new Boleto();
-                                            boleto.setCodigo(binding.editCodigoBarra.getText().toString());
-                                            boleto.setDataValidade(data);
-                                            boleto.setDescricao(descricao);
-                                            boleto.setStatus(0);
-                                            boleto.setDataPagamento("");
-                                            boleto.setValor(valor);
-                                            boleto.setNomeFarmacia(nomeFarmacia);
-                                            boleto.setValorMulta(valorMulta);
-                                            boleto.salvar();
-                                            Toast.makeText(getApplicationContext(), "Conta adicionada com sucesso", Toast.LENGTH_SHORT).show();
-                                            startActivity(new Intent(getApplicationContext(), ContasActivity.class));
-                                        }
+                                                Boleto boleto = new Boleto();
+                                                boleto.setCodigo(binding.editCodigoBarra.getText().toString());
+                                                boleto.setDataValidade(data);
+                                                boleto.setDescricao(descricao);
+                                                boleto.setStatus(0);
+                                                boleto.setDataPagamento("");
+                                                boleto.setValor(valor);
+                                                boleto.setNomeEmpresa(binding.editNomeEmpresa.getText().toString().trim());
+                                                boleto.setNomeFarmacia(nomeFarmacia);
+                                                boleto.setValorMulta(valorMulta);
+                                                boleto.salvar();
+                                                Toast.makeText(getApplicationContext(), "Conta adicionada com sucesso", Toast.LENGTH_SHORT).show();
+                                                startActivity(new Intent(getApplicationContext(), ContasActivity.class));
+                                            }
 
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError error) {
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
 
-                                        }
-                                    });
+                                            }
+                                        });
+                                    }else {
+                                        binding.editNomeEmpresa.requestFocus();
+                                        binding.editNomeEmpresa.setText("Coloque o nome da Empresa");
+                                    }
                                 }else {
                                     binding.editValorMulta.requestFocus();
                                     binding.editValorMulta.setError("Coloque o valor de multa após o atraso do boleto");

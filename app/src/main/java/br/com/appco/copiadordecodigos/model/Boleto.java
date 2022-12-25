@@ -8,6 +8,7 @@ import br.com.appco.copiadordecodigos.controller.ConfiguracoesFirebase;
 
 public class Boleto implements Serializable {
     private String nome;
+    private String nomeEmpresa;
     private String id;
     private String descricao;
     private String codigo;
@@ -32,6 +33,14 @@ public class Boleto implements Serializable {
         DatabaseReference firebaseRef = ConfiguracoesFirebase.getFirebase();
         DatabaseReference firebase = firebaseRef.child("boletos").child(nomeFarmacia).child(getId());
         firebase.setValue(this);
+    }
+
+    public String getNomeEmpresa() {
+        return nomeEmpresa;
+    }
+
+    public void setNomeEmpresa(String nomeEmpresa) {
+        this.nomeEmpresa = nomeEmpresa;
     }
 
     public Double getValorMulta() {

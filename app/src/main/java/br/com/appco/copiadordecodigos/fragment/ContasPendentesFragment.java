@@ -229,6 +229,7 @@ public class ContasPendentesFragment extends Fragment {
                                 contaRef.removeValue();
                                 Toast.makeText(context, "Boleto removido com sucesso", Toast.LENGTH_SHORT).show();
                                 bottomSheetDialog.dismiss();
+                                startActivity(new Intent(context, ContasActivity.class));
                             }else {
                                 Toast.makeText(context, "Você não tem permissão para reover boletos", Toast.LENGTH_SHORT).show();
                             }
@@ -322,6 +323,7 @@ public class ContasPendentesFragment extends Fragment {
             boleto1.setCodigo(boleto.getCodigo());
             boleto1.setNomeFarmacia(boleto.getNomeFarmacia());
             boleto1.setValorMulta(boleto.getValorMulta());
+            boleto1.setNomeEmpresa(boleto.getNomeEmpresa());
             boleto1.setValor(boleto.getValor());
             boleto1.setDataValidade(boleto.getDataValidade());
             boleto1.setDescricao(boleto.getDescricao());
@@ -339,7 +341,7 @@ public class ContasPendentesFragment extends Fragment {
 
         List<Boleto> contaFiltro = new ArrayList<>();
         for (Boleto b : boletos) {
-            if (b.getDescricao().toLowerCase().contains(nome.toLowerCase())) {
+            if (b.getNomeEmpresa().toLowerCase().contains(nome.toLowerCase())) {
                 contaFiltro.add(b);
             }
         }

@@ -118,7 +118,7 @@ public class ContasPagasFragment extends Fragment {
 
         List<Boleto> contaFiltro = new ArrayList<>();
         for (Boleto b : boletos) {
-            if (b.getDescricao().toLowerCase().contains(nome.toLowerCase())) {
+            if (b.getNomeEmpresa().toLowerCase().contains(nome.toLowerCase())) {
                 contaFiltro.add(b);
             }
         }
