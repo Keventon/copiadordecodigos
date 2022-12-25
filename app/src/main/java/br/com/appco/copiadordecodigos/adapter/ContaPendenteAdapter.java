@@ -44,7 +44,6 @@ public class ContaPendenteAdapter extends RecyclerView.Adapter<ContaPendenteAdap
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Boleto boleto = listaBoletos.get(position);
 
-        holder.descricao.setText(boleto.getDescricao());
         holder.dataVencimento.setText("Vencimento: " + boleto.getDataValidade());
         holder.textNomeEmpresaContaPendente.setText("Empresa: " + boleto.getNomeEmpresa());
 
@@ -110,12 +109,11 @@ public class ContaPendenteAdapter extends RecyclerView.Adapter<ContaPendenteAdap
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView descricao, status, dataVencimento, textNomeEmpresaContaPendente;
+        TextView status, dataVencimento, textNomeEmpresaContaPendente;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            descricao = itemView.findViewById(R.id.textDescricao);
             status = itemView.findViewById(R.id.textStatusContaPendente);
             dataVencimento = itemView.findViewById(R.id.dataVencimento);
             textNomeEmpresaContaPendente = itemView.findViewById(R.id.textNomeEmpresaContaPendente);

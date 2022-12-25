@@ -60,7 +60,6 @@ public class EscolherBoletoActivity extends AppCompatActivity {
                         .child(UsuarioFirebase.getIdentificadorUsuario())
                         .child("nomeFarmacia");
                 npmeFarmaciaRef.setValue(binding.spinnerEscolherFarmacia.getSelectedItem().toString());
-                finish();
                 startActivity(new Intent(getApplicationContext(), ContasActivity.class));
             }else {
                 Toast.makeText(this, "Escolha uma fármacia", Toast.LENGTH_SHORT).show();

@@ -142,13 +142,13 @@ public class ContasPagasFragment extends Fragment {
                 );
 
         //Iniciando layouts
-        TextView textDescricao = bottomSheetView.findViewById(R.id.textDescricaoContaPaga);
+        TextView textNomeEmpresaContaPaga = bottomSheetView.findViewById(R.id.textNomeEmpresaContaPaga);
         TextView textValor = bottomSheetView.findViewById(R.id.textValorContaPaga);
         TextView textDataPagamento = bottomSheetView.findViewById(R.id.textDataPagamentoContaPaga);
         TextView textStatus = bottomSheetView.findViewById(R.id.textStatusContaPaga);
         TextView textVoltar = bottomSheetView.findViewById(R.id.texVoltarContaPaga);
 
-        textDescricao.setText(boleto.getDescricao());
+        textNomeEmpresaContaPaga.setText(boleto.getNomeEmpresa());
 
         String valorString = String.valueOf(boleto.getValor()).replace(".", ",");
 

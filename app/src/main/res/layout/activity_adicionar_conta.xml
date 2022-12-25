@@ -219,26 +219,12 @@
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:text="Que boleto é esse?"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.066"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout2" />
-
-    <TextView
         android:id="@+id/textView4"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
-        android:text="Valor da multa após atraso do boleto"
+        android:text="Valor de juros após atraso do boleto"
         android:textColor="@color/black"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -247,57 +233,18 @@
         app:layout_constraintTop_toBottomOf="@+id/relativeLayoutValorConta" />
 
     <RelativeLayout
-        android:id="@+id/relativeLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="25dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="25dp"
-        android:background="@drawable/blue_border_rounded_cornwe"
-        android:backgroundTint="@color/cinza_background"
-        android:padding="2dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
-
-        <EditText
-            android:id="@+id/editDescricaoConta"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/_icone"
-            android:background="@android:color/transparent"
-            android:hint="Ex: Conta de energia"
-            android:inputType="textCapWords|textCapSentences"
-            android:maxLines="2"
-            android:paddingLeft="30dp"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
-            android:textCursorDrawable="@drawable/cursor_color_verde"
-            android:textSize="17sp" />
-
-        <ImageView
-            android:id="@+id/_icone"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="17dp"
-            android:src="@drawable/ic_descricao_receita_24dp" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
         android:id="@+id/relativeLayoutNomeEmpresa"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="25dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="20dp"
         android:layout_marginRight="25dp"
         android:background="@drawable/blue_border_rounded_cornwe"
         android:backgroundTint="@color/cinza_background"
         android:padding="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout2">
 
         <EditText
             android:id="@+id/editNomeEmpresa"

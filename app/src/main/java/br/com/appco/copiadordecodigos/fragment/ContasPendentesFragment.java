@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -274,7 +276,7 @@ public class ContasPendentesFragment extends Fragment {
                 );
 
         //Iniciando layouts
-        TextView textDescricao = bottomSheetView.findViewById(R.id.textDescricaoConta);
+        TextView textNomeEmpresaConta = bottomSheetView.findViewById(R.id.textNomeEmpresaConta);
         TextView textValor = bottomSheetView.findViewById(R.id.textValorConta);
         TextView textDataValidade = bottomSheetView.findViewById(R.id.textDataVencimentoConta);
         TextView textStatus = bottomSheetView.findViewById(R.id.textStatusConta);
@@ -283,7 +285,7 @@ public class ContasPendentesFragment extends Fragment {
         Button buttonCopiar = bottomSheetView.findViewById(R.id.buttonCopiarCodigoConta);
         Button buttonContaPaga = bottomSheetView.findViewById(R.id.buttonContaPaga);
 
-        textDescricao.setText(boleto.getDescricao());
+        textNomeEmpresaConta.setText(boleto.getNomeEmpresa());
 
         DecimalFormat format = new DecimalFormat("0.00");
 
@@ -326,7 +328,6 @@ public class ContasPendentesFragment extends Fragment {
             boleto1.setNomeEmpresa(boleto.getNomeEmpresa());
             boleto1.setValor(boleto.getValor());
             boleto1.setDataValidade(boleto.getDataValidade());
-            boleto1.setDescricao(boleto.getDescricao());
             boleto1.atualizar();
             Toast.makeText(context, "Boleto pago com sucesso", Toast.LENGTH_SHORT).show();
             bottomSheetDialog.dismiss();
