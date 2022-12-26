@@ -431,14 +431,12 @@ public class ContasPendentesFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        contaPendenteAdapter.notifyDataSetChanged();
         carregarContas();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        contaPendenteAdapter.notifyDataSetChanged();
     }
 
     public void onAttach(Context context) {

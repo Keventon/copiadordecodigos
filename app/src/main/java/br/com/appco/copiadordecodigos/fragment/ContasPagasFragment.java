@@ -269,14 +269,12 @@ public class ContasPagasFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        contaPagaAdapter.notifyDataSetChanged();
         carregarContas();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        contaPagaAdapter.notifyDataSetChanged();
     }
 
     @Override
