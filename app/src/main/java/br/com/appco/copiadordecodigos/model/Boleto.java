@@ -22,11 +22,11 @@ public class Boleto implements Serializable {
     public Boleto() {
     }
 
-    public void salvar() {
+    public void salvar(DatabaseReference.CompletionListener listener) {
         DatabaseReference firebaseRef = ConfiguracoesFirebase.getFirebase();
         DatabaseReference firebase = firebaseRef.child("boletos").child(nomeFarmacia).push();
         setId(firebase.getKey());
-        firebase.setValue(this);
+        firebase.setValue(this, listener);
     }
 
     public void atualizar() {

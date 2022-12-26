@@ -28,8 +28,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import br.com.appco.copiadordecodigos.R;
 import br.com.appco.copiadordecodigos.activity.EscolherBoletoActivity;
@@ -54,6 +56,8 @@ public class ContasPagasFragment extends Fragment {
     private FirebaseAuth auth = ConfiguracoesFirebase.getFirebaseAutenticacao();
     private DatabaseReference reference = ConfiguracoesFirebase.getFirebase();
     private ProgressDialog progressDialog;
+
+    private List<Boleto> boletosFiltered = new ArrayList<>();
 
     FragmentContasPagasBinding binding;
 
@@ -82,8 +86,12 @@ public class ContasPagasFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                buscarConta(newText);
-                return false;
+                if (boletos.size() > 0) {
+                    boletosFiltered = filterList(boletos, newText);
+                    contaPagaAdapter.animateTo(boletosFiltered);
+                    binding.recycleContaPaga.scrollToPosition(0);
+                }
+                return true;
             }
         });
 
@@ -94,7 +102,7 @@ public class ContasPagasFragment extends Fragment {
                         new RecyclerItemClickListener.OnItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
-                                Boleto boleto = boletos.get(position);
+                                Boleto boleto = boletosFiltered.get(position);
                                 detalhesConta(boleto);
                             }
 
@@ -130,6 +138,16 @@ public class ContasPagasFragment extends Fragment {
         }
     }
 
+    private List<Boleto> filterList(List<Boleto> produtos, String termo) {
+        final List<Boleto> filteredList = new ArrayList<>();
+        for (Boleto b : boletos) {
+            if (b.getNomeEmpresa().toUpperCase(Locale.ROOT).contains(termo.toUpperCase(Locale.ROOT))) {
+                filteredList.add(b);
+            }
+        }
+        return filteredList;
+    }
+
     public void detalhesConta(Boleto boleto) {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
                 getContext(), R.style.BottomSheetTheme
@@ -150,9 +168,9 @@ public class ContasPagasFragment extends Fragment {
 
         textNomeEmpresaContaPaga.setText(boleto.getNomeEmpresa());
 
-        String valorString = String.valueOf(boleto.getValor()).replace(".", ",");
+        DecimalFormat format = new DecimalFormat("0.00");
 
-        textValor.setText("Valor: R$" + valorString);
+        textValor.setText("Valor: R$ " + format.format(boleto.getValor()));
         textDataPagamento.setText("Pago no dia: " + boleto.getDataPagamento());
 
         textVoltar.setOnClickListener(view ->  {
@@ -200,7 +218,8 @@ public class ContasPagasFragment extends Fragment {
                                 boletos.add(ds.getValue(Boleto.class));
 
                             }
-                            contaPagaAdapter.notifyDataSetChanged();
+                            boletosFiltered = new ArrayList<>(boletos);
+                            contaPagaAdapter.setData(boletos);
                         }else {
                             progressDialog.dismiss();
                             //binding.textContasPagas.setVisibility(View.VISIBLE);

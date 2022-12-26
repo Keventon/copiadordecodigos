@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.appco.copiadordecodigos.R;
@@ -23,6 +24,11 @@ public class ContaPendenteAdapter extends RecyclerView.Adapter<ContaPendenteAdap
     public ContaPendenteAdapter(List<Boleto> boletos, Context context) {
         this.listaBoletos = boletos;
         this.context = context;
+    }
+
+    public void setData(List<Boleto> boletos){
+        this.listaBoletos = new ArrayList<>(boletos);
+        notifyDataSetChanged();
     }
 
     public void setFilteredList(List<Boleto> filteredList) {

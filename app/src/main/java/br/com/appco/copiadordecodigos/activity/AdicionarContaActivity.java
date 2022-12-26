@@ -72,9 +72,10 @@ public class AdicionarContaActivity extends AppCompatActivity {
                                             boleto.setNomeEmpresa(binding.editNomeEmpresa.getText().toString().trim());
                                             boleto.setNomeFarmacia(nomeFarmacia);
                                             boleto.setValorMulta(valorMulta);
-                                            boleto.salvar();
-                                            Toast.makeText(getApplicationContext(), "Conta adicionada com sucesso", Toast.LENGTH_SHORT).show();
-                                            startActivity(new Intent(getApplicationContext(), ContasActivity.class));
+                                            boleto.salvar(((error, ref) -> {
+                                                Toast.makeText(getApplicationContext(), "Conta adicionada com sucesso", Toast.LENGTH_SHORT).show();
+                                                startActivity(new Intent(getApplicationContext(), ContasActivity.class));
+                                            }));
                                         }
 
                                         @Override

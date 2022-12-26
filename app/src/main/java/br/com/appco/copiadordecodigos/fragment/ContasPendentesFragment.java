@@ -40,6 +40,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import br.com.appco.copiadordecodigos.R;
 import br.com.appco.copiadordecodigos.activity.AdicionarContaActivity;
@@ -73,6 +74,8 @@ public class ContasPendentesFragment extends Fragment {
     FragmentContasPendentesBinding binding;
     DatabaseReference reference = ConfiguracoesFirebase.getFirebase();
 
+    private List<Boleto> boletosFiltered = new ArrayList<>();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -93,8 +96,12 @@ public class ContasPendentesFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                buscarConta(newText);
-                return false;
+                if (boletos.size() > 0) {
+                    boletosFiltered = filterList(boletos, newText);
+                    contaPendenteAdapter.animateTo(boletosFiltered);
+                    binding.recycleContas.scrollToPosition(0);
+                }
+                return true;
             }
         });
 
@@ -107,7 +114,7 @@ public class ContasPendentesFragment extends Fragment {
                         new RecyclerItemClickListener.OnItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
-                                Boleto boleto = boletos.get(position);
+                                Boleto boleto = boletosFiltered.get(position);
                                 detalhesConta(boleto);
                             }
 
@@ -264,6 +271,16 @@ public class ContasPendentesFragment extends Fragment {
         });
     }
 
+    private List<Boleto> filterList(List<Boleto> produtos, String termo) {
+        final List<Boleto> filteredList = new ArrayList<>();
+        for (Boleto b : boletos) {
+            if (b.getNomeEmpresa().toUpperCase(Locale.ROOT).contains(termo.toUpperCase(Locale.ROOT))) {
+                filteredList.add(b);
+            }
+        }
+        return filteredList;
+    }
+
     public void detalhesConta(Boleto boleto) {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
                 getContext(), R.style.BottomSheetTheme
@@ -388,7 +405,8 @@ public class ContasPendentesFragment extends Fragment {
                                 recuperarNomeFarmacia();
 
                             }
-                            contaPendenteAdapter.notifyDataSetChanged();
+                            boletosFiltered = new ArrayList<>(boletos);
+                            contaPendenteAdapter.setData(boletos);
                         }else {
                             progressDialog.dismiss();
                             recuperarNomeFarmacia();

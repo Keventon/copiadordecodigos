@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.appco.copiadordecodigos.R;
@@ -26,6 +27,11 @@ public class ContaPagaAdapter extends RecyclerView.Adapter<ContaPagaAdapter.MyVi
 
     public void setFilteredList(List<Boleto> filteredList) {
         this.listaBoletos = filteredList;
+        notifyDataSetChanged();
+    }
+
+    public void setData(List<Boleto> boletos){
+        this.listaBoletos = new ArrayList<>(boletos);
         notifyDataSetChanged();
     }
 
