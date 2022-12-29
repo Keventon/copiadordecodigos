@@ -4,6 +4,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 
 import br.com.appco.copiadordecodigos.controller.ConfiguracoesFirebase;
+import br.com.appco.copiadordecodigos.controller.UsuarioFirebase;
 
 public class Usuario {
     private String nome;
@@ -19,6 +20,15 @@ public class Usuario {
     public void salvar() {
         DatabaseReference firebase = ConfiguracoesFirebase.getFirebase();
         firebase.child("usuario").child(this.id).setValue(this);
+    }
+
+    public void atualizarNomeFarmacia(String nomeFarmacia, DatabaseReference.CompletionListener listener) {
+        DatabaseReference reference = ConfiguracoesFirebase.getFirebase();
+        DatabaseReference npmeFarmaciaRef = reference
+                .child("usuario")
+                .child(UsuarioFirebase.getIdentificadorUsuario())
+                .child("nomeFarmacia");
+        npmeFarmaciaRef.setValue(nomeFarmacia, listener);
     }
 
     public String getNomeFarmacia() {

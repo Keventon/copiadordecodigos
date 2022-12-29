@@ -17,6 +17,8 @@ import br.com.appco.copiadordecodigos.R;
 import br.com.appco.copiadordecodigos.controller.ConfiguracoesFirebase;
 import br.com.appco.copiadordecodigos.controller.UsuarioFirebase;
 import br.com.appco.copiadordecodigos.databinding.ActivityEscolherBoletoBinding;
+import br.com.appco.copiadordecodigos.model.Usuario;
+import br.com.appco.copiadordecodigos.util.Util;
 
 public class EscolherBoletoActivity extends AppCompatActivity {
 
@@ -54,14 +56,25 @@ public class EscolherBoletoActivity extends AppCompatActivity {
 
         binding.buttonContinuarEscolherBoleto.setOnClickListener(view -> {
 
+            progressDialog = new ProgressDialog(EscolherBoletoActivity.this);
+            progressDialog.show();
+            progressDialog.setContentView(R.layout.progress_dialog);
+            progressDialog.setCancelable(false);
+            progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
             if (!binding.spinnerEscolherFarmacia.getSelectedItem().toString().equals("Escolha uma fármacia")) {
-                DatabaseReference npmeFarmaciaRef = reference
-                        .child("usuario")
-                        .child(UsuarioFirebase.getIdentificadorUsuario())
-                        .child("nomeFarmacia");
-                npmeFarmaciaRef.setValue(binding.spinnerEscolherFarmacia.getSelectedItem().toString());
-                startActivity(new Intent(getApplicationContext(), ContasActivity.class));
+                if (Util.checarConexaoDispositivo(EscolherBoletoActivity.this)) {
+                    Usuario usuario = new Usuario();
+                    usuario.atualizarNomeFarmacia(binding.spinnerEscolherFarmacia.getSelectedItem().toString(), ((error, ref) -> {
+                        progressDialog.dismiss();
+                        startActivity(new Intent(EscolherBoletoActivity.this, ContasActivity.class));
+                    }));
+                }else {
+                    progressDialog.dismiss();
+                    Toast.makeText(this, "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
+                }
             }else {
+                progressDialog.dismiss();
                 Toast.makeText(this, "Escolha uma fármacia", Toast.LENGTH_SHORT).show();
             }
         });

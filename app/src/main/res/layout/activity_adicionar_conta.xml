@@ -45,7 +45,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageVoltarAdicionarConta">
 
-        <com.santalu.maskedittext.MaskEditText
+        <EditText
             android:id="@+id/editCodigoBarra"
             style="@style/modifiedEditText"
             android:layout_width="match_parent"
@@ -59,8 +59,7 @@
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
             android:textCursorDrawable="@drawable/cursor_color_verde"
-            android:textSize="18sp"
-            app:met_mask="############ ############ ############ ############" />
+            android:textSize="18sp" />
 
         <ImageView
             android:id="@+id/_icone_codigo_barra"
@@ -260,6 +259,16 @@
             android:src="@drawable/ic_descricao_receita_24dp" />
 
     </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBarAddConta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/verde"
+        app:layout_constraintBottom_toTopOf="@+id/floatingAdicionarConta"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayoutNomeEmpresa" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingAdicionarConta"
