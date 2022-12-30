@@ -7,6 +7,7 @@
     <string-array name="farmacias">
 
         <item>Escolha uma farmácia</item>
+        <item>Distribuidora Popular</item>
         <item>Farmácia Popular</item>
         <item>Farmácia Mais Popular</item>
         <item>Farmácia Mais Popular Bairro Novo</item>
