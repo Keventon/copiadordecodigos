@@ -345,10 +345,11 @@ public class ContasPendentesFragment extends Fragment {
             boleto1.setNomeEmpresa(boleto.getNomeEmpresa());
             boleto1.setValor(boleto.getValor());
             boleto1.setDataValidade(boleto.getDataValidade());
-            boleto1.atualizar();
-            Toast.makeText(context, "Boleto pago com sucesso", Toast.LENGTH_SHORT).show();
-            bottomSheetDialog.dismiss();
-            startActivity(new Intent(getContext(), ContasActivity.class));
+            boleto1.atualizar(((error, ref) -> {
+                Toast.makeText(context, "Boleto pago com sucesso", Toast.LENGTH_SHORT).show();
+                bottomSheetDialog.dismiss();
+                startActivity(new Intent(getContext(), ContasActivity.class));
+            }));
         });
 
         bottomSheetDialog.setContentView(bottomSheetView);

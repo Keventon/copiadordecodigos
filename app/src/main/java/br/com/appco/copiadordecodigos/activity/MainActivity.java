@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void abrirAutenticacao() {
 
+
         if (!FirebaseHelper.getAutenticado()) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         }else {

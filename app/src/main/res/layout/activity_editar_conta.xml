@@ -104,7 +104,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="36dp"
-        android:text="Que conta é essa?"
+        android:text="Nome da empresa"
         android:textColor="@color/black"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -127,12 +127,12 @@
         app:layout_constraintTop_toBottomOf="@+id/textView">
 
         <EditText
-            android:id="@+id/editDescricaoContaEditar"
+            android:id="@+id/editNomeEmpresaContaEditar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/_icone"
             android:background="@android:color/transparent"
-            android:hint="Ex: Conta de energia"
+            android:hint="Ex: Martins, Energia"
             android:inputType="textCapWords|textCapSentences"
             android:maxLines="2"
             android:paddingLeft="30dp"
@@ -166,7 +166,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageVoltarEditarConta">
 
-        <com.santalu.maskedittext.MaskEditText
+            <EditText
             android:id="@+id/editCodigoBarraEditar"
             style="@style/modifiedEditText"
             android:layout_width="match_parent"
@@ -180,8 +180,7 @@
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
             android:textCursorDrawable="@drawable/cursor_color_verde"
-            android:textSize="18sp"
-            app:met_mask="############ ############ ############ ############" />
+            android:textSize="18sp" />
 
         <ImageView
             android:id="@+id/_icone_codigo_barra"
@@ -238,7 +237,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
-        android:text="Valor da multa após atraso do boleto"
+        android:text="Valor dos juros após atraso do boleto"
         android:textColor="@color/black"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"

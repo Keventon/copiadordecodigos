@@ -29,10 +29,10 @@ public class Boleto implements Serializable {
         firebase.setValue(this, listener);
     }
 
-    public void atualizar() {
+    public void atualizar(DatabaseReference.CompletionListener listener) {
         DatabaseReference firebaseRef = ConfiguracoesFirebase.getFirebase();
         DatabaseReference firebase = firebaseRef.child("boletos").child(nomeFarmacia).child(getId());
-        firebase.setValue(this);
+        firebase.setValue(this, listener);
     }
 
     public String getNomeEmpresa() {

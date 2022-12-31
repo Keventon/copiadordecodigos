@@ -35,10 +35,11 @@ public class EditarContaActivity extends AppCompatActivity {
             Double contaConvertida = contaAtual.getValor() * 10;
             Double contaConvertidaMulta = contaAtual.getValorMulta() * 10;
 
-            binding.editDescricaoContaEditar.setText(contaAtual.getDescricao());
+            binding.editNomeEmpresaContaEditar.setText(contaAtual.getNomeEmpresa());
             binding.editValorContaEditar.setText(String.valueOf(contaConvertida));
             binding.editValorMulta.setText(String.valueOf(contaConvertidaMulta));
             binding.editDataValidadeEditar.setText(contaAtual.getDataValidade());
+            binding.editCodigoBarraEditar.setText(contaAtual.getCodigo());
 
             if (contaAtual.getCodigo().equals("null")) {
                 binding.editCodigoBarraEditar.setText("");
@@ -48,32 +49,33 @@ public class EditarContaActivity extends AppCompatActivity {
         }
 
         binding.buttonConfirmarEdicao.setOnClickListener(view ->  {
-            if (binding.editCodigoBarraEditar.length() == 51 || contaAtual.getCodigo().equals("null")){
+            if (!binding.editCodigoBarraEditar.getText().toString().isEmpty()){
                 if (binding.editDataValidadeEditar.length() == 10) {
-                    if (!binding.editDescricaoContaEditar.getText().toString().isEmpty()) {
+                    if (!binding.editNomeEmpresaContaEditar.getText().toString().isEmpty()) {
                         double valor = (double) binding.editValorContaEditar.getRawValue() / 100;
                         double valorMulta = (double) binding.editValorMulta.getRawValue() / 100;
                         String data = binding.editDataValidadeEditar.getText().toString();
                         String codigo = binding.editCodigoBarraEditar.getText().toString();
-                        String descricao = binding.editDescricaoContaEditar.getText().toString();
+                        String descricao = binding.editNomeEmpresaContaEditar.getText().toString();
 
                         Boleto boleto = new Boleto();
-                        boleto.setCodigo("null");
+                        boleto.setCodigo(codigo);
                         boleto.setDataPagamento("");
-                        boleto.setDescricao(descricao);
+                        boleto.setNomeEmpresa(descricao);
                         boleto.setStatus(0);
                         boleto.setNomeFarmacia(contaAtual.getNomeFarmacia());
                         boleto.setValor(valor);
                         boleto.setValorMulta(valorMulta);
                         boleto.setDataValidade(data);
                         boleto.setId(contaAtual.getId());
-                        boleto.atualizar();
-                        Toast.makeText(this, "Boleto editado com sucesso", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(getApplicationContext(), ContasActivity.class));
+                        boleto.atualizar(((error, ref) -> {
+                            Toast.makeText(this, "Boleto editado com sucesso", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(getApplicationContext(), ContasActivity.class));
+                        }));
 
 
                     }else {
-                        Toast.makeText(this, "Você não colocou uma descrição para sua conta", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Você não colocou o nome da empresa para sua conta", Toast.LENGTH_SHORT).show();
                     }
                 }else {
                     Toast.makeText(this, "Você não definiu uma data", Toast.LENGTH_SHORT).show();
