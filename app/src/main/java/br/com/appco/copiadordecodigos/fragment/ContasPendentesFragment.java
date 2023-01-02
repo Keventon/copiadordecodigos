@@ -7,7 +7,9 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,11 +22,13 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -88,6 +92,10 @@ public class ContasPendentesFragment extends Fragment {
         contaPendenteAdapter = new ContaPendenteAdapter(boletos, context);
         binding.recycleContas.setAdapter(contaPendenteAdapter);
 
+        binding.imageCalendario.setOnClickListener(view -> {
+            abrirCalendario(view);
+        });
+
         binding.searchViewContasPendentes.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -139,6 +147,108 @@ public class ContasPendentesFragment extends Fragment {
         });
 
         return binding.getRoot();
+    }
+
+    private void abrirCalendario(View view) {
+        ViewGroup viewGroup = view.findViewById(android.R.id.content);
+
+        CalendarView calendarView;
+        Button buttonEscolherData;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View inflate = LayoutInflater.from(context).inflate(R.layout.dialog_layout_calendario, viewGroup, false);
+        builder.setView(inflate);
+        builder.setCancelable(true);
+
+        calendarView = inflate.findViewById(R.id.calendarView);
+        buttonEscolherData = inflate.findViewById(R.id.buttonEscolherDataContaPendente);
+
+        final AlertDialog dialog = builder.create();
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView calendarView, int ano, int mes, int diadoMes) {
+                int mesAno = mes + 1;
+
+                if (diadoMes < 10) {
+                    String data = "0" + diadoMes + "/0" + mesAno + "/" + ano;
+                    buscarBoletoPorData(data);
+                }else {
+                    String data = diadoMes + "/0" + mesAno + "/" + ano;
+                    buscarBoletoPorData(data);
+                }
+
+            }
+        });
+
+        buttonEscolherData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    public void buscarBoletoPorData(String data) {
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.progress_dialog);
+        progressDialog.setCancelable(false);
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DatabaseReference nomeFarmacia = reference
+                .child("usuario")
+                .child(UsuarioFirebase.getIdentificadorUsuario())
+                .child("nomeFarmacia");
+
+        nomeFarmacia.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String nomeFarmacia = snapshot.getValue().toString();
+
+                Query boletoRef = reference
+                        .child("boletos")
+                        .child(nomeFarmacia).orderByChild("dataValidade").equalTo(data);
+                boletoRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        boletos.clear();
+
+                        if (snapshot.getValue() != null) {
+                            progressDialog.dismiss();
+                            //binding.textContasPendentes.setVisibility(View.GONE);
+                            for (DataSnapshot ds: snapshot.getChildren()) {
+                                boletos.add(ds.getValue(Boleto.class));
+                                recuperarNomeFarmacia();
+
+                            }
+                            boletosFiltered = new ArrayList<>(boletos);
+                            contaPendenteAdapter.setData(boletos);
+                        }else {
+                            progressDialog.dismiss();
+                            recuperarNomeFarmacia();
+                            boletosFiltered = new ArrayList<>(boletos);
+                            contaPendenteAdapter.setData(boletos);
+                            //binding.textContasPendentes.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void verificarNivelAcesso() {
