@@ -92,9 +92,7 @@ public class ContasPendentesFragment extends Fragment {
         contaPendenteAdapter = new ContaPendenteAdapter(boletos, context);
         binding.recycleContas.setAdapter(contaPendenteAdapter);
 
-        binding.imageCalendario.setOnClickListener(view -> {
-            abrirCalendario(view);
-        });
+        binding.imageCalendario.setOnClickListener(this::abrirCalendario);
 
         binding.searchViewContasPendentes.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -183,6 +181,13 @@ public class ContasPendentesFragment extends Fragment {
             }
         });
 
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                carregarContas();
+            }
+        });
+
         buttonEscolherData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -222,8 +227,14 @@ public class ContasPendentesFragment extends Fragment {
                             progressDialog.dismiss();
                             //binding.textContasPendentes.setVisibility(View.GONE);
                             for (DataSnapshot ds: snapshot.getChildren()) {
-                                boletos.add(ds.getValue(Boleto.class));
-                                recuperarNomeFarmacia();
+                                Boleto boleto = ds.getValue(Boleto.class);
+                                if (boleto.getStatus() == 0) {
+                                    boletos.add(ds.getValue(Boleto.class));
+                                    recuperarNomeFarmacia();
+                                }else {
+                                    boletosFiltered = new ArrayList<>(boletos);
+                                    contaPendenteAdapter.setData(boletos);
+                                }
 
                             }
                             boletosFiltered = new ArrayList<>(boletos);

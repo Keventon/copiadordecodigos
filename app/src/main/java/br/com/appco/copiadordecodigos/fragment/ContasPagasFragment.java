@@ -1,8 +1,12 @@
 package br.com.appco.copiadordecodigos.fragment;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,6 +20,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -95,6 +101,8 @@ public class ContasPagasFragment extends Fragment {
             }
         });
 
+        binding.imageCalendario.setOnClickListener(this::abrirCalendario);
+
         binding.recycleContaPaga.addOnItemTouchListener(
                 new RecyclerItemClickListener(
                         getContext(),
@@ -120,6 +128,121 @@ public class ContasPagasFragment extends Fragment {
         );
 
         return binding.getRoot();
+    }
+
+    private void abrirCalendario(View view) {
+        ViewGroup viewGroup = view.findViewById(android.R.id.content);
+
+        CalendarView calendarView;
+        Button buttonEscolherData;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View inflate = LayoutInflater.from(context).inflate(R.layout.dialog_layout_calendario, viewGroup, false);
+        builder.setView(inflate);
+        builder.setCancelable(true);
+
+        calendarView = inflate.findViewById(R.id.calendarView);
+        buttonEscolherData = inflate.findViewById(R.id.buttonEscolherDataContaPendente);
+
+        final AlertDialog dialog = builder.create();
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView calendarView, int ano, int mes, int diadoMes) {
+                int mesAno = mes + 1;
+
+                if (diadoMes < 10) {
+                    String data = "0" + diadoMes + "/0" + mesAno + "/" + ano;
+                    buscarBoletoPorData(data);
+                }else {
+                    String data = diadoMes + "/0" + mesAno + "/" + ano;
+                    buscarBoletoPorData(data);
+                }
+
+            }
+        });
+
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                carregarContas();
+            }
+        });
+
+        buttonEscolherData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    public void buscarBoletoPorData(String data) {
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.progress_dialog);
+        progressDialog.setCancelable(false);
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DatabaseReference nomeFarmacia = reference
+                .child("usuario")
+                .child(UsuarioFirebase.getIdentificadorUsuario())
+                .child("nomeFarmacia");
+
+        nomeFarmacia.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String nomeFarmacia = snapshot.getValue().toString();
+
+                Query boletoRef = reference
+                        .child("boletos")
+                        .child(nomeFarmacia).orderByChild("dataPagamento").equalTo(data);
+                boletoRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        boletos.clear();
+
+                        if (snapshot.getValue() != null) {
+                            progressDialog.dismiss();
+                            //binding.textContasPendentes.setVisibility(View.GONE);
+                            for (DataSnapshot ds: snapshot.getChildren()) {
+                                Boleto boleto = ds.getValue(Boleto.class);
+                                if (boleto.getStatus() == 1) {
+                                    boletos.add(ds.getValue(Boleto.class));
+                                    recuperarNomeFarmacia();
+                                }else {
+                                    boletosFiltered = new ArrayList<>(boletos);
+                                    contaPagaAdapter.setData(boletos);
+                                }
+
+                            }
+                            boletosFiltered = new ArrayList<>(boletos);
+                            contaPagaAdapter.setData(boletos);
+                        }else {
+                            progressDialog.dismiss();
+                            recuperarNomeFarmacia();
+                            boletosFiltered = new ArrayList<>(boletos);
+                            contaPagaAdapter.setData(boletos);
+                            //binding.textContasPendentes.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     public void buscarConta(String nome) {
@@ -270,6 +393,11 @@ public class ContasPagasFragment extends Fragment {
     public void onStart() {
         super.onStart();
         carregarContas();
+    }
+
+    public void onAttach(Context context) {
+        this.context = context;
+        super.onAttach(context);
     }
 
     @Override
