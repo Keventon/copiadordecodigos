@@ -111,6 +111,8 @@ public class ContasPendentesFragment extends Fragment {
             }
         });
 
+        binding.textTodosBoletosPendentes.setOnClickListener(view -> carregarContas());
+
         binding.buttonEscolherFarmacia.setOnClickListener(view -> startActivity(new Intent(context, EscolherBoletoActivity.class)));
 
         binding.recycleContas.addOnItemTouchListener(

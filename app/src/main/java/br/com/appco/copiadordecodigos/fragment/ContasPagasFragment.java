@@ -101,6 +101,8 @@ public class ContasPagasFragment extends Fragment {
             }
         });
 
+        binding.texTodosBoletos.setOnClickListener(view -> carregarContas());
+
         binding.imageCalendario.setOnClickListener(this::abrirCalendario);
 
         binding.recycleContaPaga.addOnItemTouchListener(
