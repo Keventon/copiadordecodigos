@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
@@ -16,13 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +46,6 @@ import br.com.appco.copiadordecodigos.activity.CadastrarFuncionarioActivity;
 import br.com.appco.copiadordecodigos.activity.ContasActivity;
 import br.com.appco.copiadordecodigos.activity.EditarContaActivity;
 import br.com.appco.copiadordecodigos.activity.EscolherBoletoActivity;
-import br.com.appco.copiadordecodigos.activity.LoginActivity;
 import br.com.appco.copiadordecodigos.adapter.ContaPendenteAdapter;
 import br.com.appco.copiadordecodigos.controller.ConfiguracoesFirebase;
 import br.com.appco.copiadordecodigos.controller.UsuarioFirebase;
@@ -60,9 +53,6 @@ import br.com.appco.copiadordecodigos.database.ContaDAO;
 import br.com.appco.copiadordecodigos.databinding.FragmentContasPendentesBinding;
 import br.com.appco.copiadordecodigos.listener.RecyclerItemClickListener;
 import br.com.appco.copiadordecodigos.model.Boleto;
-import br.com.appco.copiadordecodigos.model.Conta;
-import br.com.appco.copiadordecodigos.model.Usuario;
-import br.com.appco.copiadordecodigos.util.Base64Custom;
 import br.com.appco.copiadordecodigos.util.DataAtual;
 
 public class ContasPendentesFragment extends Fragment {
@@ -458,25 +448,131 @@ public class ContasPendentesFragment extends Fragment {
         });
 
         buttonContaPaga.setOnClickListener(view ->  {
-            Boleto boleto1 = new Boleto();
-            boleto1.setStatus(1);
-            boleto1.setDataPagamento(DataAtual.dataAtual());
-            boleto1.setId(boleto.getId());
-            boleto1.setCodigo(boleto.getCodigo());
-            boleto1.setNomeFarmacia(boleto.getNomeFarmacia());
-            boleto1.setValorMulta(boleto.getValorMulta());
-            boleto1.setNomeEmpresa(boleto.getNomeEmpresa());
-            boleto1.setValor(boleto.getValor());
-            boleto1.setDataValidade(boleto.getDataValidade());
-            boleto1.atualizar(((error, ref) -> {
-                Toast.makeText(context, "Boleto pago com sucesso", Toast.LENGTH_SHORT).show();
-                bottomSheetDialog.dismiss();
-                startActivity(new Intent(getContext(), ContasActivity.class));
-            }));
+
+            BottomSheetDialog bottomSheetDialog2 = new BottomSheetDialog(
+                    getContext(), R.style.BottomSheetTheme
+            );
+
+            View bottomSheetView2 = LayoutInflater.from(getContext())
+                    .inflate(
+                            R.layout.menu_calendario_conta_pendente,
+                            (LinearLayout) binding.getRoot().findViewById(R.id.bottomSheetContainer)
+                    );
+
+            Button buttonEscolherDataCalendario = bottomSheetView2.findViewById(R.id.buttonAbrirCalendario);
+            Button buttonEscolherDataAtual = bottomSheetView2.findViewById(R.id.buttonDataAtual);
+
+            buttonEscolherDataAtual.setOnClickListener(view1 -> {
+                Boleto boleto1 = new Boleto();
+                boleto1.setStatus(1);
+                boleto1.setDataPagamento(DataAtual.dataAtual());
+                boleto1.setId(boleto.getId());
+                boleto1.setCodigo(boleto.getCodigo());
+                boleto1.setNomeFarmacia(boleto.getNomeFarmacia());
+                boleto1.setValorMulta(boleto.getValorMulta());
+                boleto1.setNomeEmpresa(boleto.getNomeEmpresa());
+                boleto1.setValor(boleto.getValor());
+                boleto1.setDataValidade(boleto.getDataValidade());
+                boleto1.atualizar(((error, ref) -> {
+                    Toast.makeText(context, "Boleto pago com sucesso", Toast.LENGTH_SHORT).show();
+                    bottomSheetDialog.dismiss();
+                    startActivity(new Intent(getContext(), ContasActivity.class));
+                }));
+            });
+
+            buttonEscolherDataCalendario.setOnClickListener(view1 -> {
+                ViewGroup viewGroup = view.findViewById(android.R.id.content);
+
+                CalendarView calendarView;
+                Button buttonEscolherData;
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                View inflate = LayoutInflater.from(context).inflate(R.layout.dialog_layout__escolher_data_calendario, viewGroup, false);
+                builder.setView(inflate);
+                builder.setCancelable(true);
+
+                calendarView = inflate.findViewById(R.id.calendario);
+                buttonEscolherData = inflate.findViewById(R.id.buttonEscolherDataCalendario);
+
+                final AlertDialog dialog = builder.create();
+
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+                    @Override
+                    public void onSelectedDayChange(@NonNull CalendarView calendarView, int ano, int mes, int diadoMes) {
+                        int mesAno = mes + 1;
+
+                        if (diadoMes < 10) {
+                            String data = "0" + diadoMes + "/0" + mesAno + "/" + ano;
+                            Boleto boleto1 = new Boleto();
+                            boleto1.setStatus(1);
+                            boleto1.setDataPagamento(data);
+                            boleto1.setId(boleto.getId());
+                            boleto1.setCodigo(boleto.getCodigo());
+                            boleto1.setNomeFarmacia(boleto.getNomeFarmacia());
+                            boleto1.setValorMulta(boleto.getValorMulta());
+                            boleto1.setNomeEmpresa(boleto.getNomeEmpresa());
+                            boleto1.setValor(boleto.getValor());
+                            boleto1.setDataValidade(boleto.getDataValidade());
+                            boleto1.atualizar(((error, ref) -> {
+                                Toast.makeText(context, "Boleto pago com sucesso", Toast.LENGTH_SHORT).show();
+                                bottomSheetDialog.dismiss();
+                                bottomSheetDialog2.dismiss();
+                                dialog.dismiss();
+                                startActivity(new Intent(getContext(), ContasActivity.class));
+                            }));
+                        }else {
+                            String data = diadoMes + "/0" + mesAno + "/" + ano;
+                            Boleto boleto1 = new Boleto();
+                            boleto1.setStatus(1);
+                            boleto1.setDataPagamento(data);
+                            boleto1.setId(boleto.getId());
+                            boleto1.setCodigo(boleto.getCodigo());
+                            boleto1.setNomeFarmacia(boleto.getNomeFarmacia());
+                            boleto1.setValorMulta(boleto.getValorMulta());
+                            boleto1.setNomeEmpresa(boleto.getNomeEmpresa());
+                            boleto1.setValor(boleto.getValor());
+                            boleto1.setDataValidade(boleto.getDataValidade());
+                            boleto1.atualizar(((error, ref) -> {
+                                Toast.makeText(context, "Boleto pago com sucesso", Toast.LENGTH_SHORT).show();
+                                bottomSheetDialog.dismiss();
+                                bottomSheetDialog2.dismiss();
+                                dialog.dismiss();
+                                startActivity(new Intent(getContext(), ContasActivity.class));
+                            }));
+                        }
+
+                    }
+                });
+
+                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        carregarContas();
+                    }
+                });
+
+                buttonEscolherData.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+            });
+
+            bottomSheetDialog2.setContentView(bottomSheetView2);
+            bottomSheetDialog2.show();
         });
 
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
+    }
+
+    private void escolherDataComCalendario(View view, Boleto boleto, BottomSheetDialog bottomSheetDialog) {
+
     }
 
     public void buscarConta(String nome) {
