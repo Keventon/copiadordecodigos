@@ -54,6 +54,7 @@ import br.com.appco.copiadordecodigos.databinding.FragmentContasPendentesBinding
 import br.com.appco.copiadordecodigos.listener.RecyclerItemClickListener;
 import br.com.appco.copiadordecodigos.model.Boleto;
 import br.com.appco.copiadordecodigos.util.DataAtual;
+import br.com.appco.copiadordecodigos.util.MoedaUtils;
 
 public class ContasPendentesFragment extends Fragment {
 
@@ -61,6 +62,7 @@ public class ContasPendentesFragment extends Fragment {
     private List<Boleto> contasFiltradas = new ArrayList<>();
     private ContaPendenteAdapter contaPendenteAdapter;
     private ContaDAO dao;
+    private double valor = 0.0;
     private Context context;
     private ProgressDialog progressDialog;
     private FirebaseAuth auth = ConfiguracoesFirebase.getFirebaseAutenticacao();
@@ -191,6 +193,9 @@ public class ContasPendentesFragment extends Fragment {
     }
 
     public void buscarBoletoPorData(String data) {
+
+        valor = 0.0;
+
         progressDialog = new ProgressDialog(getContext());
         progressDialog.show();
         progressDialog.setContentView(R.layout.progress_dialog);
@@ -221,6 +226,7 @@ public class ContasPendentesFragment extends Fragment {
                             for (DataSnapshot ds: snapshot.getChildren()) {
                                 Boleto boleto = ds.getValue(Boleto.class);
                                 if (boleto.getStatus() == 0) {
+                                    valor += boleto.getValor();
                                     boletos.add(ds.getValue(Boleto.class));
                                     recuperarNomeFarmacia();
                                 }else {
@@ -229,6 +235,8 @@ public class ContasPendentesFragment extends Fragment {
                                 }
 
                             }
+                            DecimalFormat format = new DecimalFormat("0.00");
+                            binding.textValorBoletos.setText("Total a pagar: R$ " + MoedaUtils.formatarMoeda(valor));
                             boletosFiltered = new ArrayList<>(boletos);
                             contaPendenteAdapter.setData(boletos);
                         }else {
@@ -421,7 +429,7 @@ public class ContasPendentesFragment extends Fragment {
 
         String valorString = String.valueOf(boleto.getValor()).replace(".", ",");
 
-        textValor.setText("Valor do boleto em R$: " + format.format(boleto.getValor()));
+        textValor.setText("Valor do boleto: " + MoedaUtils.formatarMoeda((boleto.getValor())));
         textDataValidade.setText("Vencimento: " + boleto.getDataValidade());
         textValorComMulta.setText("Valor dos juros por dia em R$: " + format.format(boleto.getValorMulta()));
 
@@ -593,6 +601,8 @@ public class ContasPendentesFragment extends Fragment {
 
     public void carregarContas() {
 
+        valor = 0.0;
+
         progressDialog = new ProgressDialog(getContext());
         progressDialog.show();
         progressDialog.setContentView(R.layout.progress_dialog);
@@ -622,9 +632,14 @@ public class ContasPendentesFragment extends Fragment {
                             //binding.textContasPendentes.setVisibility(View.GONE);
                             for (DataSnapshot ds: snapshot.getChildren()) {
                                 boletos.add(ds.getValue(Boleto.class));
+                                Boleto boleto = ds.getValue(Boleto.class);
                                 recuperarNomeFarmacia();
+                                valor += boleto.getValor();
 
                             }
+
+                            DecimalFormat format = new DecimalFormat("0.00");
+                            binding.textValorBoletos.setText("Total a pagar: R$ " + MoedaUtils.formatarMoeda(valor));
                             boletosFiltered = new ArrayList<>(boletos);
                             contaPendenteAdapter.setData(boletos);
                         }else {

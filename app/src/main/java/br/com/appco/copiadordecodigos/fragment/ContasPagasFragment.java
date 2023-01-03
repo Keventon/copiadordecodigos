@@ -47,6 +47,7 @@ import br.com.appco.copiadordecodigos.databinding.FragmentContasPagasBinding;
 import br.com.appco.copiadordecodigos.listener.RecyclerItemClickListener;
 import br.com.appco.copiadordecodigos.model.Boleto;
 import br.com.appco.copiadordecodigos.model.Conta;
+import br.com.appco.copiadordecodigos.util.MoedaUtils;
 
 public class ContasPagasFragment extends Fragment {
 
@@ -291,7 +292,7 @@ public class ContasPagasFragment extends Fragment {
 
         DecimalFormat format = new DecimalFormat("0.00");
 
-        textValor.setText("Valor: R$ " + format.format(boleto.getValor()));
+        textValor.setText("Valor: " + MoedaUtils.formatarMoeda(boleto.getValor()));
         textDataPagamento.setText("Pago no dia: " + boleto.getDataPagamento());
 
         textVoltar.setOnClickListener(view ->  {
