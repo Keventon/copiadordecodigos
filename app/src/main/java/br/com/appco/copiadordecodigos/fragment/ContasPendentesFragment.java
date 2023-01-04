@@ -22,9 +22,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -109,7 +111,76 @@ public class ContasPendentesFragment extends Fragment {
 
             //Iniciando layouts
             Button buttonEscolherPeloDia = bottomSheetView.findViewById(R.id.buttonEscolherPeloDia);
-            Button ButtonEscolherPeloMes = bottomSheetView.findViewById(R.id.buttonEscolherPeloMes);
+            Button buttonEscolherPeloMes = bottomSheetView.findViewById(R.id.buttonEscolherPeloMes);
+
+            buttonEscolherPeloMes.setOnClickListener(view1 -> {
+                ViewGroup viewGroup = view.findViewById(android.R.id.content);
+
+                Spinner spinner;
+                Button buttonPesquisarBoleto;
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                View inflate = LayoutInflater.from(context).inflate(R.layout.dialog_layout_escolher_mes, viewGroup, false);
+                builder.setView(inflate);
+                builder.setCancelable(true);
+
+                spinner = inflate.findViewById(R.id.spinnerMesAno);
+                buttonPesquisarBoleto = inflate.findViewById(R.id.buttonPesquisarBoletoDialog);
+
+                carregarSpinnerMesesDoAno(spinner);
+
+                final AlertDialog dialog = builder.create();
+
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        if (i != 0) {
+                            buttonPesquisarBoleto.setVisibility(View.VISIBLE);
+                        }else {
+                            buttonPesquisarBoleto.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+
+                buttonPesquisarBoleto.setOnClickListener(view2 -> {
+                    if (spinner.getSelectedItem().toString().equals("Janeiro")) {
+                        //
+                    }else if (spinner.getSelectedItem().toString().equals("Fevereiro")) {
+                        //
+                    }else if (spinner.getSelectedItem().toString().equals("Março")) {
+                        //
+                    }else if (spinner.getSelectedItem().toString().equals("Abril")) {
+                        //
+                    }else if (spinner.getSelectedItem().toString().equals("Maio")) {
+                        //
+                    }else if (spinner.getSelectedItem().toString().equals("Junho")) {
+                        //
+                    }else if (spinner.getSelectedItem().toString().equals("Julho")) {
+                        //
+                    }else if (spinner.getSelectedItem().toString().equals("Agosto")) {
+                        //
+                    }else if (spinner.getSelectedItem().toString().equals("Setembro")) {
+                        //
+                    }else if (spinner.getSelectedItem().toString().equals("Outubro")) {
+                        //
+                    }else if (spinner.getSelectedItem().toString().equals("Novembro")) {
+                        //
+                    }else if (spinner.getSelectedItem().toString().equals("Dezembro")) {
+                        //
+                    }else if (spinner.getSelectedItem().toString().equals("Escolha um mês")) {
+
+                    }
+                });
+
+                dialog.show();
+            });
 
             buttonEscolherPeloDia.setOnClickListener(view1 -> {
                 abrirCalendario(view1);
@@ -196,6 +267,17 @@ public class ContasPendentesFragment extends Fragment {
                 recuperarBoletos();
             }
         });
+
+    }
+
+    private void carregarSpinnerMesesDoAno(Spinner spinner) {
+        String[] meses = getResources().getStringArray(R.array.mesesDoAno);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                context, android.R.layout.simple_spinner_item,
+                meses
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
 
     }
 
