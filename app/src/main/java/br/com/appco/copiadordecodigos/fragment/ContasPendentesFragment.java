@@ -151,31 +151,41 @@ public class ContasPendentesFragment extends Fragment {
 
                 buttonPesquisarBoleto.setOnClickListener(view2 -> {
                     if (spinner.getSelectedItem().toString().equals("Janeiro")) {
-                        //
+                        buscarBoletoPorMes("01/2023");
+                        dialog.dismiss();
                     }else if (spinner.getSelectedItem().toString().equals("Fevereiro")) {
-                        //
+                        buscarBoletoPorMes("02/2023");
+                        dialog.dismiss();
                     }else if (spinner.getSelectedItem().toString().equals("Março")) {
-                        //
+                        buscarBoletoPorMes("03/2023");
+                        dialog.dismiss();
                     }else if (spinner.getSelectedItem().toString().equals("Abril")) {
-                        //
+                        buscarBoletoPorMes("04/2023");
+                        dialog.dismiss();
                     }else if (spinner.getSelectedItem().toString().equals("Maio")) {
-                        //
+                        buscarBoletoPorMes("05/2023");
+                        dialog.dismiss();
                     }else if (spinner.getSelectedItem().toString().equals("Junho")) {
-                        //
+                        buscarBoletoPorMes("06/2023");
+                        dialog.dismiss();
                     }else if (spinner.getSelectedItem().toString().equals("Julho")) {
-                        //
+                        buscarBoletoPorMes("07/2023");
+                        dialog.dismiss();
                     }else if (spinner.getSelectedItem().toString().equals("Agosto")) {
-                        //
+                        buscarBoletoPorMes("08/2023");
+                        dialog.dismiss();
                     }else if (spinner.getSelectedItem().toString().equals("Setembro")) {
-                        //
+                        buscarBoletoPorMes("09/2023");
+                        dialog.dismiss();
                     }else if (spinner.getSelectedItem().toString().equals("Outubro")) {
-                        //
+                        buscarBoletoPorMes("10/2023");
+                        dialog.dismiss();
                     }else if (spinner.getSelectedItem().toString().equals("Novembro")) {
-                        //
+                        buscarBoletoPorMes("11/2023");
+                        dialog.dismiss();
                     }else if (spinner.getSelectedItem().toString().equals("Dezembro")) {
-                        //
-                    }else if (spinner.getSelectedItem().toString().equals("Escolha um mês")) {
-
+                        buscarBoletoPorMes("12/2023");
+                        dialog.dismiss();
                     }
                 });
 
@@ -244,6 +254,74 @@ public class ContasPendentesFragment extends Fragment {
         });
 
         return binding.getRoot();
+    }
+
+    private void buscarBoletoPorMes(String data) {
+        valor = 0.0;
+
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.progress_dialog);
+        progressDialog.setCancelable(false);
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DatabaseReference nomeFarmacia = reference
+                .child("usuario")
+                .child(UsuarioFirebase.getIdentificadorUsuario())
+                .child("nomeFarmacia");
+
+        nomeFarmacia.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String nomeFarmacia = snapshot.getValue().toString();
+
+                Query boletoRef = reference
+                        .child("boletos")
+                        .child(nomeFarmacia).orderByChild("mes").equalTo(data);
+                boletoRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        boletos.clear();
+
+                        if (snapshot.getValue() != null) {
+                            progressDialog.dismiss();
+                            //binding.textContasPendentes.setVisibility(View.GONE);
+                            for (DataSnapshot ds: snapshot.getChildren()) {
+                                Boleto boleto = ds.getValue(Boleto.class);
+                                if (boleto.getStatus() == 0) {
+                                    boletos.add(ds.getValue(Boleto.class));
+                                    recuperarNomeFarmacia();
+                                    valor += boleto.getValor();
+                                }
+
+                            }
+
+                            DecimalFormat format = new DecimalFormat("0.00");
+                            binding.textValorBoletos.setText("Total a pagar: " + MoedaUtils.formatarMoeda(valor));
+                            boletosFiltered = new ArrayList<>(boletos);
+
+                            contaPendenteAdapter.setData(boletos);
+                        }else {
+                            binding.textValorBoletos.setText("Total a pagar: " + MoedaUtils.formatarMoeda(0.0));
+                            progressDialog.dismiss();
+                            recuperarNomeFarmacia();
+                            boletosFiltered = new ArrayList<>(boletos);
+                            contaPendenteAdapter.setData(boletos);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     public void configuraCalendarView() {
@@ -326,7 +404,7 @@ public class ContasPendentesFragment extends Fragment {
 
 
                             DecimalFormat format = new DecimalFormat("0.00");
-                            binding.textValorBoletos.setText("Total a pagar: R$ " + MoedaUtils.formatarMoeda(valor));
+                            binding.textValorBoletos.setText("Total a pagar: " + MoedaUtils.formatarMoeda(valor));
                             boletosFiltered = new ArrayList<>(boletos);
                             contaPendenteAdapter.setData(boletos);
                         }else {
@@ -446,10 +524,11 @@ public class ContasPendentesFragment extends Fragment {
 
                             }
                             DecimalFormat format = new DecimalFormat("0.00");
-                            binding.textValorBoletos.setText("Total a pagar: R$ " + MoedaUtils.formatarMoeda(valor));
+                            binding.textValorBoletos.setText("Total a pagar: " + MoedaUtils.formatarMoeda(valor));
                             boletosFiltered = new ArrayList<>(boletos);
                             contaPendenteAdapter.setData(boletos);
                         }else {
+                            binding.textValorBoletos.setText("Total a pagar: " + MoedaUtils.formatarMoeda(0.0));
                             progressDialog.dismiss();
                             recuperarNomeFarmacia();
                             boletosFiltered = new ArrayList<>(boletos);
@@ -849,7 +928,7 @@ public class ContasPendentesFragment extends Fragment {
                             }
 
                             DecimalFormat format = new DecimalFormat("0.00");
-                            binding.textValorBoletos.setText("Total a pagar: R$ " + MoedaUtils.formatarMoeda(valor));
+                            binding.textValorBoletos.setText("Total a pagar: " + MoedaUtils.formatarMoeda(valor));
                             boletosFiltered = new ArrayList<>(boletos);
                             contaPendenteAdapter.setData(boletos);
                         }else {
