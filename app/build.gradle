@@ -55,6 +55,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.firebase:firebase-iid:21.1.0'
 
+    implementation 'com.github.prolificinteractive:material-calendarview:1.4.3'
+
     implementation 'com.github.BlacKCaT27:CurrencyEditText:2.0.2'
 
     //Dependencia mascara telefone

@@ -14,6 +14,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -28,12 +29,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -62,15 +68,21 @@ public class ContasPendentesFragment extends Fragment {
     private List<Boleto> contasFiltradas = new ArrayList<>();
     private ContaPendenteAdapter contaPendenteAdapter;
     private ContaDAO dao;
+    private MaterialCalendarView calendarView;
+    private String mesAnoSelecionado;
     private double valor = 0.0;
     private Context context;
+    private String data;
     private ProgressDialog progressDialog;
+    private ValueEventListener valueEventListenerBoletos;
     private FirebaseAuth auth = ConfiguracoesFirebase.getFirebaseAutenticacao();
 
     FragmentContasPendentesBinding binding;
     DatabaseReference reference = ConfiguracoesFirebase.getFirebase();
+    DatabaseReference boletoRef;
 
     private List<Boleto> boletosFiltered = new ArrayList<>();
+    private List<String> boletosData = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -84,7 +96,29 @@ public class ContasPendentesFragment extends Fragment {
         contaPendenteAdapter = new ContaPendenteAdapter(boletos, context);
         binding.recycleContas.setAdapter(contaPendenteAdapter);
 
-        binding.imageCalendario.setOnClickListener(this::abrirCalendario);
+        binding.imageCalendario.setOnClickListener(view -> {
+            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
+                    getContext(), R.style.BottomSheetTheme
+            );
+
+            View bottomSheetView = LayoutInflater.from(getContext())
+                    .inflate(
+                            R.layout.escolher_data_mes,
+                            (LinearLayout) binding.getRoot().findViewById(R.id.bottomSheetContainer)
+                    );
+
+            //Iniciando layouts
+            Button buttonEscolherPeloDia = bottomSheetView.findViewById(R.id.buttonEscolherPeloDia);
+            Button ButtonEscolherPeloMes = bottomSheetView.findViewById(R.id.buttonEscolherPeloMes);
+
+            buttonEscolherPeloDia.setOnClickListener(view1 -> {
+                abrirCalendario(view1);
+                bottomSheetDialog.dismiss();
+            });
+
+            bottomSheetDialog.setContentView(bottomSheetView);
+            bottomSheetDialog.show();
+        });
 
         binding.searchViewContasPendentes.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -141,7 +175,101 @@ public class ContasPendentesFragment extends Fragment {
         return binding.getRoot();
     }
 
+    public void configuraCalendarView() {
+
+        CharSequence meses[] = {"Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"};
+        calendarView.setTitleMonths(meses);
+
+        CalendarDay dataAtual = calendarView.getCurrentDate();
+        String mesSelecionado = String.format("%02d", (dataAtual.getMonth() + 1));
+        mesAnoSelecionado = String.valueOf((mesSelecionado) + "" + dataAtual.getYear());
+
+        calendarView.setOnMonthChangedListener(new OnMonthChangedListener() {
+            @Override
+            public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
+                String mesSelecionado = String.format("%02d", (date.getMonth() + 1));
+                mesAnoSelecionado = String.valueOf((mesSelecionado) + "/" + date.getYear());
+
+
+
+                reference.removeEventListener(valueEventListenerBoletos);
+                recuperarBoletos();
+            }
+        });
+
+    }
+
+    private void recuperarBoletos() {
+
+        valor = 0.0;
+
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.progress_dialog);
+        progressDialog.setCancelable(false);
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DatabaseReference nomeFarmacia = reference
+                .child("usuario")
+                .child(UsuarioFirebase.getIdentificadorUsuario())
+                .child("nomeFarmacia");
+
+        nomeFarmacia.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String nomeFarmacia = snapshot.getValue().toString();
+
+                Query boletoRef = reference
+                        .child("boletos")
+                        .child(nomeFarmacia).orderByChild("status").equalTo(0);
+                boletoRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        boletos.clear();
+
+                        if (snapshot.getValue() != null) {
+                            progressDialog.dismiss();
+                            //binding.textContasPendentes.setVisibility(View.GONE);
+                            for (DataSnapshot ds: snapshot.getChildren()) {
+                                boletos.add(ds.getValue(Boleto.class));
+                                Boleto boleto = ds.getValue(Boleto.class);
+                                recuperarNomeFarmacia();
+                                boletosData.add(boleto.getDataValidade());
+                                valor += boleto.getValor();
+
+                            }
+
+                            Toast.makeText(context, String.valueOf(boletosData), Toast.LENGTH_SHORT).show();
+
+
+
+                            DecimalFormat format = new DecimalFormat("0.00");
+                            binding.textValorBoletos.setText("Total a pagar: R$ " + MoedaUtils.formatarMoeda(valor));
+                            boletosFiltered = new ArrayList<>(boletos);
+                            contaPendenteAdapter.setData(boletos);
+                        }else {
+                            progressDialog.dismiss();
+                            recuperarNomeFarmacia();
+                            //binding.textContasPendentes.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     private void abrirCalendario(View view) {
+
         ViewGroup viewGroup = view.findViewById(android.R.id.content);
 
         CalendarView calendarView;
