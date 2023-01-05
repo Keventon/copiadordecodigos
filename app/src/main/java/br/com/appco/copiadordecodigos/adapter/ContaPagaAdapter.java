@@ -51,6 +51,7 @@ public class ContaPagaAdapter extends RecyclerView.Adapter<ContaPagaAdapter.MyVi
 
         holder.dataVencimento.setText("Conta paga no dia: " + boleto.getDataPagamento());
         holder.textNomeEmpresaContaPaga.setText("Empresa: " + boleto.getNomeEmpresa());
+        holder.textContaVencida.setText("Conta vencida no dia: " + boleto.getDataValidade());
 
         if (boleto.getStatus() == 1) {
             holder.status.setText("Pago");
@@ -114,7 +115,7 @@ public class ContaPagaAdapter extends RecyclerView.Adapter<ContaPagaAdapter.MyVi
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView status, dataVencimento, textNomeEmpresaContaPaga;
+        TextView status, dataVencimento, textNomeEmpresaContaPaga, textContaVencida;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -122,6 +123,7 @@ public class ContaPagaAdapter extends RecyclerView.Adapter<ContaPagaAdapter.MyVi
             status = itemView.findViewById(R.id.textStatusContaPaga);
             dataVencimento = itemView.findViewById(R.id.dataPagamentoContaPaga);
             textNomeEmpresaContaPaga = itemView.findViewById(R.id.textNomeEmpresaContaPaga);
+            textContaVencida = itemView.findViewById(R.id.textContaVencida);
         }
     }
 }

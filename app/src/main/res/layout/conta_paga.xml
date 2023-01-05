@@ -26,6 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:text="Pago"
+        android:textStyle="bold"
         android:textColor="@color/verde"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -40,15 +41,30 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="30dp"
         android:text="Pago no dia: 22/10/2022"
         android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textNomeEmpresaContaPaga" />
+
+    <TextView
+        android:id="@+id/textContaVencida"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="30dp"
+        android:text="Conta vencida no dia: "
+        android:textColor="@color/vermelho"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textNomeEmpresaContaPaga"
+        app:layout_constraintTop_toBottomOf="@+id/dataPagamentoContaPaga"
         app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

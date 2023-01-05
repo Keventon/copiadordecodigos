@@ -10,6 +10,7 @@ public class Boleto implements Serializable {
     private String nome;
     private String nomeEmpresa;
     private String id;
+    private String mes;
     private String descricao;
     private String codigo;
     private String dataPagamento;
@@ -33,6 +34,14 @@ public class Boleto implements Serializable {
         DatabaseReference firebaseRef = ConfiguracoesFirebase.getFirebase();
         DatabaseReference firebase = firebaseRef.child("boletos").child(nomeFarmacia).child(getId());
         firebase.setValue(this, listener);
+    }
+
+    public String getMes() {
+        return mes;
+    }
+
+    public void setMes(String mes) {
+        this.mes = mes;
     }
 
     public String getNomeEmpresa() {

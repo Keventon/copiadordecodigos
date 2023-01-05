@@ -18,9 +18,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,6 +57,7 @@ public class ContasPagasFragment extends Fragment {
     private List<Conta> contasFiltradas = new ArrayList<>();
     private ContaPagaAdapter contaPagaAdapter;
     private ContaDAO dao;
+    private double valor = 0.0;
     private Context context;
     private FirebaseAuth auth = ConfiguracoesFirebase.getFirebaseAutenticacao();
     private DatabaseReference reference = ConfiguracoesFirebase.getFirebase();
@@ -100,7 +103,108 @@ public class ContasPagasFragment extends Fragment {
 
         binding.texTodosBoletos.setOnClickListener(view -> carregarContas());
 
-        binding.imageCalendario.setOnClickListener(this::abrirCalendario);
+        binding.imageCalendario.setOnClickListener(view -> {
+            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
+                    getContext(), R.style.BottomSheetTheme
+            );
+
+            View bottomSheetView = LayoutInflater.from(getContext())
+                    .inflate(
+                            R.layout.escolher_data_mes,
+                            (LinearLayout) binding.getRoot().findViewById(R.id.bottomSheetContainer)
+                    );
+
+            //Iniciando layouts
+            Button buttonEscolherPeloDia = bottomSheetView.findViewById(R.id.buttonEscolherPeloDia);
+            Button buttonEscolherPeloMes = bottomSheetView.findViewById(R.id.buttonEscolherPeloMes);
+
+            buttonEscolherPeloMes.setOnClickListener(view1 -> {
+                ViewGroup viewGroup = view.findViewById(android.R.id.content);
+
+                Spinner spinner;
+                Button buttonPesquisarBoleto;
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                View inflate = LayoutInflater.from(context).inflate(R.layout.dialog_layout_escolher_mes, viewGroup, false);
+                builder.setView(inflate);
+                builder.setCancelable(true);
+
+                spinner = inflate.findViewById(R.id.spinnerMesAno);
+                buttonPesquisarBoleto = inflate.findViewById(R.id.buttonPesquisarBoletoDialog);
+
+                carregarSpinnerMesesDoAno(spinner);
+
+                final AlertDialog dialog = builder.create();
+
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        if (i != 0) {
+                            buttonPesquisarBoleto.setVisibility(View.VISIBLE);
+                        }else {
+                            buttonPesquisarBoleto.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+
+                buttonPesquisarBoleto.setOnClickListener(view2 -> {
+                    if (spinner.getSelectedItem().toString().equals("Janeiro")) {
+                        buscarBoletoPorMes("01/2023");
+                        dialog.dismiss();
+                    }else if (spinner.getSelectedItem().toString().equals("Fevereiro")) {
+                        buscarBoletoPorMes("02/2023");
+                        dialog.dismiss();
+                    }else if (spinner.getSelectedItem().toString().equals("Março")) {
+                        buscarBoletoPorMes("03/2023");
+                        dialog.dismiss();
+                    }else if (spinner.getSelectedItem().toString().equals("Abril")) {
+                        buscarBoletoPorMes("04/2023");
+                        dialog.dismiss();
+                    }else if (spinner.getSelectedItem().toString().equals("Maio")) {
+                        buscarBoletoPorMes("05/2023");
+                        dialog.dismiss();
+                    }else if (spinner.getSelectedItem().toString().equals("Junho")) {
+                        buscarBoletoPorMes("06/2023");
+                        dialog.dismiss();
+                    }else if (spinner.getSelectedItem().toString().equals("Julho")) {
+                        buscarBoletoPorMes("07/2023");
+                        dialog.dismiss();
+                    }else if (spinner.getSelectedItem().toString().equals("Agosto")) {
+                        buscarBoletoPorMes("08/2023");
+                        dialog.dismiss();
+                    }else if (spinner.getSelectedItem().toString().equals("Setembro")) {
+                        buscarBoletoPorMes("09/2023");
+                        dialog.dismiss();
+                    }else if (spinner.getSelectedItem().toString().equals("Outubro")) {
+                        buscarBoletoPorMes("10/2023");
+                        dialog.dismiss();
+                    }else if (spinner.getSelectedItem().toString().equals("Novembro")) {
+                        buscarBoletoPorMes("11/2023");
+                        dialog.dismiss();
+                    }else if (spinner.getSelectedItem().toString().equals("Dezembro")) {
+                        buscarBoletoPorMes("12/2023");
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+            });
+
+            buttonEscolherPeloDia.setOnClickListener(view1 -> {
+                abrirCalendario(view1);
+                bottomSheetDialog.dismiss();
+            });
+
+            bottomSheetDialog.setContentView(bottomSheetView);
+            bottomSheetDialog.show();
+        });
 
         binding.recycleContaPaga.addOnItemTouchListener(
                 new RecyclerItemClickListener(
@@ -127,6 +231,85 @@ public class ContasPagasFragment extends Fragment {
         );
 
         return binding.getRoot();
+    }
+
+    private void buscarBoletoPorMes(String data) {
+        valor = 0.0;
+
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.progress_dialog);
+        progressDialog.setCancelable(false);
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        DatabaseReference nomeFarmacia = reference
+                .child("usuario")
+                .child(UsuarioFirebase.getIdentificadorUsuario())
+                .child("nomeFarmacia");
+
+        nomeFarmacia.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String nomeFarmacia = snapshot.getValue().toString();
+
+                Query boletoRef = reference
+                        .child("boletos")
+                        .child(nomeFarmacia).orderByChild("mes").equalTo(data);
+                boletoRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        boletos.clear();
+
+                        if (snapshot.getValue() != null) {
+                            progressDialog.dismiss();
+                            //binding.textContasPendentes.setVisibility(View.GONE);
+                            for (DataSnapshot ds: snapshot.getChildren()) {
+                                Boleto boleto = ds.getValue(Boleto.class);
+                                if (boleto.getStatus() == 1) {
+                                    boletos.add(ds.getValue(Boleto.class));
+                                    recuperarNomeFarmacia();
+                                    valor += boleto.getValor();
+                                }
+
+                            }
+
+                            DecimalFormat format = new DecimalFormat("0.00");
+                            binding.textValorBoletos.setText("Total pago: " + MoedaUtils.formatarMoeda(valor));
+                            boletosFiltered = new ArrayList<>(boletos);
+
+                            contaPagaAdapter.setData(boletos);
+                        }else {
+                            binding.textValorBoletos.setText("Total pagp: " + MoedaUtils.formatarMoeda(0.0));
+                            progressDialog.dismiss();
+                            recuperarNomeFarmacia();
+                            boletosFiltered = new ArrayList<>(boletos);
+                            contaPagaAdapter.setData(boletos);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void carregarSpinnerMesesDoAno(Spinner spinner) {
+        String[] meses = getResources().getStringArray(R.array.mesesDoAno);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                context, android.R.layout.simple_spinner_item,
+                meses
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
     }
 
     private void abrirCalendario(View view) {
@@ -181,6 +364,9 @@ public class ContasPagasFragment extends Fragment {
     }
 
     public void buscarBoletoPorData(String data) {
+
+        valor = 0.0;
+
         progressDialog = new ProgressDialog(getContext());
         progressDialog.show();
         progressDialog.setContentView(R.layout.progress_dialog);
@@ -213,15 +399,19 @@ public class ContasPagasFragment extends Fragment {
                                 if (boleto.getStatus() == 1) {
                                     boletos.add(ds.getValue(Boleto.class));
                                     recuperarNomeFarmacia();
+                                    valor += boleto.getValor();
+
                                 }else {
                                     boletosFiltered = new ArrayList<>(boletos);
                                     contaPagaAdapter.setData(boletos);
                                 }
 
                             }
+                            binding.textValorBoletos.setText("Total pago: " + MoedaUtils.formatarMoeda(valor));
                             boletosFiltered = new ArrayList<>(boletos);
                             contaPagaAdapter.setData(boletos);
                         }else {
+                            binding.textValorBoletos.setText("Total pago: " + MoedaUtils.formatarMoeda(0.0));
                             progressDialog.dismiss();
                             recuperarNomeFarmacia();
                             boletosFiltered = new ArrayList<>(boletos);
@@ -309,6 +499,8 @@ public class ContasPagasFragment extends Fragment {
 
     public void carregarContas() {
 
+        valor = 0.0;
+
         progressDialog = new ProgressDialog(getContext());
         progressDialog.show();
         progressDialog.setContentView(R.layout.progress_dialog);
@@ -334,17 +526,19 @@ public class ContasPagasFragment extends Fragment {
                         boletos.clear();
 
                         if (snapshot.exists()) {
-                            progressDialog.dismiss();
                             //binding.textContasPagas.setVisibility(View.GONE);
                             for (DataSnapshot ds: snapshot.getChildren()) {
+                                Boleto boleto = ds.getValue(Boleto.class);
                                 boletos.add(ds.getValue(Boleto.class));
+                                valor += boleto.getValor();
 
                             }
+                            progressDialog.dismiss();
+                            binding.textValorBoletos.setText("Total pago: " + MoedaUtils.formatarMoeda(valor));
                             boletosFiltered = new ArrayList<>(boletos);
                             contaPagaAdapter.setData(boletos);
                         }else {
                             progressDialog.dismiss();
-                            //binding.textContasPagas.setVisibility(View.VISIBLE);
                         }
                     }
 

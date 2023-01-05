@@ -57,6 +57,7 @@ public class AdicionarContaActivity extends AppCompatActivity {
                                 if(valorMulta > 0) {
                                     if(!binding.editNomeEmpresa.getText().toString().isEmpty()) {
                                         String data = binding.editDataValidade.getText().toString();
+                                        String mesAno = data.substring(3);
 
                                         DatabaseReference npmeFarmaciaRef = reference
                                                 .child("usuario")
@@ -72,6 +73,7 @@ public class AdicionarContaActivity extends AppCompatActivity {
                                                 boleto.setCodigo(binding.editCodigoBarra.getText().toString());
                                                 boleto.setDataValidade(data);
                                                 boleto.setStatus(0);
+                                                boleto.setMes(mesAno);
                                                 boleto.setDataPagamento("");
                                                 boleto.setValor(valor);
                                                 boleto.setNomeEmpresa(binding.editNomeEmpresa.getText().toString().trim());
