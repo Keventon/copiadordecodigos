@@ -153,39 +153,50 @@ public class ContasPendentesFragment extends Fragment {
                     if (spinner.getSelectedItem().toString().equals("Janeiro")) {
                         buscarBoletoPorMes("01/2023");
                         dialog.dismiss();
+                        bottomSheetDialog.dismiss();
                     }else if (spinner.getSelectedItem().toString().equals("Fevereiro")) {
                         buscarBoletoPorMes("02/2023");
                         dialog.dismiss();
+                        bottomSheetDialog.dismiss();
                     }else if (spinner.getSelectedItem().toString().equals("Março")) {
                         buscarBoletoPorMes("03/2023");
                         dialog.dismiss();
+                        bottomSheetDialog.dismiss();
                     }else if (spinner.getSelectedItem().toString().equals("Abril")) {
                         buscarBoletoPorMes("04/2023");
                         dialog.dismiss();
+                        bottomSheetDialog.dismiss();
                     }else if (spinner.getSelectedItem().toString().equals("Maio")) {
                         buscarBoletoPorMes("05/2023");
                         dialog.dismiss();
                     }else if (spinner.getSelectedItem().toString().equals("Junho")) {
                         buscarBoletoPorMes("06/2023");
                         dialog.dismiss();
+                        bottomSheetDialog.dismiss();
                     }else if (spinner.getSelectedItem().toString().equals("Julho")) {
                         buscarBoletoPorMes("07/2023");
                         dialog.dismiss();
+                        bottomSheetDialog.dismiss();
                     }else if (spinner.getSelectedItem().toString().equals("Agosto")) {
                         buscarBoletoPorMes("08/2023");
                         dialog.dismiss();
+                        bottomSheetDialog.dismiss();
                     }else if (spinner.getSelectedItem().toString().equals("Setembro")) {
                         buscarBoletoPorMes("09/2023");
                         dialog.dismiss();
+                        bottomSheetDialog.dismiss();
                     }else if (spinner.getSelectedItem().toString().equals("Outubro")) {
                         buscarBoletoPorMes("10/2023");
                         dialog.dismiss();
+                        bottomSheetDialog.dismiss();
                     }else if (spinner.getSelectedItem().toString().equals("Novembro")) {
                         buscarBoletoPorMes("11/2023");
                         dialog.dismiss();
+                        bottomSheetDialog.dismiss();
                     }else if (spinner.getSelectedItem().toString().equals("Dezembro")) {
                         buscarBoletoPorMes("12/2023");
                         dialog.dismiss();
+                        bottomSheetDialog.dismiss();
                     }
                 });
 
