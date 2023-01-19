@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="wrap_content"
     android:id="@+id/bottomSheetContainer"
     android:orientation="vertical"
     android:background="@drawable/bottom_sheet_background_quadrado">
@@ -71,13 +71,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textDataPagamentoContaPaga" />
 
+        <Button
+            android:id="@+id/buttonAddComprovante"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="Adicionar comprovante"
+            android:drawableLeft="@drawable/ic_add_comprovante_24dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="40dp"
+            android:layout_marginTop="32dp"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textValorContaPaga" />
+
         <TextView
             android:id="@+id/texVoltarContaPaga"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Voltar"
+            android:layout_marginTop="32dp"
             android:layout_marginBottom="30dp"
+            android:text="Voltar"
             android:textColor="@color/vermelho"
             android:textSize="17sp"
             android:textStyle="bold"
@@ -85,8 +101,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textValorContaPaga"
-            app:layout_constraintVertical_bias="0.415" />
+            app:layout_constraintTop_toBottomOf="@+id/buttonAddComprovante"
+            app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

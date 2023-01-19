@@ -1,19 +1,30 @@
 package br.com.appco.copiadordecodigos.fragment;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.ImageDecoder;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +32,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -33,6 +45,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.normal.TedPermission;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -40,6 +54,9 @@ import java.util.List;
 import java.util.Locale;
 
 import br.com.appco.copiadordecodigos.R;
+import br.com.appco.copiadordecodigos.activity.AbrirImagemComprovanteActivity;
+import br.com.appco.copiadordecodigos.activity.AdicionarContaActivity;
+import br.com.appco.copiadordecodigos.activity.EscolherComprovanteActivity;
 import br.com.appco.copiadordecodigos.activity.LoginActivity;
 import br.com.appco.copiadordecodigos.adapter.ContaPagaAdapter;
 import br.com.appco.copiadordecodigos.controller.ConfiguracoesFirebase;
@@ -64,6 +81,7 @@ public class ContasPagasFragment extends Fragment {
     private ProgressDialog progressDialog;
 
     private List<Boleto> boletosFiltered = new ArrayList<>();
+    Uri imagemSelecionada = null;
 
     FragmentContasPagasBinding binding;
 
@@ -489,6 +507,7 @@ public class ContasPagasFragment extends Fragment {
         TextView textDataPagamento = bottomSheetView.findViewById(R.id.textDataPagamentoContaPaga);
         TextView textStatus = bottomSheetView.findViewById(R.id.textStatusContaPaga);
         TextView textVoltar = bottomSheetView.findViewById(R.id.texVoltarContaPaga);
+        Button buttonAddComprovante = bottomSheetView.findViewById(R.id.buttonAddComprovante);
 
         textNomeEmpresaContaPaga.setText(boleto.getNomeEmpresa());
 
@@ -504,6 +523,11 @@ public class ContasPagasFragment extends Fragment {
         if (boleto.getStatus() == 1) {
             textStatus.setText("Pago");
         }
+
+        buttonAddComprovante.setOnClickListener(view -> {
+            startActivity(new Intent(context, EscolherComprovanteActivity.class));
+
+        });
 
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();

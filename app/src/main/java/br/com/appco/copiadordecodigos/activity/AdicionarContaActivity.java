@@ -1,20 +1,45 @@
 package br.com.appco.copiadordecodigos.activity;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
+import android.Manifest;
+import android.app.AlertDialog;
+import android.app.Instrumentation;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.ImageDecoder;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CalendarView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.normal.TedPermission;
 
+import java.util.List;
+
+import br.com.appco.copiadordecodigos.R;
 import br.com.appco.copiadordecodigos.controller.ConfiguracoesFirebase;
 import br.com.appco.copiadordecodigos.controller.UsuarioFirebase;
 import br.com.appco.copiadordecodigos.database.ContaDAO;
@@ -27,7 +52,8 @@ import br.com.appco.copiadordecodigos.util.Util;
 public class AdicionarContaActivity extends AppCompatActivity {
 
     ActivityAdicionarContaBinding binding;
-    private ContaDAO contaDAO;
+    Uri imagemSelecionada;
+    //private ContaDAO contaDAO;
 
     DatabaseReference reference = ConfiguracoesFirebase.getFirebase();
 
@@ -47,7 +73,6 @@ public class AdicionarContaActivity extends AppCompatActivity {
 
         binding.floatingAdicionarConta.setOnClickListener(view -> {
             if (Util.checarConexaoDispositivo(AdicionarContaActivity.this)) {
-                binding.progressBarAddConta.setVisibility(View.VISIBLE);
                 if (!binding.editCodigoBarra.getText().toString().isEmpty()) {
                     if (!binding.editNomeEmpresa.getText().toString().isEmpty()) {
                         if (binding.editDataValidade.length() == 10) {
@@ -59,6 +84,7 @@ public class AdicionarContaActivity extends AppCompatActivity {
                                         String data = binding.editDataValidade.getText().toString();
                                         String mesAno = data.substring(3);
 
+                                        binding.progressBarAddConta.setVisibility(View.VISIBLE);
                                         DatabaseReference npmeFarmaciaRef = reference
                                                 .child("usuario")
                                                 .child(UsuarioFirebase.getIdentificadorUsuario())
@@ -91,6 +117,7 @@ public class AdicionarContaActivity extends AppCompatActivity {
 
                                             }
                                         });
+
                                     }else {
                                         binding.progressBarAddConta.setVisibility(View.GONE);
                                         binding.editNomeEmpresa.requestFocus();

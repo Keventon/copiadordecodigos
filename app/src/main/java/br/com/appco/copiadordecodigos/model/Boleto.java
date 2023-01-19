@@ -18,6 +18,7 @@ public class Boleto implements Serializable {
     private String nomeFarmacia;
     private Double valor;
     private Double valorMulta;
+    private String imagemComprovante;
     private int status;
 
     public Boleto() {
@@ -34,6 +35,14 @@ public class Boleto implements Serializable {
         DatabaseReference firebaseRef = ConfiguracoesFirebase.getFirebase();
         DatabaseReference firebase = firebaseRef.child("boletos").child(nomeFarmacia).child(getId());
         firebase.setValue(this, listener);
+    }
+
+    public String getImagemComprovante() {
+        return imagemComprovante;
+    }
+
+    public void setImagemComprovante(String imagemComprovante) {
+        this.imagemComprovante = imagemComprovante;
     }
 
     public String getMes() {
