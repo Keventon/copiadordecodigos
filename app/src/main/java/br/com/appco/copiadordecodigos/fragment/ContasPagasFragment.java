@@ -525,7 +525,9 @@ public class ContasPagasFragment extends Fragment {
         }
 
         buttonAddComprovante.setOnClickListener(view -> {
-            startActivity(new Intent(context, EscolherComprovanteActivity.class));
+            Intent intent = new Intent(context, EscolherComprovanteActivity.class);
+            intent.putExtra("info_boleto", boleto);
+            startActivity(intent);
 
         });
 

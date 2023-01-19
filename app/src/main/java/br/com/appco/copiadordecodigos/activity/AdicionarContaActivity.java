@@ -102,6 +102,7 @@ public class AdicionarContaActivity extends AppCompatActivity {
                                                 boleto.setMes(mesAno);
                                                 boleto.setDataPagamento("");
                                                 boleto.setValor(valor);
+                                                boleto.setImagemComprovante("");
                                                 boleto.setNomeEmpresa(binding.editNomeEmpresa.getText().toString().trim());
                                                 boleto.setNomeFarmacia(nomeFarmacia);
                                                 boleto.setValorMulta(valorMulta);

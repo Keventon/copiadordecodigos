@@ -31,6 +31,16 @@ public class Boleto implements Serializable {
         firebase.setValue(this, listener);
     }
 
+    public void salvarImagem(String idBoleto, String nomeFarmacia, String imagemComprovante, DatabaseReference.CompletionListener listener) {
+        DatabaseReference firebaseRef = ConfiguracoesFirebase.getFirebase();
+        DatabaseReference firebase = firebaseRef.child("boletos")
+                .child(nomeFarmacia)
+                .child(idBoleto)
+                .child("imagemComprovante");
+        firebase.setValue(imagemComprovante, listener);
+
+    }
+
     public void atualizar(DatabaseReference.CompletionListener listener) {
         DatabaseReference firebaseRef = ConfiguracoesFirebase.getFirebase();
         DatabaseReference firebase = firebaseRef.child("boletos").child(nomeFarmacia).child(getId());

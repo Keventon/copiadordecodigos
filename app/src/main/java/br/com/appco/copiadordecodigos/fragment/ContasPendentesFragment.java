@@ -776,6 +776,7 @@ public class ContasPendentesFragment extends Fragment {
                 boleto1.setDataPagamento(DataAtual.dataAtual());
                 boleto1.setId(boleto.getId());
                 boleto1.setCodigo(boleto.getCodigo());
+                boleto1.setImagemComprovante("");
                 boleto1.setNomeFarmacia(boleto.getNomeFarmacia());
                 boleto1.setValorMulta(boleto.getValorMulta());
                 boleto1.setNomeEmpresa(boleto.getNomeEmpresa());
