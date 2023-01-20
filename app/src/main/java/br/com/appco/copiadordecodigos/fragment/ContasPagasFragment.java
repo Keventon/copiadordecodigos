@@ -58,6 +58,7 @@ import br.com.appco.copiadordecodigos.activity.AbrirImagemComprovanteActivity;
 import br.com.appco.copiadordecodigos.activity.AdicionarContaActivity;
 import br.com.appco.copiadordecodigos.activity.EscolherComprovanteActivity;
 import br.com.appco.copiadordecodigos.activity.LoginActivity;
+import br.com.appco.copiadordecodigos.activity.VerComprovanteActivity;
 import br.com.appco.copiadordecodigos.adapter.ContaPagaAdapter;
 import br.com.appco.copiadordecodigos.controller.ConfiguracoesFirebase;
 import br.com.appco.copiadordecodigos.controller.UsuarioFirebase;
@@ -506,8 +507,8 @@ public class ContasPagasFragment extends Fragment {
         TextView textValor = bottomSheetView.findViewById(R.id.textValorContaPaga);
         TextView textDataPagamento = bottomSheetView.findViewById(R.id.textDataPagamentoContaPaga);
         TextView textStatus = bottomSheetView.findViewById(R.id.textStatusContaPaga);
-        TextView textVoltar = bottomSheetView.findViewById(R.id.texVoltarContaPaga);
         Button buttonAddComprovante = bottomSheetView.findViewById(R.id.buttonAddComprovante);
+        Button buttonVerComprovante = bottomSheetView.findViewById(R.id.buttonVerComprovante);
 
         textNomeEmpresaContaPaga.setText(boleto.getNomeEmpresa());
 
@@ -516,12 +517,20 @@ public class ContasPagasFragment extends Fragment {
         textValor.setText("Valor: " + MoedaUtils.formatarMoeda(boleto.getValor()));
         textDataPagamento.setText("Pago no dia: " + boleto.getDataPagamento());
 
-        textVoltar.setOnClickListener(view ->  {
-            bottomSheetDialog.dismiss();
-        });
-
         if (boleto.getStatus() == 1) {
             textStatus.setText("Pago");
+        }
+
+        if (!boleto.getImagemComprovante().equals("")) {
+            buttonVerComprovante.setVisibility(View.VISIBLE);
+            buttonAddComprovante.setVisibility(View.GONE);
+            buttonVerComprovante.setOnClickListener(view -> {
+                Intent intent = new Intent(context, VerComprovanteActivity.class);
+                intent.putExtra("url_comprovante", boleto.getImagemComprovante());
+                startActivity(intent);
+            });
+        }else {
+            buttonVerComprovante.setVisibility(View.GONE);
         }
 
         buttonAddComprovante.setOnClickListener(view -> {
@@ -539,7 +548,7 @@ public class ContasPagasFragment extends Fragment {
 
         valor = 0.0;
 
-        progressDialog = new ProgressDialog(getContext());
+        progressDialog = new ProgressDialog(context);
         progressDialog.show();
         progressDialog.setContentView(R.layout.progress_dialog);
         progressDialog.setCancelable(false);
@@ -576,6 +585,7 @@ public class ContasPagasFragment extends Fragment {
                             boletosFiltered = new ArrayList<>(boletos);
                             contaPagaAdapter.setData(boletos);
                         }else {
+                            binding.textValorBoletos.setText("Total pago: " + MoedaUtils.formatarMoeda(0));
                             progressDialog.dismiss();
                         }
                     }

@@ -785,7 +785,7 @@ public class ContasPendentesFragment extends Fragment {
                 boleto1.atualizar(((error, ref) -> {
                     Toast.makeText(context, "Boleto pago com sucesso", Toast.LENGTH_SHORT).show();
                     bottomSheetDialog.dismiss();
-                    startActivity(new Intent(getContext(), ContasActivity.class));
+                    startActivity(new Intent(context, ContasActivity.class));
                 }));
             });
 
@@ -820,6 +820,7 @@ public class ContasPendentesFragment extends Fragment {
                             boleto1.setId(boleto.getId());
                             boleto1.setCodigo(boleto.getCodigo());
                             boleto1.setNomeFarmacia(boleto.getNomeFarmacia());
+                            boleto1.setImagemComprovante(boleto.getImagemComprovante());
                             boleto1.setValorMulta(boleto.getValorMulta());
                             boleto1.setNomeEmpresa(boleto.getNomeEmpresa());
                             boleto1.setValor(boleto.getValor());
@@ -829,7 +830,7 @@ public class ContasPendentesFragment extends Fragment {
                                 bottomSheetDialog.dismiss();
                                 bottomSheetDialog2.dismiss();
                                 dialog.dismiss();
-                                startActivity(new Intent(getContext(), ContasActivity.class));
+                                startActivity(new Intent(context, ContasActivity.class));
                             }));
                         }else {
                             String data = diadoMes + "/0" + mesAno + "/" + ano;
@@ -840,6 +841,7 @@ public class ContasPendentesFragment extends Fragment {
                             boleto1.setCodigo(boleto.getCodigo());
                             boleto1.setNomeFarmacia(boleto.getNomeFarmacia());
                             boleto1.setValorMulta(boleto.getValorMulta());
+                            boleto1.setImagemComprovante(boleto.getImagemComprovante());
                             boleto1.setNomeEmpresa(boleto.getNomeEmpresa());
                             boleto1.setValor(boleto.getValor());
                             boleto1.setDataValidade(boleto.getDataValidade());
@@ -848,7 +850,7 @@ public class ContasPendentesFragment extends Fragment {
                                 bottomSheetDialog.dismiss();
                                 bottomSheetDialog2.dismiss();
                                 dialog.dismiss();
-                                startActivity(new Intent(getContext(), ContasActivity.class));
+                                startActivity(new Intent(context, ContasActivity.class));
                             }));
                         }
 

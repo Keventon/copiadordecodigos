@@ -21,6 +21,9 @@
         android:theme="@style/Theme.CopiadorDeCodigos"
         tools:targetApi="31">
         <activity
+            android:name=".activity.VerComprovanteActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.EscolherComprovanteActivity"
             android:exported="false" />
         <activity
@@ -94,14 +97,10 @@
             android:authorities="br.com.appco.copiadordecodigos.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
-
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
-
+                android:resource="@xml/file_paths" />
         </provider>
-
-
     </application>
 
 </manifest>

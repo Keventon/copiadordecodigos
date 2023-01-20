@@ -63,6 +63,7 @@ public class EditarContaActivity extends AppCompatActivity {
                         boleto.setDataPagamento("");
                         boleto.setNomeEmpresa(descricao);
                         boleto.setStatus(0);
+                        boleto.setImagemComprovante("");
                         boleto.setNomeFarmacia(contaAtual.getNomeFarmacia());
                         boleto.setValor(valor);
                         boleto.setValorMulta(valorMulta);

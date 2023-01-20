@@ -188,7 +188,7 @@ public class EscolherComprovanteActivity extends AppCompatActivity {
 
     private void salvarImagemFirebase(Uri caminhoImagem, Boleto boleto) {
 
-        progressDialog = new ProgressDialog(getApplicationContext());
+        progressDialog = new ProgressDialog(EscolherComprovanteActivity.this);
         progressDialog.show();
         progressDialog.setContentView(R.layout.progress_dialog_salvando_comprovante);
         progressDialog.setCancelable(false);
@@ -218,11 +218,6 @@ public class EscolherComprovanteActivity extends AppCompatActivity {
 
     }
 
-    private void salvarBoletoComrovante(Boleto boleto){
-
-
-    }
-
     private final ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -243,6 +238,7 @@ public class EscolherComprovanteActivity extends AppCompatActivity {
                     }else {//Camera
                         File file = new File(currentPhotoPath);
                         caminhoImagem = String.valueOf(file.toURI());
+                        imagemSelecionada = Uri.parse(caminhoImagem);
 
                         binding.imageComprovante.setImageURI(Uri.fromFile(file));
                         binding.cardComprovante.setOnClickListener(view -> {
