@@ -772,11 +772,15 @@ public class ContasPendentesFragment extends Fragment {
 
             buttonEscolherDataAtual.setOnClickListener(view1 -> {
                 Boleto boleto1 = new Boleto();
+
+                String mesAno = DataAtual.dataAtual().substring(3);
+
                 boleto1.setStatus(1);
                 boleto1.setDataPagamento(DataAtual.dataAtual());
                 boleto1.setId(boleto.getId());
                 boleto1.setCodigo(boleto.getCodigo());
                 boleto1.setImagemComprovante("");
+                boleto1.setMes(mesAno);
                 boleto1.setNomeFarmacia(boleto.getNomeFarmacia());
                 boleto1.setValorMulta(boleto.getValorMulta());
                 boleto1.setNomeEmpresa(boleto.getNomeEmpresa());
@@ -815,12 +819,15 @@ public class ContasPendentesFragment extends Fragment {
                         if (diadoMes < 10) {
                             String data = "0" + diadoMes + "/0" + mesAno + "/" + ano;
                             Boleto boleto1 = new Boleto();
+
+                            String mesAno1 = data.substring(3);
                             boleto1.setStatus(1);
                             boleto1.setDataPagamento(data);
                             boleto1.setId(boleto.getId());
                             boleto1.setCodigo(boleto.getCodigo());
                             boleto1.setNomeFarmacia(boleto.getNomeFarmacia());
-                            boleto1.setImagemComprovante(boleto.getImagemComprovante());
+                            boleto1.setImagemComprovante("");
+                            boleto1.setMes(mesAno + "/" + ano);
                             boleto1.setValorMulta(boleto.getValorMulta());
                             boleto1.setNomeEmpresa(boleto.getNomeEmpresa());
                             boleto1.setValor(boleto.getValor());
@@ -835,13 +842,15 @@ public class ContasPendentesFragment extends Fragment {
                         }else {
                             String data = diadoMes + "/0" + mesAno + "/" + ano;
                             Boleto boleto1 = new Boleto();
+                            String mesAno1 = data.substring(3);
                             boleto1.setStatus(1);
                             boleto1.setDataPagamento(data);
                             boleto1.setId(boleto.getId());
                             boleto1.setCodigo(boleto.getCodigo());
+                            boleto1.setMes("0" + mesAno + "/" + ano);
                             boleto1.setNomeFarmacia(boleto.getNomeFarmacia());
                             boleto1.setValorMulta(boleto.getValorMulta());
-                            boleto1.setImagemComprovante(boleto.getImagemComprovante());
+                            boleto1.setImagemComprovante("");
                             boleto1.setNomeEmpresa(boleto.getNomeEmpresa());
                             boleto1.setValor(boleto.getValor());
                             boleto1.setDataValidade(boleto.getDataValidade());
@@ -946,6 +955,7 @@ public class ContasPendentesFragment extends Fragment {
                             boletosFiltered = new ArrayList<>(boletos);
                             contaPendenteAdapter.setData(boletos);
                         }else {
+                            binding.textValorBoletos.setText("Total a pagar: " + MoedaUtils.formatarMoeda(0));
                             progressDialog.dismiss();
                             recuperarNomeFarmacia();
                             //binding.textContasPendentes.setVisibility(View.VISIBLE);
