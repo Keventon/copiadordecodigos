@@ -71,7 +71,7 @@ public class ContasPendentesFragment extends Fragment {
     private ContaPendenteAdapter contaPendenteAdapter;
     private ContaDAO dao;
     private MaterialCalendarView calendarView;
-    private String mesAnoSelecionado;
+    private String mesAnoSelecionado, nomeFarmacia = "";
     private double valor = 0.0;
     private Context context;
     private String data;
@@ -599,7 +599,7 @@ public class ContasPendentesFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 if (snapshot.getValue() != null) {
-                    String nomeFarmacia = snapshot.getValue().toString();
+                    nomeFarmacia = snapshot.getValue().toString();
                     binding.textNomeUsuarioContaPendente.setText("Você está na " + nomeFarmacia);
                 }
             }

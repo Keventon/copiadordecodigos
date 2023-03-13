@@ -12,6 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
         <item name="android:statusBarColor">@color/verde</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
         <!-- Customize your theme here. -->
     </style>
 

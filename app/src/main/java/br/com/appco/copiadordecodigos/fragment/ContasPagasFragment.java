@@ -73,6 +73,8 @@ public class ContasPagasFragment extends Fragment {
 
     private List<Boleto> boletos = new ArrayList<>();
     private List<Conta> contasFiltradas = new ArrayList<>();
+
+    String nomeFarmacia = "";
     private ContaPagaAdapter contaPagaAdapter;
     private ContaDAO dao;
     private double valor = 0.0;
@@ -236,6 +238,8 @@ public class ContasPagasFragment extends Fragment {
             bottomSheetDialog.setContentView(bottomSheetView);
             bottomSheetDialog.show();
         });
+
+        carregarContas();
 
         binding.recycleContaPaga.addOnItemTouchListener(
                 new RecyclerItemClickListener(
@@ -547,8 +551,6 @@ public class ContasPagasFragment extends Fragment {
 
     public void carregarContas() {
 
-        valor = 0.0;
-
         progressDialog = new ProgressDialog(context);
         progressDialog.show();
         progressDialog.setContentView(R.layout.progress_dialog);
@@ -579,7 +581,11 @@ public class ContasPagasFragment extends Fragment {
                                 for (DataSnapshot ds: snapshot.getChildren()) {
                                     Boleto boleto = ds.getValue(Boleto.class);
                                     boletos.add(ds.getValue(Boleto.class));
-                                    valor += boleto.getValor();
+
+                                    assert boleto != null;
+                                    if (boleto.getValor() != null) {
+                                        valor += boleto.getValor();
+                                    }
 
                                 }
                                 progressDialog.dismiss();
@@ -622,7 +628,7 @@ public class ContasPagasFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 if (snapshot.getValue() != null) {
-                    String nomeFarmacia = snapshot.getValue().toString();
+                    nomeFarmacia = snapshot.getValue().toString();
                     binding.textNomeFarmaciaContasPagas.setText("Você está na " + nomeFarmacia);
                 }else {
                     Toast.makeText(context, "Erro", Toast.LENGTH_SHORT).show();
@@ -634,12 +640,6 @@ public class ContasPagasFragment extends Fragment {
 
             }
         });
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        carregarContas();
     }
 
     public void onAttach(Context context) {

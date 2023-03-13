@@ -67,7 +67,7 @@ public class EscolherBoletoActivity extends AppCompatActivity {
                     Usuario usuario = new Usuario();
                     usuario.atualizarNomeFarmacia(binding.spinnerEscolherFarmacia.getSelectedItem().toString(), ((error, ref) -> {
                         progressDialog.dismiss();
-                        startActivity(new Intent(EscolherBoletoActivity.this, ContasActivity.class));
+                        finish();
                     }));
                 }else {
                     progressDialog.dismiss();
