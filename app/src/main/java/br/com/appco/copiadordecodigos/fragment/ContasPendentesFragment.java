@@ -921,52 +921,54 @@ public class ContasPendentesFragment extends Fragment {
         progressDialog.setCancelable(false);
         progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
-        DatabaseReference nomeFarmacia = reference
+        DatabaseReference nomeFarmaciaRef = reference
                 .child("usuario")
                 .child(UsuarioFirebase.getIdentificadorUsuario())
                 .child("nomeFarmacia");
 
-        nomeFarmacia.addValueEventListener(new ValueEventListener() {
+        nomeFarmaciaRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String nomeFarmacia = snapshot.getValue().toString();
+                nomeFarmacia = snapshot.getValue().toString();
 
-                Query boletoRef = reference
-                        .child("boletos")
-                        .child(nomeFarmacia).orderByChild("status").equalTo(0);
-                boletoRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        boletos.clear();
+                if (!nomeFarmacia.equals("")) {
+                    Query boletoRef = reference
+                            .child("boletos")
+                            .child(nomeFarmacia).orderByChild("status").equalTo(0);
+                    boletoRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            boletos.clear();
 
-                        if (snapshot.getValue() != null) {
-                            progressDialog.dismiss();
-                            //binding.textContasPendentes.setVisibility(View.GONE);
-                            for (DataSnapshot ds: snapshot.getChildren()) {
-                                boletos.add(ds.getValue(Boleto.class));
-                                Boleto boleto = ds.getValue(Boleto.class);
+                            if (snapshot.getValue() != null) {
+                                progressDialog.dismiss();
+                                //binding.textContasPendentes.setVisibility(View.GONE);
+                                for (DataSnapshot ds: snapshot.getChildren()) {
+                                    boletos.add(ds.getValue(Boleto.class));
+                                    Boleto boleto = ds.getValue(Boleto.class);
+                                    recuperarNomeFarmacia();
+                                    valor += boleto.getValor();
+
+                                }
+
+                                DecimalFormat format = new DecimalFormat("0.00");
+                                binding.textValorBoletos.setText("Total a pagar: " + MoedaUtils.formatarMoeda(valor));
+                                boletosFiltered = new ArrayList<>(boletos);
+                                contaPendenteAdapter.setData(boletos);
+                            }else {
+                                binding.textValorBoletos.setText("Total a pagar: " + MoedaUtils.formatarMoeda(0));
+                                progressDialog.dismiss();
                                 recuperarNomeFarmacia();
-                                valor += boleto.getValor();
-
+                                //binding.textContasPendentes.setVisibility(View.VISIBLE);
                             }
-
-                            DecimalFormat format = new DecimalFormat("0.00");
-                            binding.textValorBoletos.setText("Total a pagar: " + MoedaUtils.formatarMoeda(valor));
-                            boletosFiltered = new ArrayList<>(boletos);
-                            contaPendenteAdapter.setData(boletos);
-                        }else {
-                            binding.textValorBoletos.setText("Total a pagar: " + MoedaUtils.formatarMoeda(0));
-                            progressDialog.dismiss();
-                            recuperarNomeFarmacia();
-                            //binding.textContasPendentes.setVisibility(View.VISIBLE);
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
 
-                    }
-                });
+                        }
+                    });
+                }
             }
 
             @Override

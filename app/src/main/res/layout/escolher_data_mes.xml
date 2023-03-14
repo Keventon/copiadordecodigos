@@ -5,12 +5,12 @@
     android:layout_width="match_parent"
     android:id="@+id/bottomSheetContainer"
     android:background="@drawable/bottom_sheet_background_quadrado"
-    android:layout_height="200dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="wrap_content">
 
 
         <TextView
@@ -47,9 +47,10 @@
             android:id="@+id/buttonEscolherPeloMes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="30dp"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
+            android:layout_marginBottom="50dp"
             android:background="@drawable/button_background"
             android:padding="16dp"
             android:text="Escolher pelo mês"

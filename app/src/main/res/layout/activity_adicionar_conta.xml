@@ -50,7 +50,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <RelativeLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/relativeLayoutCodigoBarra"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -70,40 +70,63 @@
                     style="@style/modifiedEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginStart="40dp"
                     android:background="@android:color/transparent"
                     android:hint="Digite o código de barras"
-                    android:inputType="number"
-                    android:maxLines="1"
+                    android:maxLines="5"
+                    android:inputType="textMultiLine"
                     android:paddingStart="30dp"
                     android:paddingTop="20dp"
                     android:paddingBottom="20dp"
                     android:textCursorDrawable="@drawable/cursor_color_verde"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/_icone_codigo_barra"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/_icone_codigo_barra"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
+                    android:layout_marginStart="16dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="17dp"
-                    android:src="@drawable/codigo_de_barras" />
+                    android:src="@drawable/codigo_de_barras"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            </RelativeLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/textScanearBoleto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Scannear Boleto"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:padding="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/relativeLayoutCodigoBarra" />
 
             <RelativeLayout
                 android:id="@+id/relativeLayoutValorConta"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:layout_marginLeft="25dp"
-                android:layout_marginTop="24dp"
                 android:layout_marginRight="25dp"
                 android:background="@drawable/blue_border_rounded_cornwe"
                 android:backgroundTint="@color/cinza_background"
                 android:padding="2dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/relativeLayoutCodigoBarra">
+                app:layout_constraintTop_toBottomOf="@+id/textScanearBoleto">
 
                 <com.blackcat.currencyedittext.CurrencyEditText
                     android:id="@+id/editValorConta"

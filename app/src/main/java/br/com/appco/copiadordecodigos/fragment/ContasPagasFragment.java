@@ -100,6 +100,8 @@ public class ContasPagasFragment extends Fragment {
         contaPagaAdapter = new ContaPagaAdapter(boletos, context);
         binding.recycleContaPaga.setAdapter(contaPagaAdapter);
 
+        binding.textSairContaPaga.setVisibility(View.GONE);
+
         binding.textSairContaPaga.setOnClickListener(view -> {
             auth.signOut();
             startActivity(new Intent(getContext(), LoginActivity.class));
@@ -557,15 +559,15 @@ public class ContasPagasFragment extends Fragment {
         progressDialog.setCancelable(false);
         progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
-        DatabaseReference nomeFarmacia = reference
+        DatabaseReference nomeFarmaciaRef = reference
                 .child("usuario")
                 .child(UsuarioFirebase.getIdentificadorUsuario())
                 .child("nomeFarmacia");
 
-        nomeFarmacia.addValueEventListener(new ValueEventListener() {
+        nomeFarmaciaRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String nomeFarmacia = snapshot.getValue().toString();
+                nomeFarmacia = snapshot.getValue().toString();
 
                 Query boletoRef = reference
                         .child("boletos")
