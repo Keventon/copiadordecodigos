@@ -118,7 +118,7 @@ public class ContasPendentesFragment extends Fragment {
             }
         });
 
-        //binding.textTodosBoletosPendentes.setOnClickListener(view -> carregarContas());
+        binding.cardTodosBoletosPendentes.setOnClickListener(view -> carregarContas());
 
         binding.textNomeUsuarioContaPendente.setOnClickListener(view -> startActivity(new Intent(context, EscolherBoletoActivity.class)));
 
@@ -135,7 +135,7 @@ public class ContasPendentesFragment extends Fragment {
 
                             @Override
                             public void onLongItemClick(View view, int position) {
-                                Boleto boleto = boletos.get(position);
+                                Boleto boleto = boletosFiltered.get(position);
                                 menuOpcoes(boleto);
 
                             }
@@ -284,8 +284,6 @@ public class ContasPendentesFragment extends Fragment {
                             binding.textValorBoletos.setText(MoedaUtils.formatarMoeda(0.0));
                             progressDialog.dismiss();
                             recuperarNomeFarmacia();
-                            boletosFiltered = new ArrayList<>(boletos);
-                            contaPendenteAdapter.setData(boletos);
                         }
                     }
 
@@ -496,9 +494,6 @@ public class ContasPendentesFragment extends Fragment {
                                     valor += boleto.getValor();
                                     boletos.add(ds.getValue(Boleto.class));
                                     recuperarNomeFarmacia();
-                                }else {
-                                    boletosFiltered = new ArrayList<>(boletos);
-                                    contaPendenteAdapter.setData(boletos);
                                 }
 
                             }
@@ -510,8 +505,6 @@ public class ContasPendentesFragment extends Fragment {
                             binding.textValorBoletos.setText(MoedaUtils.formatarMoeda(0.0));
                             progressDialog.dismiss();
                             recuperarNomeFarmacia();
-                            boletosFiltered = new ArrayList<>(boletos);
-                            contaPendenteAdapter.setData(boletos);
                             //binding.textContasPendentes.setVisibility(View.VISIBLE);
                         }
                     }

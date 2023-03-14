@@ -143,19 +143,69 @@
                     app:searchIcon="@drawable/ic_pesquisar_24dp" />
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/cardBuscarPorDia"
-                    android:layout_width="120dp"
-                    android:layout_height="100dp"
-                    android:layout_marginStart="32dp"
+                    android:id="@+id/cardTodosBoletosPendentes"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="10dp"
+                    android:clickable="true"
+                    android:foreground="?selectableItemBackground"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/searchViewContasPendentes">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="20dp">
+
+                        <ImageView
+                            android:id="@+id/imageView6"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="16dp"
+                            android:src="@drawable/todos_24dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginBottom="20dp"
+                            android:text="Todos boletos"
+                            android:textColor="@color/black"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardBuscarPorDia"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="10dp"
+                    android:clickable="true"
+                    android:foreground="?selectableItemBackground"
+                    app:layout_constraintEnd_toStartOf="@+id/cardBuscarPoMes"
+                    app:layout_constraintStart_toEndOf="@+id/cardTodosBoletosPendentes"
+                    app:layout_constraintTop_toBottomOf="@+id/searchViewContasPendentes">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="20dp">
 
                         <ImageView
                             android:id="@+id/imageView4"
@@ -185,20 +235,21 @@
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardBuscarPoMes"
-                    android:layout_width="120dp"
-                    android:layout_height="100dp"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:layout_marginEnd="32dp"
+                    android:layout_marginEnd="16dp"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="10dp"
+                    android:clickable="true"
+                    android:foreground="?selectableItemBackground"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@+id/cardBuscarPorDia"
                     app:layout_constraintTop_toBottomOf="@+id/searchViewContasPendentes">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="5dp">
 
                         <ImageView
                             android:id="@+id/imageView5"
@@ -211,6 +262,7 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
+                            android:gravity="center"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="16dp"
