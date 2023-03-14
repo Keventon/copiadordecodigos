@@ -102,7 +102,7 @@
                 android:id="@+id/textScanearBoleto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="4dp"
                 android:text="Scannear Boleto"
                 android:layout_marginStart="25dp"
                 android:layout_marginEnd="25dp"
@@ -114,19 +114,33 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/relativeLayoutCodigoBarra" />
 
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:text="Digite o valor do boleto"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textScanearBoleto" />
+
             <RelativeLayout
                 android:id="@+id/relativeLayoutValorConta"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"
+                android:layout_marginTop="5dp"
                 android:background="@drawable/blue_border_rounded_cornwe"
                 android:backgroundTint="@color/cinza_background"
                 android:padding="2dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textScanearBoleto">
+                app:layout_constraintTop_toBottomOf="@+id/textView9">
 
                 <com.blackcat.currencyedittext.CurrencyEditText
                     android:id="@+id/editValorConta"
