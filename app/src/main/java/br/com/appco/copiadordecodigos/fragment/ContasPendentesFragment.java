@@ -284,6 +284,8 @@ public class ContasPendentesFragment extends Fragment {
                         }else {
                             binding.textValorBoletos.setText(MoedaUtils.formatarMoeda(0.0));
                             progressDialog.dismiss();
+                            boletosFiltered = new ArrayList<>(boletos);
+                            contaPendenteAdapter.setData(boletos);
                         }
                     }
 
@@ -501,7 +503,8 @@ public class ContasPendentesFragment extends Fragment {
                         }else {
                             binding.textValorBoletos.setText(MoedaUtils.formatarMoeda(0.0));
                             progressDialog.dismiss();
-                            //binding.textContasPendentes.setVisibility(View.VISIBLE);
+                            boletosFiltered = new ArrayList<>(boletos);
+                            contaPendenteAdapter.setData(boletos);
                         }
                     }
 
