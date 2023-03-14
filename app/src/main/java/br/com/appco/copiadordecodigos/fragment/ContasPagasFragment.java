@@ -100,13 +100,6 @@ public class ContasPagasFragment extends Fragment {
         contaPagaAdapter = new ContaPagaAdapter(boletos, context);
         binding.recycleContaPaga.setAdapter(contaPagaAdapter);
 
-        binding.textSairContaPaga.setVisibility(View.GONE);
-
-        binding.textSairContaPaga.setOnClickListener(view -> {
-            auth.signOut();
-            startActivity(new Intent(getContext(), LoginActivity.class));
-        });
-
         binding.searchViewContasPagas.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -124,124 +117,10 @@ public class ContasPagasFragment extends Fragment {
             }
         });
 
-        binding.texTodosBoletos.setOnClickListener(view -> carregarContas());
+        binding.cardTodosBoletosPagos.setOnClickListener(view -> carregarContas());
 
-        binding.imageCalendario.setOnClickListener(view -> {
-            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
-                    getContext(), R.style.BottomSheetTheme
-            );
-
-            View bottomSheetView = LayoutInflater.from(getContext())
-                    .inflate(
-                            R.layout.escolher_data_mes,
-                            (LinearLayout) binding.getRoot().findViewById(R.id.bottomSheetContainer)
-                    );
-
-            //Iniciando layouts
-            Button buttonEscolherPeloDia = bottomSheetView.findViewById(R.id.buttonEscolherPeloDia);
-            Button buttonEscolherPeloMes = bottomSheetView.findViewById(R.id.buttonEscolherPeloMes);
-
-            buttonEscolherPeloMes.setOnClickListener(view1 -> {
-                ViewGroup viewGroup = view.findViewById(android.R.id.content);
-
-                Spinner spinner;
-                Button buttonPesquisarBoleto;
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                View inflate = LayoutInflater.from(context).inflate(R.layout.dialog_layout_escolher_mes, viewGroup, false);
-                builder.setView(inflate);
-                builder.setCancelable(true);
-
-                spinner = inflate.findViewById(R.id.spinnerMesAno);
-                buttonPesquisarBoleto = inflate.findViewById(R.id.buttonPesquisarBoletoDialog);
-
-                carregarSpinnerMesesDoAno(spinner);
-
-                final AlertDialog dialog = builder.create();
-
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        if (i != 0) {
-                            buttonPesquisarBoleto.setVisibility(View.VISIBLE);
-                        }else {
-                            buttonPesquisarBoleto.setVisibility(View.GONE);
-                        }
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
-
-                    }
-                });
-
-                buttonPesquisarBoleto.setOnClickListener(view2 -> {
-                    if (spinner.getSelectedItem().toString().equals("Janeiro")) {
-                        buscarBoletoPorMes("01/2023");
-                        dialog.dismiss();
-                        bottomSheetDialog.dismiss();
-                    }else if (spinner.getSelectedItem().toString().equals("Fevereiro")) {
-                        buscarBoletoPorMes("02/2023");
-                        dialog.dismiss();
-                        bottomSheetDialog.dismiss();
-                    }else if (spinner.getSelectedItem().toString().equals("Março")) {
-                        buscarBoletoPorMes("03/2023");
-                        dialog.dismiss();
-                        bottomSheetDialog.dismiss();
-                    }else if (spinner.getSelectedItem().toString().equals("Abril")) {
-                        buscarBoletoPorMes("04/2023");
-                        dialog.dismiss();
-                        bottomSheetDialog.dismiss();
-                    }else if (spinner.getSelectedItem().toString().equals("Maio")) {
-                        buscarBoletoPorMes("05/2023");
-                        dialog.dismiss();
-                        bottomSheetDialog.dismiss();
-                    }else if (spinner.getSelectedItem().toString().equals("Junho")) {
-                        buscarBoletoPorMes("06/2023");
-                        dialog.dismiss();
-                        bottomSheetDialog.dismiss();
-                    }else if (spinner.getSelectedItem().toString().equals("Julho")) {
-                        buscarBoletoPorMes("07/2023");
-                        dialog.dismiss();
-                        bottomSheetDialog.dismiss();
-                    }else if (spinner.getSelectedItem().toString().equals("Agosto")) {
-                        buscarBoletoPorMes("08/2023");
-                        dialog.dismiss();
-                        bottomSheetDialog.dismiss();
-                    }else if (spinner.getSelectedItem().toString().equals("Setembro")) {
-                        buscarBoletoPorMes("09/2023");
-                        dialog.dismiss();
-                        bottomSheetDialog.dismiss();
-                    }else if (spinner.getSelectedItem().toString().equals("Outubro")) {
-                        buscarBoletoPorMes("10/2023");
-                        dialog.dismiss();
-                        bottomSheetDialog.dismiss();
-                    }else if (spinner.getSelectedItem().toString().equals("Novembro")) {
-                        buscarBoletoPorMes("11/2023");
-                        dialog.dismiss();
-                        bottomSheetDialog.dismiss();
-                    }else if (spinner.getSelectedItem().toString().equals("Dezembro")) {
-                        buscarBoletoPorMes("12/2023");
-                        dialog.dismiss();
-                        bottomSheetDialog.dismiss();
-                    }
-                });
-
-                dialog.show();
-            });
-
-            buttonEscolherPeloDia.setOnClickListener(view1 -> {
-                abrirCalendario(view1);
-                bottomSheetDialog.dismiss();
-            });
-
-            bottomSheetDialog.setContentView(bottomSheetView);
-            bottomSheetDialog.show();
-        });
-
-        carregarContas();
+        binding.cardBuscarPoMes.setOnClickListener(this::layoutEscolherPorMes);
+        binding.cardBuscarPorDia.setOnClickListener(this::abrirCalendario);
 
         binding.recycleContaPaga.addOnItemTouchListener(
                 new RecyclerItemClickListener(
@@ -270,8 +149,86 @@ public class ContasPagasFragment extends Fragment {
         return binding.getRoot();
     }
 
+    private void layoutEscolherPorMes(View v) {
+        ViewGroup viewGroup = v.findViewById(android.R.id.content);
+
+        Spinner spinner;
+        Button buttonPesquisarBoleto;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View inflate = LayoutInflater.from(context).inflate(R.layout.dialog_layout_escolher_mes, viewGroup, false);
+        builder.setView(inflate);
+        builder.setCancelable(true);
+
+        spinner = inflate.findViewById(R.id.spinnerMesAno);
+        buttonPesquisarBoleto = inflate.findViewById(R.id.buttonPesquisarBoletoDialog);
+
+        carregarSpinnerMesesDoAno(spinner);
+
+        final AlertDialog dialog = builder.create();
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i != 0) {
+                    buttonPesquisarBoleto.setVisibility(View.VISIBLE);
+                }else {
+                    buttonPesquisarBoleto.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        buttonPesquisarBoleto.setOnClickListener(view2 -> {
+            if (spinner.getSelectedItem().toString().equals("Janeiro")) {
+                buscarBoletoPorMes("01/2023");
+                dialog.dismiss();
+            }else if (spinner.getSelectedItem().toString().equals("Fevereiro")) {
+                buscarBoletoPorMes("02/2023");
+                dialog.dismiss();
+            }else if (spinner.getSelectedItem().toString().equals("Março")) {
+                buscarBoletoPorMes("03/2023");
+                dialog.dismiss();
+            }else if (spinner.getSelectedItem().toString().equals("Abril")) {
+                buscarBoletoPorMes("04/2023");
+                dialog.dismiss();
+            }else if (spinner.getSelectedItem().toString().equals("Maio")) {
+                buscarBoletoPorMes("05/2023");
+                dialog.dismiss();
+            }else if (spinner.getSelectedItem().toString().equals("Junho")) {
+                buscarBoletoPorMes("06/2023");
+                dialog.dismiss();
+            }else if (spinner.getSelectedItem().toString().equals("Julho")) {
+                buscarBoletoPorMes("07/2023");
+                dialog.dismiss();
+            }else if (spinner.getSelectedItem().toString().equals("Agosto")) {
+                buscarBoletoPorMes("08/2023");
+                dialog.dismiss();
+            }else if (spinner.getSelectedItem().toString().equals("Setembro")) {
+                buscarBoletoPorMes("09/2023");
+                dialog.dismiss();
+            }else if (spinner.getSelectedItem().toString().equals("Outubro")) {
+                buscarBoletoPorMes("10/2023");
+                dialog.dismiss();
+            }else if (spinner.getSelectedItem().toString().equals("Novembro")) {
+                buscarBoletoPorMes("11/2023");
+                dialog.dismiss();
+            }else if (spinner.getSelectedItem().toString().equals("Dezembro")) {
+                buscarBoletoPorMes("12/2023");
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
     private void buscarBoletoPorMes(String data) {
-        valor = 0.0;
 
         progressDialog = new ProgressDialog(getContext());
         progressDialog.show();
@@ -296,6 +253,7 @@ public class ContasPagasFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         boletos.clear();
+                        valor = 0.0;
 
                         if (snapshot.getValue() != null) {
                             progressDialog.dismiss();
@@ -311,12 +269,12 @@ public class ContasPagasFragment extends Fragment {
                             }
 
                             DecimalFormat format = new DecimalFormat("0.00");
-                            binding.textValorBoletos.setText("Total pago: " + MoedaUtils.formatarMoeda(valor));
+                            binding.textValorBoletosPagos.setText(MoedaUtils.formatarMoeda(valor));
                             boletosFiltered = new ArrayList<>(boletos);
 
                             contaPagaAdapter.setData(boletos);
                         }else {
-                            binding.textValorBoletos.setText("Total pagp: " + MoedaUtils.formatarMoeda(0.0));
+                            binding.textValorBoletosPagos.setText(MoedaUtils.formatarMoeda(0.0));
                             progressDialog.dismiss();
                             recuperarNomeFarmacia();
                             boletosFiltered = new ArrayList<>(boletos);
@@ -402,8 +360,6 @@ public class ContasPagasFragment extends Fragment {
 
     public void buscarBoletoPorData(String data) {
 
-        valor = 0.0;
-
         progressDialog = new ProgressDialog(getContext());
         progressDialog.show();
         progressDialog.setContentView(R.layout.progress_dialog);
@@ -427,6 +383,7 @@ public class ContasPagasFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         boletos.clear();
+                        valor = 0.0;
 
                         if (snapshot.getValue() != null) {
                             //binding.textContasPendentes.setVisibility(View.GONE);
@@ -445,11 +402,11 @@ public class ContasPagasFragment extends Fragment {
                                 }
 
                             }
-                            binding.textValorBoletos.setText("Total pago: " + MoedaUtils.formatarMoeda(valor));
+                            binding.textValorBoletosPagos.setText(MoedaUtils.formatarMoeda(valor));
                             boletosFiltered = new ArrayList<>(boletos);
                             contaPagaAdapter.setData(boletos);
                         }else {
-                            binding.textValorBoletos.setText("Total pago: " + MoedaUtils.formatarMoeda(0.0));
+                            binding.textValorBoletosPagos.setText(MoedaUtils.formatarMoeda(0.0));
                             progressDialog.dismiss();
                             recuperarNomeFarmacia();
                             boletosFiltered = new ArrayList<>(boletos);
@@ -576,6 +533,7 @@ public class ContasPagasFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         boletos.clear();
+                        valor = 0.0;
 
                         if (snapshot.exists()) {
                             if (snapshot.getValue() != null) {
@@ -591,15 +549,15 @@ public class ContasPagasFragment extends Fragment {
 
                                 }
                                 progressDialog.dismiss();
-                                binding.textValorBoletos.setText("Total pago: " + MoedaUtils.formatarMoeda(valor));
+                                binding.textValorBoletosPagos.setText( MoedaUtils.formatarMoeda(valor));
                                 boletosFiltered = new ArrayList<>(boletos);
                                 contaPagaAdapter.setData(boletos);
                             }else {
-                                binding.textValorBoletos.setText("Total pago: " + MoedaUtils.formatarMoeda(0));
+                                binding.textValorBoletosPagos.setText(MoedaUtils.formatarMoeda(0));
                                 progressDialog.dismiss();
                             }
                         }else {
-                            binding.textValorBoletos.setText("Total pago: " + MoedaUtils.formatarMoeda(0));
+                            binding.textValorBoletosPagos.setText(MoedaUtils.formatarMoeda(0));
                             progressDialog.dismiss();
                         }
                     }
@@ -631,7 +589,7 @@ public class ContasPagasFragment extends Fragment {
 
                 if (snapshot.getValue() != null) {
                     nomeFarmacia = snapshot.getValue().toString();
-                    binding.textNomeFarmaciaContasPagas.setText("Você está na " + nomeFarmacia);
+                    //binding.textNomeFarmaciaContasPagas.setText("Você está na " + nomeFarmacia);
                 }else {
                     Toast.makeText(context, "Erro", Toast.LENGTH_SHORT).show();
                 }
@@ -642,6 +600,12 @@ public class ContasPagasFragment extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        carregarContas();
     }
 
     public void onAttach(Context context) {

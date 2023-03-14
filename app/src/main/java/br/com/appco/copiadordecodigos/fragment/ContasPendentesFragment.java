@@ -70,6 +70,8 @@ public class ContasPendentesFragment extends Fragment {
     private List<Boleto> contasFiltradas = new ArrayList<>();
     private ContaPendenteAdapter contaPendenteAdapter;
     private ContaDAO dao;
+
+    private boolean nomeFarmaciaEncontrado = false;
     private MaterialCalendarView calendarView;
     private String mesAnoSelecionado, nomeFarmacia = "";
     private double valor = 0.0;
@@ -269,7 +271,6 @@ public class ContasPendentesFragment extends Fragment {
                                 Boleto boleto = ds.getValue(Boleto.class);
                                 if (boleto.getStatus() == 0) {
                                     boletos.add(ds.getValue(Boleto.class));
-                                    recuperarNomeFarmacia();
                                     valor += boleto.getValor();
                                 }
 
@@ -283,7 +284,6 @@ public class ContasPendentesFragment extends Fragment {
                         }else {
                             binding.textValorBoletos.setText(MoedaUtils.formatarMoeda(0.0));
                             progressDialog.dismiss();
-                            recuperarNomeFarmacia();
                         }
                     }
 
@@ -370,7 +370,6 @@ public class ContasPendentesFragment extends Fragment {
                             for (DataSnapshot ds: snapshot.getChildren()) {
                                 boletos.add(ds.getValue(Boleto.class));
                                 Boleto boleto = ds.getValue(Boleto.class);
-                                recuperarNomeFarmacia();
                                 boletosData.add(boleto.getDataValidade());
                                 valor += boleto.getValor();
 
@@ -386,7 +385,6 @@ public class ContasPendentesFragment extends Fragment {
                             contaPendenteAdapter.setData(boletos);
                         }else {
                             progressDialog.dismiss();
-                            recuperarNomeFarmacia();
                             //binding.textContasPendentes.setVisibility(View.VISIBLE);
                         }
                     }
@@ -493,7 +491,6 @@ public class ContasPendentesFragment extends Fragment {
                                 if (boleto.getStatus() == 0) {
                                     valor += boleto.getValor();
                                     boletos.add(ds.getValue(Boleto.class));
-                                    recuperarNomeFarmacia();
                                 }
 
                             }
@@ -504,7 +501,6 @@ public class ContasPendentesFragment extends Fragment {
                         }else {
                             binding.textValorBoletos.setText(MoedaUtils.formatarMoeda(0.0));
                             progressDialog.dismiss();
-                            recuperarNomeFarmacia();
                             //binding.textContasPendentes.setVisibility(View.VISIBLE);
                         }
                     }
@@ -561,6 +557,47 @@ public class ContasPendentesFragment extends Fragment {
 
                 if (snapshot.getValue() != null) {
                     nomeFarmacia = snapshot.getValue().toString();
+                    nomeFarmaciaEncontrado = true;
+
+                    if (!nomeFarmacia.equals("")) {
+                        Query boletoRef = reference
+                                .child("boletos")
+                                .child(nomeFarmacia).orderByChild("status").equalTo(0);
+                        boletoRef.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                valor = 0.0;
+                                boletos.clear();
+
+                                if (snapshot.getValue() != null) {
+                                    //binding.textContasPendentes.setVisibility(View.GONE);
+                                    for (DataSnapshot ds: snapshot.getChildren()) {
+                                        boletos.add(ds.getValue(Boleto.class));
+                                        Boleto boleto = ds.getValue(Boleto.class);
+                                        valor += boleto.getValor();
+
+                                    }
+
+                                    DecimalFormat format = new DecimalFormat("0.00");
+                                    binding.textValorBoletos.setText(MoedaUtils.formatarMoeda(valor));
+                                    boletosFiltered = new ArrayList<>(boletos);
+                                    contaPendenteAdapter.setData(boletos);
+                                    progressDialog.dismiss();
+                                }else {
+                                    binding.textValorBoletos.setText(MoedaUtils.formatarMoeda(0));
+                                    progressDialog.dismiss();
+                                    boletosFiltered = new ArrayList<>(boletos);
+                                    contaPendenteAdapter.setData(boletos);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    }
+
                     binding.textNomeUsuarioContaPendente.setText("Você está na " + nomeFarmacia);
                 }
             }
@@ -882,61 +919,7 @@ public class ContasPendentesFragment extends Fragment {
         progressDialog.setCancelable(false);
         progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
-        DatabaseReference nomeFarmaciaRef = reference
-                .child("usuario")
-                .child(UsuarioFirebase.getIdentificadorUsuario())
-                .child("nomeFarmacia");
-
-        nomeFarmaciaRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                nomeFarmacia = snapshot.getValue().toString();
-
-                if (!nomeFarmacia.equals("")) {
-                    Query boletoRef = reference
-                            .child("boletos")
-                            .child(nomeFarmacia).orderByChild("status").equalTo(0);
-                    boletoRef.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            boletos.clear();
-
-                            if (snapshot.getValue() != null) {
-                                progressDialog.dismiss();
-                                //binding.textContasPendentes.setVisibility(View.GONE);
-                                for (DataSnapshot ds: snapshot.getChildren()) {
-                                    boletos.add(ds.getValue(Boleto.class));
-                                    Boleto boleto = ds.getValue(Boleto.class);
-                                    recuperarNomeFarmacia();
-                                    valor += boleto.getValor();
-
-                                }
-
-                                DecimalFormat format = new DecimalFormat("0.00");
-                                binding.textValorBoletos.setText(MoedaUtils.formatarMoeda(valor));
-                                boletosFiltered = new ArrayList<>(boletos);
-                                contaPendenteAdapter.setData(boletos);
-                            }else {
-                                binding.textValorBoletos.setText(MoedaUtils.formatarMoeda(0));
-                                progressDialog.dismiss();
-                                recuperarNomeFarmacia();
-                                //binding.textContasPendentes.setVisibility(View.VISIBLE);
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+        recuperarNomeFarmacia();
     }
 
     @Override
