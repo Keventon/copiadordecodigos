@@ -440,13 +440,6 @@ public class ContasPendentesFragment extends Fragment {
             }
         });
 
-        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-                carregarContas();
-            }
-        });
-
         buttonEscolherData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -577,12 +570,12 @@ public class ContasPendentesFragment extends Fragment {
                                     for (DataSnapshot ds: snapshot.getChildren()) {
                                         boletos.add(ds.getValue(Boleto.class));
                                         Boleto boleto = ds.getValue(Boleto.class);
+                                        assert boleto != null;
                                         valor += boleto.getValor();
 
                                     }
 
                                     DecimalFormat format = new DecimalFormat("0.00");
-                                    binding.textValorBoletos.setText(MoedaUtils.formatarMoeda(valor));
                                     boletosFiltered = new ArrayList<>(boletos);
                                     contaPendenteAdapter.setData(boletos);
                                     progressDialog.dismiss();
@@ -592,6 +585,10 @@ public class ContasPendentesFragment extends Fragment {
                                     boletosFiltered = new ArrayList<>(boletos);
                                     contaPendenteAdapter.setData(boletos);
                                 }
+
+
+                                Toast.makeText(context, "Total: " + valor, Toast.LENGTH_SHORT).show();
+                                binding.textValorBoletos.setText(MoedaUtils.formatarMoeda(valor));
                             }
 
                             @Override
@@ -864,13 +861,6 @@ public class ContasPendentesFragment extends Fragment {
                             }));
                         }
 
-                    }
-                });
-
-                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialogInterface) {
-                        carregarContas();
                     }
                 });
 

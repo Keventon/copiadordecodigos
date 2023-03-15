@@ -516,64 +516,7 @@ public class ContasPagasFragment extends Fragment {
         progressDialog.setCancelable(false);
         progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
-        DatabaseReference nomeFarmaciaRef = reference
-                .child("usuario")
-                .child(UsuarioFirebase.getIdentificadorUsuario())
-                .child("nomeFarmacia");
-
-        nomeFarmaciaRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                nomeFarmacia = snapshot.getValue().toString();
-
-                Query boletoRef = reference
-                        .child("boletos")
-                        .child(nomeFarmacia).orderByChild("status").equalTo(1);
-                boletoRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        boletos.clear();
-                        valor = 0.0;
-
-                        if (snapshot.exists()) {
-                            if (snapshot.getValue() != null) {
-                                //binding.textContasPagas.setVisibility(View.GONE);
-                                for (DataSnapshot ds: snapshot.getChildren()) {
-                                    Boleto boleto = ds.getValue(Boleto.class);
-                                    boletos.add(ds.getValue(Boleto.class));
-
-                                    assert boleto != null;
-                                    if (boleto.getValor() != null) {
-                                        valor += boleto.getValor();
-                                    }
-
-                                }
-                                progressDialog.dismiss();
-                                binding.textValorBoletosPagos.setText( MoedaUtils.formatarMoeda(valor));
-                                boletosFiltered = new ArrayList<>(boletos);
-                                contaPagaAdapter.setData(boletos);
-                            }else {
-                                binding.textValorBoletosPagos.setText(MoedaUtils.formatarMoeda(0));
-                                progressDialog.dismiss();
-                            }
-                        }else {
-                            binding.textValorBoletosPagos.setText(MoedaUtils.formatarMoeda(0));
-                            progressDialog.dismiss();
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+        recuperarNomeFarmacia();
     }
 
     private void recuperarNomeFarmacia() {
@@ -589,7 +532,46 @@ public class ContasPagasFragment extends Fragment {
 
                 if (snapshot.getValue() != null) {
                     nomeFarmacia = snapshot.getValue().toString();
-                    //binding.textNomeFarmaciaContasPagas.setText("Você está na " + nomeFarmacia);
+                    Query boletoRef = reference
+                            .child("boletos")
+                            .child(nomeFarmacia).orderByChild("status").equalTo(1);
+                    boletoRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            boletos.clear();
+                            valor = 0.0;
+
+                            if (snapshot.exists()) {
+                                if (snapshot.getValue() != null) {
+                                    //binding.textContasPagas.setVisibility(View.GONE);
+                                    for (DataSnapshot ds: snapshot.getChildren()) {
+                                        Boleto boleto = ds.getValue(Boleto.class);
+                                        boletos.add(ds.getValue(Boleto.class));
+
+                                        assert boleto != null;
+                                        valor += boleto.getValor();
+
+                                    }
+                                    progressDialog.dismiss();
+                                    boletosFiltered = new ArrayList<>(boletos);
+                                    contaPagaAdapter.setData(boletos);
+                                }else {
+                                    binding.textValorBoletosPagos.setText(MoedaUtils.formatarMoeda(0));
+                                    progressDialog.dismiss();
+                                }
+                            }else {
+                                binding.textValorBoletosPagos.setText(MoedaUtils.formatarMoeda(0));
+                                progressDialog.dismiss();
+                            }
+
+                            binding.textValorBoletosPagos.setText(MoedaUtils.formatarMoeda(valor));
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
                 }else {
                     Toast.makeText(context, "Erro", Toast.LENGTH_SHORT).show();
                 }
