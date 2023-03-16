@@ -376,11 +376,6 @@ public class ContasPendentesFragment extends Fragment {
                                 valor += boleto.getValor();
 
                             }
-
-                            Toast.makeText(context, String.valueOf(boletosData), Toast.LENGTH_SHORT).show();
-
-
-
                             DecimalFormat format = new DecimalFormat("0.00");
                             binding.textValorBoletos.setText(MoedaUtils.formatarMoeda(valor));
                             boletosFiltered = new ArrayList<>(boletos);
@@ -542,12 +537,18 @@ public class ContasPendentesFragment extends Fragment {
 
         //verificarNivelAcesso();
 
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.progress_dialog);
+        progressDialog.setCancelable(false);
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
         DatabaseReference nomeRef = reference
                 .child("usuario")
                 .child(UsuarioFirebase.getIdentificadorUsuario())
                 .child("nomeFarmacia");
 
-        nomeRef.addValueEventListener(new ValueEventListener() {
+        nomeRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
@@ -568,26 +569,28 @@ public class ContasPendentesFragment extends Fragment {
                                 if (snapshot.getValue() != null) {
                                     //binding.textContasPendentes.setVisibility(View.GONE);
                                     for (DataSnapshot ds: snapshot.getChildren()) {
+                                        progressDialog.dismiss();
                                         boletos.add(ds.getValue(Boleto.class));
                                         Boleto boleto = ds.getValue(Boleto.class);
                                         assert boleto != null;
                                         valor += boleto.getValor();
 
                                     }
-
                                     DecimalFormat format = new DecimalFormat("0.00");
                                     boletosFiltered = new ArrayList<>(boletos);
                                     contaPendenteAdapter.setData(boletos);
-                                    progressDialog.dismiss();
+
+                                    if (boletos.size() > 0) {
+                                        binding.cardBuscarPorDia.setVisibility(View.VISIBLE);
+                                        binding.cardBuscarPoMes.setVisibility(View.VISIBLE);
+                                        binding.cardTodosBoletosPendentes.setVisibility(View.VISIBLE);
+                                    }
                                 }else {
                                     binding.textValorBoletos.setText(MoedaUtils.formatarMoeda(0));
                                     progressDialog.dismiss();
                                     boletosFiltered = new ArrayList<>(boletos);
                                     contaPendenteAdapter.setData(boletos);
                                 }
-
-
-                                Toast.makeText(context, "Total: " + valor, Toast.LENGTH_SHORT).show();
                                 binding.textValorBoletos.setText(MoedaUtils.formatarMoeda(valor));
                             }
 
@@ -905,12 +908,6 @@ public class ContasPendentesFragment extends Fragment {
     public void carregarContas() {
 
         valor = 0.0;
-
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.show();
-        progressDialog.setContentView(R.layout.progress_dialog);
-        progressDialog.setCancelable(false);
-        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
         recuperarNomeFarmacia();
     }

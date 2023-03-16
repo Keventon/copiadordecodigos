@@ -77,6 +77,8 @@ public class ContasPagasFragment extends Fragment {
     String nomeFarmacia = "";
     private ContaPagaAdapter contaPagaAdapter;
     private ContaDAO dao;
+
+    private TextView textValorBoletosPagos;
     private double valor = 0.0;
     private Context context;
     private FirebaseAuth auth = ConfiguracoesFirebase.getFirebaseAutenticacao();
@@ -116,6 +118,8 @@ public class ContasPagasFragment extends Fragment {
                 return true;
             }
         });
+
+        carregarContas();
 
         binding.cardTodosBoletosPagos.setOnClickListener(view -> carregarContas());
 
@@ -262,7 +266,6 @@ public class ContasPagasFragment extends Fragment {
                                 Boleto boleto = ds.getValue(Boleto.class);
                                 if (boleto.getStatus() == 1) {
                                     boletos.add(ds.getValue(Boleto.class));
-                                    recuperarNomeFarmacia();
                                     valor += boleto.getValor();
                                 }
 
@@ -276,7 +279,6 @@ public class ContasPagasFragment extends Fragment {
                         }else {
                             binding.textValorBoletosPagos.setText(MoedaUtils.formatarMoeda(0.0));
                             progressDialog.dismiss();
-                            recuperarNomeFarmacia();
                             boletosFiltered = new ArrayList<>(boletos);
                             contaPagaAdapter.setData(boletos);
                         }
@@ -378,7 +380,7 @@ public class ContasPagasFragment extends Fragment {
 
                 Query boletoRef = reference
                         .child("boletos")
-                        .child(nomeFarmacia).orderByChild("dataPagamento").equalTo(data);
+                        .child(nomeFarmacia).orderByChild("dataValidade").equalTo(data);
                 boletoRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -391,7 +393,6 @@ public class ContasPagasFragment extends Fragment {
                                 Boleto boleto = ds.getValue(Boleto.class);
                                 if (boleto.getStatus() == 1) {
                                     boletos.add(ds.getValue(Boleto.class));
-                                    recuperarNomeFarmacia();
                                     valor += boleto.getValor();
                                     progressDialog.dismiss();
 
@@ -408,7 +409,6 @@ public class ContasPagasFragment extends Fragment {
                         }else {
                             binding.textValorBoletosPagos.setText(MoedaUtils.formatarMoeda(0.0));
                             progressDialog.dismiss();
-                            recuperarNomeFarmacia();
                             boletosFiltered = new ArrayList<>(boletos);
                             contaPagaAdapter.setData(boletos);
                             //binding.textContasPendentes.setVisibility(View.VISIBLE);
@@ -510,23 +510,23 @@ public class ContasPagasFragment extends Fragment {
 
     public void carregarContas() {
 
+        recuperarNomeFarmacia();
+    }
+
+    private void recuperarNomeFarmacia() {
+
         progressDialog = new ProgressDialog(context);
         progressDialog.show();
         progressDialog.setContentView(R.layout.progress_dialog);
         progressDialog.setCancelable(false);
         progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
-        recuperarNomeFarmacia();
-    }
-
-    private void recuperarNomeFarmacia() {
-
         DatabaseReference nomeRef = reference
                 .child("usuario")
                 .child(UsuarioFirebase.getIdentificadorUsuario())
                 .child("nomeFarmacia");
 
-        nomeRef.addValueEventListener(new ValueEventListener() {
+        nomeRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
@@ -542,29 +542,28 @@ public class ContasPagasFragment extends Fragment {
                             valor = 0.0;
 
                             if (snapshot.exists()) {
-                                if (snapshot.getValue() != null) {
-                                    //binding.textContasPagas.setVisibility(View.GONE);
-                                    for (DataSnapshot ds: snapshot.getChildren()) {
-                                        Boleto boleto = ds.getValue(Boleto.class);
-                                        boletos.add(ds.getValue(Boleto.class));
+                                for (DataSnapshot ds: snapshot.getChildren()) {
+                                    Boleto boleto = ds.getValue(Boleto.class);
+                                    boletos.add(ds.getValue(Boleto.class));
 
-                                        assert boleto != null;
-                                        valor += boleto.getValor();
+                                    assert boleto != null;
+                                    valor += boleto.getValor();
 
-                                    }
-                                    progressDialog.dismiss();
-                                    boletosFiltered = new ArrayList<>(boletos);
-                                    contaPagaAdapter.setData(boletos);
-                                }else {
-                                    binding.textValorBoletosPagos.setText(MoedaUtils.formatarMoeda(0));
-                                    progressDialog.dismiss();
                                 }
+
+                                boletosFiltered = new ArrayList<>(boletos);
+                                contaPagaAdapter.setData(boletos);
+                                binding.textValorBoletosPagos.setText(MoedaUtils.formatarMoeda(valor));
+                                progressDialog.dismiss();
+                                binding.cardBuscarPoMes.setVisibility(View.VISIBLE);
+                                binding.cardBuscarPorDia.setVisibility(View.VISIBLE);
+                                binding.cardTodosBoletosPagos.setVisibility(View.VISIBLE);
                             }else {
+                                boletosFiltered = new ArrayList<>(boletos);
+                                contaPagaAdapter.setData(boletos);
                                 binding.textValorBoletosPagos.setText(MoedaUtils.formatarMoeda(0));
                                 progressDialog.dismiss();
                             }
-
-                            binding.textValorBoletosPagos.setText(MoedaUtils.formatarMoeda(valor));
                         }
 
                         @Override
@@ -581,13 +580,8 @@ public class ContasPagasFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        });
-    }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        carregarContas();
+        });
     }
 
     public void onAttach(Context context) {
