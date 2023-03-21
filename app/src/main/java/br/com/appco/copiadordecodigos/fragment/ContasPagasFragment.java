@@ -344,7 +344,6 @@ public class ContasPagasFragment extends Fragment {
         builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-                carregarContas();
             }
         });
 
@@ -496,6 +495,7 @@ public class ContasPagasFragment extends Fragment {
         }
 
         buttonAddComprovante.setOnClickListener(view -> {
+            bottomSheetDialog.dismiss();
             Intent intent = new Intent(context, EscolherComprovanteActivity.class);
             intent.putExtra("info_boleto", boleto);
             startActivity(intent);
@@ -582,12 +582,6 @@ public class ContasPagasFragment extends Fragment {
         });
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        carregarContas();
-    }
-
     public void onAttach(Context context) {
         this.context = context;
         super.onAttach(context);
@@ -596,11 +590,6 @@ public class ContasPagasFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
+        carregarContas();
     }
 }
