@@ -790,7 +790,7 @@ public class ContasPendentesFragment extends Fragment {
                 boleto1.atualizar(((error, ref) -> {
                     Toast.makeText(context, "Boleto pago com sucesso", Toast.LENGTH_SHORT).show();
                     bottomSheetDialog.dismiss();
-                    startActivity(new Intent(context, ContasActivity.class));
+                    bottomSheetDialog2.dismiss();
                 }));
             });
 
@@ -838,7 +838,6 @@ public class ContasPendentesFragment extends Fragment {
                                 bottomSheetDialog.dismiss();
                                 bottomSheetDialog2.dismiss();
                                 dialog.dismiss();
-                                startActivity(new Intent(context, ContasActivity.class));
                             }));
                         }else {
                             String data = diadoMes + "/0" + mesAno + "/" + ano;
@@ -860,7 +859,6 @@ public class ContasPendentesFragment extends Fragment {
                                 bottomSheetDialog.dismiss();
                                 bottomSheetDialog2.dismiss();
                                 dialog.dismiss();
-                                startActivity(new Intent(context, ContasActivity.class));
                             }));
                         }
 

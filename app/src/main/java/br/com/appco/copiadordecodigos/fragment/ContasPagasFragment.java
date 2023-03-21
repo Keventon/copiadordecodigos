@@ -119,8 +119,6 @@ public class ContasPagasFragment extends Fragment {
             }
         });
 
-        carregarContas();
-
         binding.cardTodosBoletosPagos.setOnClickListener(view -> carregarContas());
 
         binding.cardBuscarPoMes.setOnClickListener(this::layoutEscolherPorMes);
@@ -582,6 +580,12 @@ public class ContasPagasFragment extends Fragment {
             }
 
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        carregarContas();
     }
 
     public void onAttach(Context context) {
