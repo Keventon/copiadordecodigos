@@ -743,6 +743,7 @@ public class ContasPendentesFragment extends Fragment {
             Button buttonEscolherDataAtual = bottomSheetView2.findViewById(R.id.buttonDataAtual);
 
             buttonEscolherDataAtual.setOnClickListener(view1 -> {
+
                 Boleto boleto1 = new Boleto();
 
                 String mesAno = DataAtual.dataAtual().substring(3);
