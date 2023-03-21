@@ -4,6 +4,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
@@ -34,12 +35,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
-import com.journeyapps.barcodescanner.ScanContract;
-import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.util.List;
+import java.util.function.IntToDoubleFunction;
 
 import br.com.appco.copiadordecodigos.R;
 import br.com.appco.copiadordecodigos.controller.ConfiguracoesFirebase;
@@ -161,31 +163,44 @@ public class AdicionarContaActivity extends AppCompatActivity {
     }
 
     private void scanearBoleto() {
-        ScanOptions options = new ScanOptions();
-        options.setPrompt("Clique no botão de aumentar volume para ligar o flash");
-        options.setBeepEnabled(true);
-        options.setOrientationLocked(true);
-        options.setCaptureActivity(CaptureAct.class);
-        barLaucher.launch(options);
+
+        IntentIntegrator integrator = new IntentIntegrator(AdicionarContaActivity.this);
+        integrator.setCaptureActivity(CaptureAct.class);
+        integrator.setOrientationLocked(false);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+        integrator.setPrompt("Clique no botão de aumentar volume para ligar o flash");
+        integrator.initiateScan();
+
     }
 
-    ActivityResultLauncher<ScanOptions> barLaucher = registerForActivityResult(new ScanContract(), result -> {
-        if (result.getContents() != null) {
-            if (result.getContents().isEmpty()) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+
+        if (result != null) {
+            if (result.getContents() != null) {
+                binding.editCodigoBarra.setText(calculaLinha(result.getContents()));
+            }else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(AdicionarContaActivity.this);
-                builder.setTitle("Ocorreu um erro ao ler o código de barras");
-                builder.setMessage("Tente novamente");
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                builder.setTitle("Erro na leitura do código de barras");
+                builder.setMessage("Deseja tentar novamente?");
+                builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        scanearBoleto();
+                    }
+                });
+
+                builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
                     }
-                }).show();
-            }else {
-                binding.editCodigoBarra.setText(calculaLinha(result.getContents()));
+                });
             }
         }
-    });
+    }
 
     public static String calculaLinha(String barra) {
         // Remover caracteres não numéricos.
