@@ -39,10 +39,9 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
-import com.journeyapps.barcodescanner.ScanContract;
-import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.util.List;
+import java.util.function.IntToDoubleFunction;
 
 import br.com.appco.copiadordecodigos.R;
 import br.com.appco.copiadordecodigos.controller.ConfiguracoesFirebase;
