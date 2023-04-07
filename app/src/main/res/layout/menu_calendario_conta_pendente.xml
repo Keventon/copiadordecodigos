@@ -10,7 +10,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="wrap_content">
 
 
         <TextView
@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Selecione qual data você pagou esse boleto."
+            android:text="Selecione qual data você pagou esse boleto"
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -48,12 +48,12 @@
             android:id="@+id/buttonDataAtual"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="32dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginBottom="40dp"
-            android:drawableLeft="@drawable/ic_data_receita_24dp"
+            android:layout_marginBottom="32dp"
             android:background="@drawable/button_background"
+            android:drawableLeft="@drawable/ic_data_receita_24dp"
             android:drawableEnd="@drawable/ic_data_receita_24dp"
             android:padding="16dp"
             android:text="Pegar data de hoje"
@@ -62,8 +62,8 @@
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttonAbrirCalendario"
-            app:layout_constraintVertical_bias="0.113" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonAbrirCalendario" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -128,7 +128,7 @@ public class ContasPagasFragment extends Fragment {
 
         binding.imageCalendario.setOnClickListener(view -> {
             BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
-                    getContext(), R.style.BottomSheetTheme
+                    context, R.style.BottomSheetTheme
             );
 
             View bottomSheetView = LayoutInflater.from(getContext())
@@ -245,7 +245,7 @@ public class ContasPagasFragment extends Fragment {
 
         binding.recycleContaPaga.addOnItemTouchListener(
                 new RecyclerItemClickListener(
-                        getContext(),
+                        context,
                         binding.recycleContaPaga,
                         new RecyclerItemClickListener.OnItemClickListener() {
                             @Override
@@ -284,7 +284,7 @@ public class ContasPagasFragment extends Fragment {
                 .child(UsuarioFirebase.getIdentificadorUsuario())
                 .child("nomeFarmacia");
 
-        nomeFarmacia.addValueEventListener(new ValueEventListener() {
+        nomeFarmacia.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String nomeFarmacia = snapshot.getValue().toString();
@@ -292,7 +292,7 @@ public class ContasPagasFragment extends Fragment {
                 Query boletoRef = reference
                         .child("boletos")
                         .child(nomeFarmacia).orderByChild("mes").equalTo(data);
-                boletoRef.addValueEventListener(new ValueEventListener() {
+                boletoRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         boletos.clear();
@@ -313,7 +313,6 @@ public class ContasPagasFragment extends Fragment {
                             DecimalFormat format = new DecimalFormat("0.00");
                             binding.textValorBoletos.setText("Total pago: " + MoedaUtils.formatarMoeda(valor));
                             boletosFiltered = new ArrayList<>(boletos);
-
                             contaPagaAdapter.setData(boletos);
                         }else {
                             binding.textValorBoletos.setText("Total pagp: " + MoedaUtils.formatarMoeda(0.0));
@@ -415,7 +414,7 @@ public class ContasPagasFragment extends Fragment {
                 .child(UsuarioFirebase.getIdentificadorUsuario())
                 .child("nomeFarmacia");
 
-        nomeFarmacia.addValueEventListener(new ValueEventListener() {
+        nomeFarmacia.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String nomeFarmacia = snapshot.getValue().toString();
@@ -423,7 +422,7 @@ public class ContasPagasFragment extends Fragment {
                 Query boletoRef = reference
                         .child("boletos")
                         .child(nomeFarmacia).orderByChild("dataPagamento").equalTo(data);
-                boletoRef.addValueEventListener(new ValueEventListener() {
+                boletoRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         boletos.clear();
@@ -500,7 +499,7 @@ public class ContasPagasFragment extends Fragment {
 
     public void detalhesConta(Boleto boleto) {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
-                getContext(), R.style.BottomSheetTheme
+                context, R.style.BottomSheetTheme
         );
 
         View bottomSheetView = LayoutInflater.from(getContext())
@@ -564,7 +563,7 @@ public class ContasPagasFragment extends Fragment {
                 .child(UsuarioFirebase.getIdentificadorUsuario())
                 .child("nomeFarmacia");
 
-        nomeFarmaciaRef.addValueEventListener(new ValueEventListener() {
+        nomeFarmaciaRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 nomeFarmacia = snapshot.getValue().toString();
@@ -572,10 +571,11 @@ public class ContasPagasFragment extends Fragment {
                 Query boletoRef = reference
                         .child("boletos")
                         .child(nomeFarmacia).orderByChild("status").equalTo(1);
-                boletoRef.addValueEventListener(new ValueEventListener() {
+                boletoRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         boletos.clear();
+                        valor = 0.0;
 
                         if (snapshot.exists()) {
                             if (snapshot.getValue() != null) {
@@ -590,15 +590,23 @@ public class ContasPagasFragment extends Fragment {
                                     }
 
                                 }
+                                contaPagaAdapter.notifyDataSetChanged();
                                 progressDialog.dismiss();
-                                binding.textValorBoletos.setText("Total pago: " + MoedaUtils.formatarMoeda(valor));
                                 boletosFiltered = new ArrayList<>(boletos);
                                 contaPagaAdapter.setData(boletos);
+                                binding.textValorBoletos.setText("Total pago: " + MoedaUtils.formatarMoeda(valor));
+
                             }else {
+                                contaPagaAdapter.notifyDataSetChanged();
                                 binding.textValorBoletos.setText("Total pago: " + MoedaUtils.formatarMoeda(0));
                                 progressDialog.dismiss();
+                                boletosFiltered = new ArrayList<>(boletos);
+                                contaPagaAdapter.setData(boletos);
                             }
                         }else {
+                            contaPagaAdapter.notifyDataSetChanged();
+                            boletosFiltered = new ArrayList<>(boletos);
+                            contaPagaAdapter.setData(boletos);
                             binding.textValorBoletos.setText("Total pago: " + MoedaUtils.formatarMoeda(0));
                             progressDialog.dismiss();
                         }

@@ -731,7 +731,13 @@ public class ContasPendentesFragment extends Fragment {
 
         textValor.setText("Valor do boleto: " + MoedaUtils.formatarMoeda((boleto.getValor())));
         textDataValidade.setText("Vencimento: " + boleto.getDataValidade());
-        textValorComMulta.setText("Valor dos juros por dia em R$: " + format.format(boleto.getValorMulta()));
+
+
+        if (boleto.getValorMulta() > 0) {
+            textValorComMulta.setText("Valor dos juros por dia em R$: " + format.format(boleto.getValorMulta()));
+        }else {
+            textValorComMulta.setVisibility(View.GONE);
+        }
 
         if (boleto.getCodigo().equals("null")) {
             textCodigo.setVisibility(View.GONE);
@@ -926,7 +932,7 @@ public class ContasPendentesFragment extends Fragment {
                 .child(UsuarioFirebase.getIdentificadorUsuario())
                 .child("nomeFarmacia");
 
-        nomeFarmaciaRef.addValueEventListener(new ValueEventListener() {
+        nomeFarmaciaRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 nomeFarmacia = snapshot.getValue().toString();
@@ -935,9 +941,10 @@ public class ContasPendentesFragment extends Fragment {
                     Query boletoRef = reference
                             .child("boletos")
                             .child(nomeFarmacia).orderByChild("status").equalTo(0);
-                    boletoRef.addValueEventListener(new ValueEventListener() {
+                    boletoRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            valor = 0.0;
                             boletos.clear();
 
                             if (snapshot.getValue() != null) {
@@ -951,11 +958,15 @@ public class ContasPendentesFragment extends Fragment {
 
                                 }
 
+                                contaPendenteAdapter.notifyDataSetChanged();
                                 DecimalFormat format = new DecimalFormat("0.00");
                                 binding.textValorBoletos.setText("Total a pagar: " + MoedaUtils.formatarMoeda(valor));
                                 boletosFiltered = new ArrayList<>(boletos);
                                 contaPendenteAdapter.setData(boletos);
                             }else {
+                                contaPendenteAdapter.notifyDataSetChanged();
+                                boletosFiltered = new ArrayList<>(boletos);
+                                contaPendenteAdapter.setData(boletos);
                                 binding.textValorBoletos.setText("Total a pagar: " + MoedaUtils.formatarMoeda(0));
                                 progressDialog.dismiss();
                                 recuperarNomeFarmacia();
