@@ -304,7 +304,7 @@ public class ContasPagasFragment extends Fragment {
                                 Boleto boleto = ds.getValue(Boleto.class);
                                 if (boleto.getStatus() == 1) {
                                     boletos.add(ds.getValue(Boleto.class));
-                                    recuperarNomeFarmacia();
+                                    //recuperarNomeFarmacia();
                                     valor += boleto.getValor();
                                 }
 
@@ -421,13 +421,13 @@ public class ContasPagasFragment extends Fragment {
 
                 Query boletoRef = reference
                         .child("boletos")
-                        .child(nomeFarmacia).orderByChild("dataPagamento").equalTo(data);
+                        .child(nomeFarmacia).orderByChild("dataValidade").equalTo(data);
                 boletoRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         boletos.clear();
 
-                        if (snapshot.getValue() != null) {
+                        if (snapshot.exists()) {
                             //binding.textContasPendentes.setVisibility(View.GONE);
                             for (DataSnapshot ds: snapshot.getChildren()) {
                                 Boleto boleto = ds.getValue(Boleto.class);
@@ -437,10 +437,6 @@ public class ContasPagasFragment extends Fragment {
                                     valor += boleto.getValor();
                                     progressDialog.dismiss();
 
-                                }else {
-                                    progressDialog.dismiss();
-                                    boletosFiltered = new ArrayList<>(boletos);
-                                    contaPagaAdapter.setData(boletos);
                                 }
 
                             }
@@ -578,31 +574,22 @@ public class ContasPagasFragment extends Fragment {
                         valor = 0.0;
 
                         if (snapshot.exists()) {
-                            if (snapshot.getValue() != null) {
-                                //binding.textContasPagas.setVisibility(View.GONE);
-                                for (DataSnapshot ds: snapshot.getChildren()) {
-                                    Boleto boleto = ds.getValue(Boleto.class);
-                                    boletos.add(ds.getValue(Boleto.class));
+                            //binding.textContasPagas.setVisibility(View.GONE);
+                            for (DataSnapshot ds: snapshot.getChildren()) {
+                                Boleto boleto = ds.getValue(Boleto.class);
+                                boletos.add(ds.getValue(Boleto.class));
 
-                                    assert boleto != null;
-                                    if (boleto.getValor() != null) {
-                                        valor += boleto.getValor();
-                                    }
-
+                                assert boleto != null;
+                                if (boleto.getValor() != null) {
+                                    valor += boleto.getValor();
                                 }
-                                contaPagaAdapter.notifyDataSetChanged();
-                                progressDialog.dismiss();
-                                boletosFiltered = new ArrayList<>(boletos);
-                                contaPagaAdapter.setData(boletos);
-                                binding.textValorBoletos.setText("Total pago: " + MoedaUtils.formatarMoeda(valor));
 
-                            }else {
-                                contaPagaAdapter.notifyDataSetChanged();
-                                binding.textValorBoletos.setText("Total pago: " + MoedaUtils.formatarMoeda(0));
-                                progressDialog.dismiss();
-                                boletosFiltered = new ArrayList<>(boletos);
-                                contaPagaAdapter.setData(boletos);
                             }
+                            contaPagaAdapter.notifyDataSetChanged();
+                            progressDialog.dismiss();
+                            boletosFiltered = new ArrayList<>(boletos);
+                            contaPagaAdapter.setData(boletos);
+                            binding.textValorBoletos.setText("Total pago: " + MoedaUtils.formatarMoeda(valor));
                         }else {
                             contaPagaAdapter.notifyDataSetChanged();
                             boletosFiltered = new ArrayList<>(boletos);
