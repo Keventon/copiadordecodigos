@@ -49,7 +49,7 @@ public class VerComprovanteActivity extends AppCompatActivity {
 
         }
 
-        binding.imageFotoComprovante.setOnClickListener(view -> {
+        binding.imageDownload.setOnClickListener(view -> {
             BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
                     VerComprovanteActivity.this, R.style.BottomSheetTheme
             );

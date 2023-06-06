@@ -54,6 +54,7 @@ import br.com.appco.copiadordecodigos.activity.CadastrarFuncionarioActivity;
 import br.com.appco.copiadordecodigos.activity.ContasActivity;
 import br.com.appco.copiadordecodigos.activity.EditarContaActivity;
 import br.com.appco.copiadordecodigos.activity.EscolherBoletoActivity;
+import br.com.appco.copiadordecodigos.activity.EscolherComprovanteActivity;
 import br.com.appco.copiadordecodigos.adapter.ContaPendenteAdapter;
 import br.com.appco.copiadordecodigos.controller.ConfiguracoesFirebase;
 import br.com.appco.copiadordecodigos.controller.UsuarioFirebase;
@@ -636,7 +637,7 @@ public class ContasPendentesFragment extends Fragment {
         buttonExcluir.setOnClickListener(view ->  {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle("Confirmar exclusão");
-            builder.setMessage("Deseja realmente apagar a conta: " + boleto.getDescricao() + "?");
+            builder.setMessage("Deseja realmente apagar o boleto?");
             builder.setCancelable(false);
             builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                 @Override
@@ -733,11 +734,7 @@ public class ContasPendentesFragment extends Fragment {
         textDataValidade.setText("Vencimento: " + boleto.getDataValidade());
 
 
-        if (boleto.getValorMulta() > 0) {
-            textValorComMulta.setText("Valor dos juros por dia em R$: " + format.format(boleto.getValorMulta()));
-        }else {
-            textValorComMulta.setVisibility(View.GONE);
-        }
+        textValorComMulta.setVisibility(View.GONE);
 
         if (boleto.getCodigo().equals("null")) {
             textCodigo.setVisibility(View.GONE);
@@ -788,14 +785,15 @@ public class ContasPendentesFragment extends Fragment {
                 boleto1.setImagemComprovante("");
                 boleto1.setMes(mesAno);
                 boleto1.setNomeFarmacia(boleto.getNomeFarmacia());
-                boleto1.setValorMulta(boleto.getValorMulta());
                 boleto1.setNomeEmpresa(boleto.getNomeEmpresa());
                 boleto1.setValor(boleto.getValor());
                 boleto1.setDataValidade(boleto.getDataValidade());
                 boleto1.atualizar(((error, ref) -> {
                     Toast.makeText(context, "Boleto pago com sucesso", Toast.LENGTH_SHORT).show();
                     bottomSheetDialog.dismiss();
-                    startActivity(new Intent(context, ContasActivity.class));
+                    Intent intent = new Intent(context, EscolherComprovanteActivity.class);
+                    intent.putExtra("info_boleto", boleto);
+                    startActivity(intent);
                 }));
             });
 
@@ -834,7 +832,6 @@ public class ContasPendentesFragment extends Fragment {
                             boleto1.setNomeFarmacia(boleto.getNomeFarmacia());
                             boleto1.setImagemComprovante("");
                             boleto1.setMes(mesAno + "/" + ano);
-                            boleto1.setValorMulta(boleto.getValorMulta());
                             boleto1.setNomeEmpresa(boleto.getNomeEmpresa());
                             boleto1.setValor(boleto.getValor());
                             boleto1.setDataValidade(boleto.getDataValidade());
@@ -843,7 +840,9 @@ public class ContasPendentesFragment extends Fragment {
                                 bottomSheetDialog.dismiss();
                                 bottomSheetDialog2.dismiss();
                                 dialog.dismiss();
-                                startActivity(new Intent(context, ContasActivity.class));
+                                Intent intent = new Intent(context, EscolherComprovanteActivity.class);
+                                intent.putExtra("info_boleto", boleto);
+                                startActivity(intent);
                             }));
                         }else {
                             String data = diadoMes + "/0" + mesAno + "/" + ano;
@@ -855,7 +854,6 @@ public class ContasPendentesFragment extends Fragment {
                             boleto1.setCodigo(boleto.getCodigo());
                             boleto1.setMes("0" + mesAno + "/" + ano);
                             boleto1.setNomeFarmacia(boleto.getNomeFarmacia());
-                            boleto1.setValorMulta(boleto.getValorMulta());
                             boleto1.setImagemComprovante("");
                             boleto1.setNomeEmpresa(boleto.getNomeEmpresa());
                             boleto1.setValor(boleto.getValor());
@@ -865,7 +863,9 @@ public class ContasPendentesFragment extends Fragment {
                                 bottomSheetDialog.dismiss();
                                 bottomSheetDialog2.dismiss();
                                 dialog.dismiss();
-                                startActivity(new Intent(context, ContasActivity.class));
+                                Intent intent = new Intent(context, EscolherComprovanteActivity.class);
+                                intent.putExtra("info_boleto", boleto);
+                                startActivity(intent);
                             }));
                         }
 

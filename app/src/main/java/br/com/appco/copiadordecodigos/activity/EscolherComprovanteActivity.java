@@ -210,7 +210,7 @@ public class EscolherComprovanteActivity extends AppCompatActivity {
                 boleto1.setNomeFarmacia(boleto.getNomeFarmacia());
                 boleto1.salvarImagem(boleto.getId(), boleto.getNomeFarmacia(), imageUrlUploaded, (error, ref) -> {
                     progressDialog.dismiss();
-                    Toast.makeText(this, "Imagem adicionada com sucesso", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Comprovante adicionado com sucesso", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(EscolherComprovanteActivity.this, ContasActivity.class));
                 });
             });

@@ -33,11 +33,9 @@ public class EditarContaActivity extends AppCompatActivity {
 
         if (contaAtual != null) {
             Double contaConvertida = contaAtual.getValor() * 10;
-            Double contaConvertidaMulta = contaAtual.getValorMulta() * 10;
 
             binding.editNomeEmpresaContaEditar.setText(contaAtual.getNomeEmpresa());
             binding.editValorContaEditar.setText(String.valueOf(contaConvertida));
-            binding.editValorMulta.setText(String.valueOf(contaConvertidaMulta));
             binding.editDataValidadeEditar.setText(contaAtual.getDataValidade());
             binding.editCodigoBarraEditar.setText(contaAtual.getCodigo());
 
@@ -53,7 +51,6 @@ public class EditarContaActivity extends AppCompatActivity {
                 if (binding.editDataValidadeEditar.length() == 10) {
                     if (!binding.editNomeEmpresaContaEditar.getText().toString().isEmpty()) {
                         double valor = (double) binding.editValorContaEditar.getRawValue() / 100;
-                        double valorMulta = (double) binding.editValorMulta.getRawValue() / 100;
                         String data = binding.editDataValidadeEditar.getText().toString();
                         String codigo = binding.editCodigoBarraEditar.getText().toString();
                         String descricao = binding.editNomeEmpresaContaEditar.getText().toString();
@@ -66,7 +63,6 @@ public class EditarContaActivity extends AppCompatActivity {
                         boleto.setImagemComprovante("");
                         boleto.setNomeFarmacia(contaAtual.getNomeFarmacia());
                         boleto.setValor(valor);
-                        boleto.setValorMulta(valorMulta);
                         boleto.setDataValidade(data);
                         boleto.setId(contaAtual.getId());
                         boleto.atualizar(((error, ref) -> {
