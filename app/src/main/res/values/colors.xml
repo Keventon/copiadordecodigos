@@ -9,7 +9,7 @@
     <color name="cinza">#A7A7A7</color>
     <color name="vermelho">#F86156</color>
     <color name="cinza_background">#F1F1EB</color>
-    <color name="black">#FF000000</color>
-    <color name="preto">#202020</color>
+    <color name="black">#313131</color>
+    <color name="preto">#313131</color>
     <color name="white">#FFFFFFFF</color>
 </resources>
