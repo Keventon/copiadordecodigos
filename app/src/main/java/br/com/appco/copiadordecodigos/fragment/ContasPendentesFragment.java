@@ -63,6 +63,7 @@ import br.com.appco.copiadordecodigos.databinding.FragmentContasPendentesBinding
 import br.com.appco.copiadordecodigos.listener.RecyclerItemClickListener;
 import br.com.appco.copiadordecodigos.model.Boleto;
 import br.com.appco.copiadordecodigos.util.DataAtual;
+import br.com.appco.copiadordecodigos.util.GetMask;
 import br.com.appco.copiadordecodigos.util.MoedaUtils;
 
 public class ContasPendentesFragment extends Fragment {
@@ -232,7 +233,7 @@ public class ContasPendentesFragment extends Fragment {
 
         binding.textTodosBoletosPendentes.setOnClickListener(view -> carregarContas());
 
-        binding.buttonEscolherFarmacia.setOnClickListener(view -> startActivity(new Intent(context, EscolherBoletoActivity.class)));
+        binding.linear.setOnClickListener(view -> startActivity(new Intent(context, EscolherBoletoActivity.class)));
 
         binding.recycleContas.addOnItemTouchListener(
                 new RecyclerItemClickListener(
@@ -259,11 +260,6 @@ public class ContasPendentesFragment extends Fragment {
                         }
                 )
         );
-
-        binding.textCadastrarFuncionarioContaPendente.setOnClickListener(view -> {
-            auth.signOut();
-            startActivity(new Intent(context, CadastrarFuncionarioActivity.class));
-        });
 
         return binding.getRoot();
     }
@@ -309,12 +305,12 @@ public class ContasPendentesFragment extends Fragment {
                             }
 
                             DecimalFormat format = new DecimalFormat("0.00");
-                            binding.textValorBoletos.setText("Total a pagar: " + MoedaUtils.formatarMoeda(valor));
+                            binding.textValorBoletos.setText("R$ " + GetMask.getValor(valor));
                             boletosFiltered = new ArrayList<>(boletos);
 
                             contaPendenteAdapter.setData(boletos);
                         }else {
-                            binding.textValorBoletos.setText("Total a pagar: " + MoedaUtils.formatarMoeda(0.0));
+                            binding.textValorBoletos.setText(GetMask.getValor(0.0));
                             progressDialog.dismiss();
                             recuperarNomeFarmacia();
                             boletosFiltered = new ArrayList<>(boletos);
@@ -416,7 +412,7 @@ public class ContasPendentesFragment extends Fragment {
 
 
                             DecimalFormat format = new DecimalFormat("0.00");
-                            binding.textValorBoletos.setText("Total a pagar: " + MoedaUtils.formatarMoeda(valor));
+                            binding.textValorBoletos.setText("R$ " + GetMask.getValor(valor));
                             boletosFiltered = new ArrayList<>(boletos);
                             contaPendenteAdapter.setData(boletos);
                         }else {
@@ -536,11 +532,11 @@ public class ContasPendentesFragment extends Fragment {
 
                             }
                             DecimalFormat format = new DecimalFormat("0.00");
-                            binding.textValorBoletos.setText("Total a pagar: " + MoedaUtils.formatarMoeda(valor));
+                            binding.textValorBoletos.setText("R$ " + GetMask.getValor(valor));
                             boletosFiltered = new ArrayList<>(boletos);
                             contaPendenteAdapter.setData(boletos);
                         }else {
-                            binding.textValorBoletos.setText("Total a pagar: " + MoedaUtils.formatarMoeda(0.0));
+                            binding.textValorBoletos.setText("R$ " + GetMask.getValor(0.0));
                             progressDialog.dismiss();
                             recuperarNomeFarmacia();
                             boletosFiltered = new ArrayList<>(boletos);
@@ -573,9 +569,9 @@ public class ContasPendentesFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String acesso = snapshot.getValue().toString();
                 if (acesso.equals("A")) {
-                    binding.textCadastrarFuncionarioContaPendente.setVisibility(View.VISIBLE);
+                    //binding.textCadastrarFuncionarioContaPendente.setVisibility(View.VISIBLE);
                 }else {
-                    binding.textCadastrarFuncionarioContaPendente.setVisibility(View.GONE);
+                    //binding.textCadastrarFuncionarioContaPendente.setVisibility(View.GONE);
                 }
             }
 
@@ -601,7 +597,7 @@ public class ContasPendentesFragment extends Fragment {
 
                 if (snapshot.getValue() != null) {
                     nomeFarmacia = snapshot.getValue().toString();
-                    binding.textNomeUsuarioContaPendente.setText("Você está na " + nomeFarmacia);
+                    binding.textNomeUsuarioContaPendente.setText(nomeFarmacia);
                 }
             }
 
@@ -960,14 +956,14 @@ public class ContasPendentesFragment extends Fragment {
 
                                 contaPendenteAdapter.notifyDataSetChanged();
                                 DecimalFormat format = new DecimalFormat("0.00");
-                                binding.textValorBoletos.setText("Total a pagar: " + MoedaUtils.formatarMoeda(valor));
+                                binding.textValorBoletos.setText("R$ " + GetMask.getValor(valor));
                                 boletosFiltered = new ArrayList<>(boletos);
                                 contaPendenteAdapter.setData(boletos);
                             }else {
                                 contaPendenteAdapter.notifyDataSetChanged();
                                 boletosFiltered = new ArrayList<>(boletos);
                                 contaPendenteAdapter.setData(boletos);
-                                binding.textValorBoletos.setText("Total a pagar: " + MoedaUtils.formatarMoeda(0));
+                                binding.textValorBoletos.setText("R$ " + GetMask.getValor(0));
                                 progressDialog.dismiss();
                                 recuperarNomeFarmacia();
                                 //binding.textContasPendentes.setVisibility(View.VISIBLE);

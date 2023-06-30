@@ -51,7 +51,7 @@ public class ContaPendenteAdapter extends RecyclerView.Adapter<ContaPendenteAdap
         Boleto boleto = listaBoletos.get(position);
 
         holder.dataVencimento.setText("Vencimento: " + boleto.getDataValidade());
-        holder.textNomeEmpresaContaPendente.setText("Empresa: " + boleto.getNomeEmpresa());
+        holder.textNomeEmpresaContaPendente.setText(boleto.getNomeEmpresa());
 
         if (boleto.getStatus() == 0) {
             holder.status.setText("Não pago");

@@ -12,7 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
         <item name="android:statusBarColor">@color/verde</item>
-        <item name="android:fontFamily">@font/nunito_bold</item>
+        <item name="android:fontFamily">@font/nunito_semibold</item>
         <!-- Customize your theme here. -->
     </style>
 
