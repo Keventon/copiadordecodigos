@@ -22,6 +22,7 @@
             android:layout_height="wrap_content"
             android:text="Aguarde..."
             android:textSize="20sp"
+            android:textColor="@color/preto"
             android:textStyle="bold"
             android:layout_marginTop="10dp"/>
 

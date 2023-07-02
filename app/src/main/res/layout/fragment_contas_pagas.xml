@@ -7,10 +7,60 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.ContasPagasFragment">
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:cardCornerRadius="2dp"
+        app:cardElevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/verde">
+
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="36dp"
+                android:gravity="center"
+                android:text="Total pago"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textValorBoletos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView11"
+                app:layout_constraintVertical_bias="0.164" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchViewContasPagas"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/pesquisa_rounded"
@@ -20,36 +70,20 @@
         android:padding="10dp"
         android:theme="@style/SearchViewTheme"
         app:iconifiedByDefault="false"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageCalendario"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linear"
-        app:layout_constraintVertical_bias="0.051"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
         app:queryBackground="@android:color/transparent"
         app:queryHint="Buscar um boleto..."
         app:searchIcon="@drawable/ic_pesquisar_24dp" />
-
-    <TextView
-        android:id="@+id/textValorBoletos"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text=""
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.752"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchViewContasPagas" />
 
     <ImageView
         android:id="@+id/imageCalendario"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginTop="2dp"
         android:layout_marginEnd="16dp"
         android:src="@drawable/ic_calendario_24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/searchViewContasPagas"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/searchViewContasPagas" />
 
@@ -63,60 +97,35 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textNomeFarmaciaContasPagas"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="16dp"
-            android:text=""
-            android:textStyle="bold"
-            android:textColor="@color/verde"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textSairContaPaga"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sair"
-            android:textStyle="bold"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="16dp"
-            android:gravity="end"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:layout_weight="1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.879"
-            app:layout_constraintStart_toEndOf="@+id/textNomeUsuario"
-            app:layout_constraintTop_toTopOf="parent" />
-
     </LinearLayout>
 
     <TextView
         android:id="@+id/texTodosBoletos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="24dp"
         android:layout_marginStart="6dp"
+        android:background="@drawable/pesquisa_rounded"
+        android:gravity="end"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
         android:text="Todos os boletos"
-        android:layout_marginTop="16dp"
-        android:textColor="@color/black"
+        android:textColor="@color/preto"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.047"
+        app:layout_constraintHorizontal_bias="0.065"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textValorBoletos" />
+        app:layout_constraintTop_toBottomOf="@+id/searchViewContasPagas" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycleContaPaga"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
-        android:layout_marginStart="6dp"
-        android:layout_marginEnd="6dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

@@ -67,6 +67,7 @@ import br.com.appco.copiadordecodigos.databinding.FragmentContasPagasBinding;
 import br.com.appco.copiadordecodigos.listener.RecyclerItemClickListener;
 import br.com.appco.copiadordecodigos.model.Boleto;
 import br.com.appco.copiadordecodigos.model.Conta;
+import br.com.appco.copiadordecodigos.util.GetMask;
 import br.com.appco.copiadordecodigos.util.MoedaUtils;
 
 public class ContasPagasFragment extends Fragment {
@@ -99,13 +100,6 @@ public class ContasPagasFragment extends Fragment {
         binding.recycleContaPaga.setHasFixedSize(true);
         contaPagaAdapter = new ContaPagaAdapter(boletos, context);
         binding.recycleContaPaga.setAdapter(contaPagaAdapter);
-
-        binding.textSairContaPaga.setVisibility(View.GONE);
-
-        binding.textSairContaPaga.setOnClickListener(view -> {
-            auth.signOut();
-            startActivity(new Intent(getContext(), LoginActivity.class));
-        });
 
         binding.searchViewContasPagas.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -311,11 +305,11 @@ public class ContasPagasFragment extends Fragment {
                             }
 
                             DecimalFormat format = new DecimalFormat("0.00");
-                            binding.textValorBoletos.setText("Total pago: " + MoedaUtils.formatarMoeda(valor));
+                            binding.textValorBoletos.setText("R$ " + GetMask.getValor(valor));
                             boletosFiltered = new ArrayList<>(boletos);
                             contaPagaAdapter.setData(boletos);
                         }else {
-                            binding.textValorBoletos.setText("Total pagp: " + MoedaUtils.formatarMoeda(0.0));
+                            binding.textValorBoletos.setText("R$ " + GetMask.getValor(0.0));
                             progressDialog.dismiss();
                             recuperarNomeFarmacia();
                             boletosFiltered = new ArrayList<>(boletos);
@@ -440,11 +434,11 @@ public class ContasPagasFragment extends Fragment {
                                 }
 
                             }
-                            binding.textValorBoletos.setText("Total pago: " + MoedaUtils.formatarMoeda(valor));
+                            binding.textValorBoletos.setText("R$ " + GetMask.getValor(valor));
                             boletosFiltered = new ArrayList<>(boletos);
                             contaPagaAdapter.setData(boletos);
                         }else {
-                            binding.textValorBoletos.setText("Total pago: " + MoedaUtils.formatarMoeda(0.0));
+                            binding.textValorBoletos.setText("R$ " + GetMask.getValor(0.0));
                             progressDialog.dismiss();
                             recuperarNomeFarmacia();
                             boletosFiltered = new ArrayList<>(boletos);
@@ -589,12 +583,12 @@ public class ContasPagasFragment extends Fragment {
                             progressDialog.dismiss();
                             boletosFiltered = new ArrayList<>(boletos);
                             contaPagaAdapter.setData(boletos);
-                            binding.textValorBoletos.setText("Total pago: " + MoedaUtils.formatarMoeda(valor));
+                            binding.textValorBoletos.setText("R$ " + GetMask.getValor(valor));
                         }else {
                             contaPagaAdapter.notifyDataSetChanged();
                             boletosFiltered = new ArrayList<>(boletos);
                             contaPagaAdapter.setData(boletos);
-                            binding.textValorBoletos.setText("Total pago: " + MoedaUtils.formatarMoeda(0));
+                            binding.textValorBoletos.setText("R$ " + GetMask.getValor(0));
                             progressDialog.dismiss();
                         }
                     }
@@ -626,7 +620,7 @@ public class ContasPagasFragment extends Fragment {
 
                 if (snapshot.getValue() != null) {
                     nomeFarmacia = snapshot.getValue().toString();
-                    binding.textNomeFarmaciaContasPagas.setText("Você está na " + nomeFarmacia);
+                    //binding.textNomeFarmaciaContasPagas.setText("Você está na " + nomeFarmacia);
                 }else {
                     Toast.makeText(context, "Erro", Toast.LENGTH_SHORT).show();
                 }
