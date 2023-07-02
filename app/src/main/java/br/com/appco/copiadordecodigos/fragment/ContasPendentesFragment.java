@@ -726,7 +726,7 @@ public class ContasPendentesFragment extends Fragment {
 
         String valorString = String.valueOf(boleto.getValor()).replace(".", ",");
 
-        textValor.setText("Valor do boleto: " + MoedaUtils.formatarMoeda((boleto.getValor())));
+        textValor.setText("Valor do boleto: R$ " +GetMask.getValor((boleto.getValor())));
         textDataValidade.setText("Vencimento: " + boleto.getDataValidade());
 
 
@@ -787,6 +787,7 @@ public class ContasPendentesFragment extends Fragment {
                 boleto1.atualizar(((error, ref) -> {
                     Toast.makeText(context, "Boleto pago com sucesso", Toast.LENGTH_SHORT).show();
                     bottomSheetDialog.dismiss();
+                    bottomSheetDialog2.dismiss();
                     Intent intent = new Intent(context, EscolherComprovanteActivity.class);
                     intent.putExtra("info_boleto", boleto);
                     startActivity(intent);

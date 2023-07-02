@@ -9,6 +9,9 @@
     android:layout_marginStart="16dp"
     android:layout_marginEnd="16dp"
     app:cardElevation="2dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?selectableItemBackground"
     android:layout_marginBottom="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout

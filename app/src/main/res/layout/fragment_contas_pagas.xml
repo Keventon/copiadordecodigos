@@ -79,9 +79,11 @@
 
     <ImageView
         android:id="@+id/imageCalendario"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginEnd="16dp"
+        android:padding="5dp"
+        android:background="@drawable/background_ripple_transparent"
         android:src="@drawable/ic_calendario_24dp"
         app:layout_constraintBottom_toBottomOf="@+id/searchViewContasPagas"
         app:layout_constraintEnd_toEndOf="parent"
@@ -99,27 +101,38 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/texTodosBoletos"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/textTodosBoletos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="24dp"
         android:layout_marginStart="6dp"
-        android:background="@drawable/pesquisa_rounded"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?selectableItemBackground"
         android:gravity="end"
-        android:paddingTop="6dp"
-        android:paddingBottom="6dp"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:text="Todos os boletos"
-        android:textColor="@color/preto"
-        android:textSize="16sp"
-        android:textStyle="bold"
+        app:cardElevation="0dp"
+        app:cardCornerRadius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.065"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchViewContasPagas" />
+        app:layout_constraintTop_toBottomOf="@+id/searchViewContasPagas">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="@color/preto"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:background="@drawable/pesquisa_rounded"
+            android:text="Todos os boletos"/>
+
+    </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycleContaPaga"
@@ -130,7 +143,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/texTodosBoletos"
+        app:layout_constraintTop_toBottomOf="@+id/textTodosBoletos"
         app:layout_constraintVertical_bias="1.0"
         tools:listitem="@layout/conta_paga" />
 

@@ -118,7 +118,7 @@ public class ContasPagasFragment extends Fragment {
             }
         });
 
-        binding.texTodosBoletos.setOnClickListener(view -> carregarContas());
+        binding.textTodosBoletos.setOnClickListener(view -> carregarContas());
 
         binding.imageCalendario.setOnClickListener(view -> {
             BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(

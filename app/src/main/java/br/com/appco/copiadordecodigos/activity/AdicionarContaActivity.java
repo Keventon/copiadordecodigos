@@ -114,6 +114,7 @@ public class AdicionarContaActivity extends AppCompatActivity {
                                             boleto.salvar(((error, ref) -> {
                                                 binding.progressBarAddConta.setVisibility(View.GONE);
                                                 Toast.makeText(getApplicationContext(), "Conta adicionada com sucesso", Toast.LENGTH_SHORT).show();
+                                                finish();
                                                 startActivity(new Intent(getApplicationContext(), ContasActivity.class));
                                             }));
                                         }
