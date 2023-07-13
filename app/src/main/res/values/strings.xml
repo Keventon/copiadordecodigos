@@ -2,6 +2,15 @@
     <string name="app_name">Minhas Contas</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="titulo_slider_1">Organize seus boletos através de datas para não perder o dia para pagamento.</string>
+    <string name="titulo_slider_2">Salve seus boletos e consulte quando quiser. Sem perda de papéis.</string>
+    <string name="titulo_slider_3">Faça a análise de quanto você vai gastar com o pagamento de seus boletos.</string>
+    <string name="sub_titulo_slider_4">Arraste para o lado para começarmos.</string>
+    <string name="titulo_slider_4">Tudo isso e muito mais para você :)</string>
+    <string name="titulo_slider_5">Crie sua conta agora mesmo</string>
+    <string name="sub_titulo_slider_5">Tenha uma vida livre do esquecimento de boletos.</string>
+    <string name="button_slider_criar_conta">Criar conta</string>
+    <string name="sub_titulo_2_slider_5">Já tenho conta</string>
 
 
     <string-array name="farmacias">

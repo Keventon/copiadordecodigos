@@ -4,15 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import com.heinrichreimersoftware.materialintro.app.IntroActivity;
-
 import br.com.appco.copiadordecodigos.R;
 
-public class SplashActivity extends IntroActivity {
+public class CadastroActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+        setContentView(R.layout.activity_cadastro);
     }
 }
