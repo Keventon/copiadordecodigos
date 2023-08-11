@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.heinrichreimersoftware.materialintro.app.IntroActivity;
 import com.heinrichreimersoftware.materialintro.slide.FragmentSlide;
@@ -28,6 +29,7 @@ public class SliderActivity extends IntroActivity {
             editor.putBoolean("isFirstTime", false);
             editor.apply();
         } else {
+            Toast.makeText(this, "Caiu aqui", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, MainActivity.class));
         }
     }
