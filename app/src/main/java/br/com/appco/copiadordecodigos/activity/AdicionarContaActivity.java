@@ -9,8 +9,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import android.Manifest;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Instrumentation;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -42,6 +45,10 @@ import com.gun0912.tedpermission.normal.TedPermission;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import br.com.appco.copiadordecodigos.R;
@@ -52,6 +59,7 @@ import br.com.appco.copiadordecodigos.database.SQLiteHelper;
 import br.com.appco.copiadordecodigos.databinding.ActivityAdicionarContaBinding;
 import br.com.appco.copiadordecodigos.model.Boleto;
 import br.com.appco.copiadordecodigos.model.Conta;
+import br.com.appco.copiadordecodigos.util.AlarmReceiver;
 import br.com.appco.copiadordecodigos.util.Util;
 
 public class AdicionarContaActivity extends AppCompatActivity {
@@ -101,6 +109,27 @@ public class AdicionarContaActivity extends AppCompatActivity {
                                             String nomeFarmacia = snapshot.getValue().toString();
 
                                             Boleto boleto = new Boleto();
+
+                                            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+                                            try {
+                                                Date date = dateFormat.parse(data);
+                                                Calendar calendar = Calendar.getInstance();
+                                                calendar.setTime(date);
+                                                calendar.add(Calendar.DAY_OF_YEAR, -2); // Subtrai 2 dias
+
+                                                Intent intent = new Intent(AdicionarContaActivity.this, AlarmReceiver.class);
+                                                PendingIntent pendingIntent = PendingIntent.getBroadcast(AdicionarContaActivity.this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                                                AlarmManager alarmManager = (AlarmManager) AdicionarContaActivity.this.getSystemService(Context.ALARM_SERVICE);
+                                                if (alarmManager != null) {
+                                                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+                                                }
+
+                                            } catch (ParseException e) {
+                                                throw new RuntimeException(e);
+                                            }
+
                                             boleto.setCodigo(binding.editCodigoBarra.getText().toString());
                                             boleto.setDataValidade(data);
                                             boleto.setStatus(0);
