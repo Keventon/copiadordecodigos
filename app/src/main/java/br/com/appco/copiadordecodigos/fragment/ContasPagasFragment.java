@@ -360,20 +360,29 @@ public class ContasPagasFragment extends Fragment {
 
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView calendarView, int ano, int mes, int diadoMes) {
-                int mesAno = mes + 1;
+        calendarView.setOnDateChangeListener((calendarView1, ano, mes, diadoMes) -> {
+            int mesAno = mes + 1;
 
-                if (diadoMes < 10) {
-                    String data = "0" + diadoMes + "/0" + mesAno + "/" + ano;
-                    buscarBoletoPorData(data);
+            if (diadoMes < 10) {
+                String data;
+                if (mesAno < 10) {
+                    data = "0" + diadoMes + "/0" + mesAno + "/" + ano;
                 }else {
-                    String data = diadoMes + "/0" + mesAno + "/" + ano;
-                    buscarBoletoPorData(data);
+                    data = "0" + diadoMes + "/" + mesAno + "/" + ano;
                 }
-
+                Toast.makeText(context, data, Toast.LENGTH_SHORT).show();
+                buscarBoletoPorData(data);
+            }else {
+                String data;
+                if (mesAno < 10) {
+                    data = diadoMes + "/0" + mesAno + "/" + ano;
+                }else {
+                    data = diadoMes + "/" + mesAno + "/" + ano;
+                }
+                Toast.makeText(context, data, Toast.LENGTH_SHORT).show();
+                buscarBoletoPorData(data);
             }
+
         });
 
         builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -434,6 +443,7 @@ public class ContasPagasFragment extends Fragment {
                                 }
 
                             }
+                            progressDialog.dismiss();
                             binding.textValorBoletos.setText("R$ " + GetMask.getValor(valor));
                             boletosFiltered = new ArrayList<>(boletos);
                             contaPagaAdapter.setData(boletos);

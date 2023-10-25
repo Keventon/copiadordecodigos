@@ -455,35 +455,33 @@ public class ContasPendentesFragment extends Fragment {
 
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView calendarView, int ano, int mes, int diadoMes) {
-                int mesAno = mes + 1;
+        calendarView.setOnDateChangeListener((calendarView1, ano, mes, diadoMes) -> {
+            int mesAno = mes + 1;
 
-                if (diadoMes < 10) {
-                    String data = "0" + diadoMes + "/0" + mesAno + "/" + ano;
-                    buscarBoletoPorData(data);
+            if (diadoMes < 10) {
+                if (mesAno < 10) {
+                    data = "0" + diadoMes + "/0" + mesAno + "/" + ano;
                 }else {
-                    String data = diadoMes + "/0" + mesAno + "/" + ano;
-                    buscarBoletoPorData(data);
+                    data = "0" + diadoMes + "/" + mesAno + "/" + ano;
                 }
-
+                Toast.makeText(context, data, Toast.LENGTH_SHORT).show();
+                buscarBoletoPorData(data);
+            }else {
+                String data;
+                if (mesAno < 10) {
+                    data = diadoMes + "/0" + mesAno + "/" + ano;
+                }else {
+                    data = diadoMes + "/" + mesAno + "/" + ano;
+                }
+                Toast.makeText(context, data, Toast.LENGTH_SHORT).show();
+                buscarBoletoPorData(data);
             }
+
         });
 
-        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-                carregarContas();
-            }
-        });
+        builder.setOnDismissListener(dialogInterface -> carregarContas());
 
-        buttonEscolherData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
+        buttonEscolherData.setOnClickListener(view1 -> dialog.dismiss());
 
         dialog.show();
     }
@@ -812,76 +810,56 @@ public class ContasPendentesFragment extends Fragment {
 
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-                calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-                    @Override
-                    public void onSelectedDayChange(@NonNull CalendarView calendarView, int ano, int mes, int diadoMes) {
-                        int mesAno = mes + 1;
+                calendarView.setOnDateChangeListener((calendarView1, ano, mes, diadoMes) -> {
+                    int mesAno = mes + 1;
 
-                        if (diadoMes < 10) {
-                            String data = "0" + diadoMes + "/0" + mesAno + "/" + ano;
-                            Boleto boleto1 = new Boleto();
-
-                            String mesAno1 = data.substring(3);
-                            boleto1.setStatus(1);
-                            boleto1.setDataPagamento(data);
-                            boleto1.setId(boleto.getId());
-                            boleto1.setCodigo(boleto.getCodigo());
-                            boleto1.setNomeFarmacia(boleto.getNomeFarmacia());
-                            boleto1.setImagemComprovante("");
-                            boleto1.setMes(mesAno + "/" + ano);
-                            boleto1.setNomeEmpresa(boleto.getNomeEmpresa());
-                            boleto1.setValor(boleto.getValor());
-                            boleto1.setDataValidade(boleto.getDataValidade());
-                            boleto1.atualizar(((error, ref) -> {
-                                Toast.makeText(context, "Boleto pago com sucesso", Toast.LENGTH_SHORT).show();
-                                bottomSheetDialog.dismiss();
-                                bottomSheetDialog2.dismiss();
-                                dialog.dismiss();
-                                Intent intent = new Intent(context, EscolherComprovanteActivity.class);
-                                intent.putExtra("info_boleto", boleto);
-                                startActivity(intent);
-                            }));
+                    if (diadoMes < 10) {
+                        if (mesAno < 10) {
+                            data = "0" + diadoMes + "/0" + mesAno + "/" + ano;
+                            Toast.makeText(context, data, Toast.LENGTH_SHORT).show();
                         }else {
-                            String data = diadoMes + "/0" + mesAno + "/" + ano;
-                            Boleto boleto1 = new Boleto();
-                            String mesAno1 = data.substring(3);
-                            boleto1.setStatus(1);
-                            boleto1.setDataPagamento(data);
-                            boleto1.setId(boleto.getId());
-                            boleto1.setCodigo(boleto.getCodigo());
-                            boleto1.setMes("0" + mesAno + "/" + ano);
-                            boleto1.setNomeFarmacia(boleto.getNomeFarmacia());
-                            boleto1.setImagemComprovante("");
-                            boleto1.setNomeEmpresa(boleto.getNomeEmpresa());
-                            boleto1.setValor(boleto.getValor());
-                            boleto1.setDataValidade(boleto.getDataValidade());
-                            boleto1.atualizar(((error, ref) -> {
-                                Toast.makeText(context, "Boleto pago com sucesso", Toast.LENGTH_SHORT).show();
-                                bottomSheetDialog.dismiss();
-                                bottomSheetDialog2.dismiss();
-                                dialog.dismiss();
-                                Intent intent = new Intent(context, EscolherComprovanteActivity.class);
-                                intent.putExtra("info_boleto", boleto);
-                                startActivity(intent);
-                            }));
+                            data = "0" + diadoMes + "/" + mesAno + "/" + ano;
+                            Toast.makeText(context, data, Toast.LENGTH_SHORT).show();
                         }
-
+                    }else {
+                        if (mesAno < 10) {
+                            data = diadoMes + "/0" + mesAno + "/" + ano;
+                            Toast.makeText(context, data, Toast.LENGTH_SHORT).show();
+                        }else {
+                            data = diadoMes + "/" + mesAno + "/" + ano;
+                            Toast.makeText(context, data, Toast.LENGTH_SHORT).show();
+                        }
+                        Toast.makeText(context, data, Toast.LENGTH_SHORT).show();
                     }
-                });
 
-                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialogInterface) {
-                        carregarContas();
-                    }
-                });
+                    Boleto boleto1 = new Boleto();
 
-                buttonEscolherData.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                    String mesAno1 = data.substring(3);
+                    boleto1.setStatus(1);
+                    boleto1.setDataPagamento(data);
+                    boleto1.setId(boleto.getId());
+                    boleto1.setCodigo(boleto.getCodigo());
+                    boleto1.setNomeFarmacia(boleto.getNomeFarmacia());
+                    boleto1.setImagemComprovante("");
+                    boleto1.setMes(mesAno + "/" + ano);
+                    boleto1.setNomeEmpresa(boleto.getNomeEmpresa());
+                    boleto1.setValor(boleto.getValor());
+                    boleto1.setDataValidade(boleto.getDataValidade());
+                    boleto1.atualizar(((error, ref) -> {
+                        Toast.makeText(context, "Boleto pago com sucesso", Toast.LENGTH_SHORT).show();
+                        bottomSheetDialog.dismiss();
+                        bottomSheetDialog2.dismiss();
                         dialog.dismiss();
-                    }
+                        Intent intent = new Intent(context, EscolherComprovanteActivity.class);
+                        intent.putExtra("info_boleto", boleto);
+                        startActivity(intent);
+                    }));
+
                 });
+
+                builder.setOnDismissListener(dialogInterface -> carregarContas());
+
+                buttonEscolherData.setOnClickListener(view2 -> dialog.dismiss());
 
                 dialog.show();
             });
@@ -892,26 +870,6 @@ public class ContasPendentesFragment extends Fragment {
 
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
-    }
-
-    private void escolherDataComCalendario(View view, Boleto boleto, BottomSheetDialog bottomSheetDialog) {
-
-    }
-
-    public void buscarConta(String nome) {
-
-        List<Boleto> contaFiltro = new ArrayList<>();
-        for (Boleto b : boletos) {
-            if (b.getNomeEmpresa().toLowerCase().contains(nome.toLowerCase())) {
-                contaFiltro.add(b);
-            }
-        }
-
-        if (contaFiltro.isEmpty()) {
-
-        }else {
-            contaPendenteAdapter.setFilteredList(contaFiltro);
-        }
     }
 
     public void carregarContas() {
