@@ -3,70 +3,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    app:cardCornerRadius="16dp"
-    android:layout_marginBottom="16dp"
-    app:cardElevation="0dp"
-    android:clickable="true"
-    android:foreground="?selectableItemBackground"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
     android:layout_marginStart="16dp"
     android:layout_marginEnd="16dp"
-    android:layout_height="wrap_content">
+    app:cardCornerRadius="4dp"
+    app:cardElevation="2dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?selectableItemBackground"
+    android:layout_marginBottom="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#F7FFF7">
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            app:cardCornerRadius="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/textNomeEmpresaConta"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="E"
-                    android:textColor="@color/black"
-                    android:textSize="40sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.51" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.cardview.widget.CardView>
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/textNomeEmpresaContaPaga"
             android:layout_width="0dp"
-            android:textStyle="bold"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
             android:text="Nome da empresa"
-            android:textColor="#404040"
-            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/textStatusContaPaga"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/cardView"
-            app:layout_constraintTop_toTopOf="@+id/cardView" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textStatusContaPaga"
@@ -74,41 +39,45 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:text="Pago"
-            android:textColor="@color/verde"
+            android:textColor="#242424"
             android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textNomeEmpresaContaPaga"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textNomeEmpresaContaPaga" />
+            app:layout_constraintTop_toTopOf="@+id/textNomeEmpresaContaPaga"
+            app:layout_constraintVertical_bias="0.425" />
 
         <TextView
             android:id="@+id/dataPagamentoContaPaga"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Conta paga no dia: 23/10/2023"
             android:layout_marginStart="16dp"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="#56940E"
-            android:layout_marginEnd="24dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:text="Pago no dia: 22/10/2022"
+            android:textColor="@color/black"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/cardView"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textNomeEmpresaContaPaga" />
 
         <TextView
             android:id="@+id/textContaVencida"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:text="Vencimento: 23/12/2023"
-            android:textColor="@color/black"
-            android:textSize="14sp"
+            android:layout_marginBottom="30dp"
+            android:text="Conta vencida no dia: "
+            android:textColor="@color/vermelho"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/textStatusContaPaga"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/cardView"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dataPagamentoContaPaga"
-            app:layout_constraintVertical_bias="0.466" />
+            app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

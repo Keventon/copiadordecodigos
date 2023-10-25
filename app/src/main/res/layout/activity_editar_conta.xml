@@ -89,21 +89,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="24dp"
         android:text="Data de validade da conta"
         android:textColor="@color/black"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.237"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayoutValorMulta" />
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayoutValorConta" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="24dp"
         android:text="Nome da empresa"
         android:textColor="@color/black"
         android:textSize="18sp"
@@ -155,12 +155,12 @@
         android:id="@+id/relativeLayoutCodigoBarra"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:background="@drawable/blue_border_rounded_cornwe"
         android:backgroundTint="@color/cinza_background"
         android:padding="2dp"
-        app:layout_constraintBottom_toTopOf="@+id/relativeLayoutValorConta"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.58"
         app:layout_constraintStart_toStartOf="parent"
@@ -196,15 +196,15 @@
         android:id="@+id/relativeLayoutValorConta"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:layout_marginLeft="25dp"
-        android:layout_marginTop="128dp"
         android:layout_marginRight="25dp"
         android:background="@drawable/blue_border_rounded_cornwe"
         android:backgroundTint="@color/cinza_background"
         android:padding="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView25">
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayoutCodigoBarra">
 
         <com.blackcat.currencyedittext.CurrencyEditText
             android:id="@+id/editValorContaEditar"
@@ -231,65 +231,13 @@
 
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:text="Valor dos juros após atraso do boleto"
-        android:textColor="@color/black"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayoutValorConta" />
-
-    <RelativeLayout
-        android:id="@+id/relativeLayoutValorMulta"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="25dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="25dp"
-        android:background="@drawable/blue_border_rounded_cornwe"
-        android:backgroundTint="@color/cinza_background"
-        android:padding="2dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4">
-
-        <com.blackcat.currencyedittext.CurrencyEditText
-            android:id="@+id/editValorMulta"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/_icone_valor_multa"
-            android:background="@android:color/transparent"
-            android:hint="Digite o valor da conta"
-            android:inputType="number"
-            android:maxLines="1"
-            android:paddingLeft="30dp"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
-            android:textCursorDrawable="@drawable/cursor_color_verde"
-            android:textSize="18sp" />
-
-        <ImageView
-            android:id="@+id/_icone_valor_multa"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="17dp"
-            android:src="@drawable/ic_dinheiro" />
-
-    </RelativeLayout>
-
     <Button
         android:id="@+id/buttonConfirmarEdicao"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="23dp"
         android:background="@drawable/button_background"
         android:text="Confirmar edição"

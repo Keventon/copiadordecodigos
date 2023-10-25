@@ -84,56 +84,50 @@ public class AdicionarContaActivity extends AppCompatActivity {
                         if (binding.editDataValidade.length() == 10) {
                             double valor = (double) binding.editValorConta.getRawValue() / 100;
                             if (valor > 0) {
-                                double valorMulta = (double) binding.editValorMulta.getRawValue() / 100;
-                                if(valorMulta > 0) {
-                                    if(!binding.editNomeEmpresa.getText().toString().isEmpty()) {
-                                        String data = binding.editDataValidade.getText().toString();
-                                        String mesAno = data.substring(3);
+                                if(!binding.editNomeEmpresa.getText().toString().isEmpty()) {
+                                    String data = binding.editDataValidade.getText().toString();
+                                    String mesAno = data.substring(3);
 
-                                        binding.progressBarAddConta.setVisibility(View.VISIBLE);
-                                        DatabaseReference npmeFarmaciaRef = reference
-                                                .child("usuario")
-                                                .child(UsuarioFirebase.getIdentificadorUsuario())
-                                                .child("nomeFarmacia");
+                                    binding.progressBarAddConta.setVisibility(View.VISIBLE);
+                                    DatabaseReference npmeFarmaciaRef = reference
+                                            .child("usuario")
+                                            .child(UsuarioFirebase.getIdentificadorUsuario())
+                                            .child("nomeFarmacia");
 
-                                        npmeFarmaciaRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                String nomeFarmacia = snapshot.getValue().toString();
+                                    npmeFarmaciaRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            String nomeFarmacia = snapshot.getValue().toString();
 
-                                                Boleto boleto = new Boleto();
-                                                boleto.setCodigo(binding.editCodigoBarra.getText().toString());
-                                                boleto.setDataValidade(data);
-                                                boleto.setStatus(0);
-                                                boleto.setMes(mesAno);
-                                                boleto.setDataPagamento("");
-                                                boleto.setValor(valor);
-                                                boleto.setImagemComprovante("");
-                                                boleto.setNomeEmpresa(binding.editNomeEmpresa.getText().toString().trim());
-                                                boleto.setNomeFarmacia(nomeFarmacia);
-                                                boleto.setValorMulta(valorMulta);
-                                                boleto.salvar(((error, ref) -> {
-                                                    binding.progressBarAddConta.setVisibility(View.GONE);
-                                                    Toast.makeText(getApplicationContext(), "Conta adicionada com sucesso", Toast.LENGTH_SHORT).show();
-                                                    startActivity(new Intent(getApplicationContext(), ContasActivity.class));
-                                                }));
-                                            }
+                                            Boleto boleto = new Boleto();
+                                            boleto.setCodigo(binding.editCodigoBarra.getText().toString());
+                                            boleto.setDataValidade(data);
+                                            boleto.setStatus(0);
+                                            boleto.setMes(mesAno);
+                                            boleto.setDataPagamento("");
+                                            boleto.setValor(valor);
+                                            boleto.setImagemComprovante("");
+                                            boleto.setNomeEmpresa(binding.editNomeEmpresa.getText().toString().trim());
+                                            boleto.setNomeFarmacia(nomeFarmacia);
+                                            boleto.setValorMulta(0.0);
+                                            boleto.salvar(((error, ref) -> {
+                                                binding.progressBarAddConta.setVisibility(View.GONE);
+                                                Toast.makeText(getApplicationContext(), "Conta adicionada com sucesso", Toast.LENGTH_SHORT).show();
+                                                finish();
+                                                startActivity(new Intent(getApplicationContext(), ContasActivity.class));
+                                            }));
+                                        }
 
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError error) {
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
 
-                                            }
-                                        });
+                                        }
+                                    });
 
-                                    }else {
-                                        binding.progressBarAddConta.setVisibility(View.GONE);
-                                        binding.editNomeEmpresa.requestFocus();
-                                        binding.editNomeEmpresa.setText("Coloque o nome da Empresa");
-                                    }
                                 }else {
                                     binding.progressBarAddConta.setVisibility(View.GONE);
-                                    binding.editValorMulta.requestFocus();
-                                    binding.editValorMulta.setError("Coloque o valor de multa após o atraso do boleto");
+                                    binding.editNomeEmpresa.requestFocus();
+                                    binding.editNomeEmpresa.setText("Coloque o nome da Empresa");
                                 }
                             }else {
                                 binding.progressBarAddConta.setVisibility(View.GONE);

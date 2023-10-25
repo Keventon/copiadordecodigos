@@ -36,6 +36,33 @@ public class ContaPendenteAdapter extends RecyclerView.Adapter<ContaPendenteAdap
         notifyDataSetChanged();
     }
 
+    @NonNull
+    @Override
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+        View itemLista = LayoutInflater.from(parent.getContext())
+                                        .inflate(R.layout.conta_pendente, parent, false);
+
+        return new MyViewHolder(itemLista);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        Boleto boleto = listaBoletos.get(position);
+
+        holder.dataVencimento.setText("Vencimento: " + boleto.getDataValidade());
+        holder.textNomeEmpresaContaPendente.setText(boleto.getNomeEmpresa());
+
+        if (boleto.getStatus() == 0) {
+            holder.status.setText("Não pago");
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return this.listaBoletos.size();
+    }
+
     private void addItem(int position, Boleto boleto){
         listaBoletos.add(position, boleto);
         notifyItemChanged(position);
@@ -86,47 +113,15 @@ public class ContaPendenteAdapter extends RecyclerView.Adapter<ContaPendenteAdap
         }
     }
 
-    @NonNull
-    @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-        View itemLista = LayoutInflater.from(parent.getContext())
-                                        .inflate(R.layout.conta_pendente, parent, false);
-
-        return new MyViewHolder(itemLista);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        Boleto boleto = listaBoletos.get(position);
-
-        holder.dataVencimento.setText("Vencimento: " + boleto.getDataValidade());
-        holder.textNomeEmpresaContaPendente.setText(boleto.getNomeEmpresa());
-
-        String inicialNome = boleto.getNomeEmpresa().substring(0, 1);
-
-        holder.textInicialNomeEmpresa.setText(inicialNome);
-
-        if (boleto.getStatus() == 0) {
-            holder.status.setText("Não pago");
-        }
-    }
-
-    @Override
-    public int getItemCount() {
-        return this.listaBoletos.size();
-    }
-
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView status, dataVencimento, textNomeEmpresaContaPendente, textInicialNomeEmpresa;
+        TextView status, dataVencimento, textNomeEmpresaContaPendente;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             status = itemView.findViewById(R.id.textStatusContaPendente);
             dataVencimento = itemView.findViewById(R.id.dataVencimento);
-            textInicialNomeEmpresa = itemView.findViewById(R.id.textInicialNomeEmpresa);
             textNomeEmpresaContaPendente = itemView.findViewById(R.id.textNomeEmpresaContaPendente);
         }
     }

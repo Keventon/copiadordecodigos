@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:text="Adicionar boleto"
+        android:textStyle="bold"
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,8 +35,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -104,7 +103,7 @@
                 android:id="@+id/textScanearBoleto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="16dp"
                 android:text="Scannear Boleto"
                 android:layout_marginStart="25dp"
                 android:layout_marginEnd="25dp"
@@ -116,16 +115,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/relativeLayoutCodigoBarra" />
 
-
             <TextView
                 android:id="@+id/textView9"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="32dp"
+                android:text="Valor do boleto"
                 android:textColor="@color/black"
                 android:textSize="18sp"
-                android:text="Digite o valor do boleto"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textScanearBoleto" />
@@ -135,8 +133,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="25dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginRight="25dp"
-                android:layout_marginTop="5dp"
                 android:background="@drawable/blue_border_rounded_cornwe"
                 android:backgroundTint="@color/cinza_background"
                 android:padding="2dp"
@@ -169,51 +167,12 @@
 
             </RelativeLayout>
 
-            <RelativeLayout
-                android:id="@+id/relativeLayoutValorMulta"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="25dp"
-                android:background="@drawable/blue_border_rounded_cornwe"
-                android:backgroundTint="@color/cinza_background"
-                android:padding="2dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView4">
-
-                <com.blackcat.currencyedittext.CurrencyEditText
-                    android:id="@+id/editValorMulta"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/_icone_valor_multa"
-                    android:background="@android:color/transparent"
-                    android:hint="Digite o valor da conta"
-                    android:inputType="number"
-                    android:maxLines="1"
-                    android:paddingLeft="30dp"
-                    android:paddingTop="20dp"
-                    android:paddingBottom="20dp"
-                    android:textCursorDrawable="@drawable/cursor_color_verde"
-                    android:textSize="18sp" />
-
-                <ImageView
-                    android:id="@+id/_icone_valor_multa"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="17dp"
-                    android:src="@drawable/ic_dinheiro" />
-
-            </RelativeLayout>
-
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="140dp"
+                android:layout_marginTop="24dp"
                 android:text="Data de validade do boleto"
                 android:textColor="@color/black"
                 android:textSize="18sp"
@@ -263,20 +222,6 @@
 
             </RelativeLayout>
 
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="16dp"
-                android:text="Valor de juros após atraso do boleto"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/relativeLayoutValorConta" />
-
             <RelativeLayout
                 android:id="@+id/relativeLayoutNomeEmpresa"
                 android:layout_width="match_parent"
@@ -287,12 +232,10 @@
                 android:background="@drawable/blue_border_rounded_cornwe"
                 android:backgroundTint="@color/cinza_background"
                 android:padding="2dp"
-                app:layout_constraintBottom_toTopOf="@+id/floatingAdicionarConta"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.64"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/relativeLayout2"
-                app:layout_constraintVertical_bias="0.015">
+                app:layout_constraintTop_toBottomOf="@+id/relativeLayout2">
 
                 <EditText
                     android:id="@+id/editNomeEmpresa"
@@ -323,22 +266,24 @@
                 android:id="@+id/progressBarAddConta"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
                 android:indeterminateTint="@color/verde"
-                app:layout_constraintBottom_toTopOf="@+id/floatingAdicionarConta"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/relativeLayoutNomeEmpresa" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/floatingAdicionarConta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
                 app:backgroundTint="@color/verde"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/progressBarAddConta"
                 app:srcCompat="@drawable/ic_confirmar_branco_24dp" />
 
 

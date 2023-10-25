@@ -67,6 +67,7 @@ import br.com.appco.copiadordecodigos.databinding.FragmentContasPagasBinding;
 import br.com.appco.copiadordecodigos.listener.RecyclerItemClickListener;
 import br.com.appco.copiadordecodigos.model.Boleto;
 import br.com.appco.copiadordecodigos.model.Conta;
+import br.com.appco.copiadordecodigos.util.GetMask;
 import br.com.appco.copiadordecodigos.util.MoedaUtils;
 
 public class ContasPagasFragment extends Fragment {
@@ -77,8 +78,6 @@ public class ContasPagasFragment extends Fragment {
     String nomeFarmacia = "";
     private ContaPagaAdapter contaPagaAdapter;
     private ContaDAO dao;
-
-    private TextView textValorBoletosPagos;
     private double valor = 0.0;
     private Context context;
     private FirebaseAuth auth = ConfiguracoesFirebase.getFirebaseAutenticacao();
@@ -119,14 +118,128 @@ public class ContasPagasFragment extends Fragment {
             }
         });
 
-        binding.cardTodosBoletosPagos.setOnClickListener(view -> carregarContas());
+        binding.textTodosBoletos.setOnClickListener(view -> carregarContas());
 
-        binding.cardBuscarPoMes.setOnClickListener(this::layoutEscolherPorMes);
-        binding.cardBuscarPorDia.setOnClickListener(this::abrirCalendario);
+        binding.imageCalendario.setOnClickListener(view -> {
+            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
+                    context, R.style.BottomSheetTheme
+            );
+
+            View bottomSheetView = LayoutInflater.from(getContext())
+                    .inflate(
+                            R.layout.escolher_data_mes,
+                            (LinearLayout) binding.getRoot().findViewById(R.id.bottomSheetContainer)
+                    );
+
+            //Iniciando layouts
+            Button buttonEscolherPeloDia = bottomSheetView.findViewById(R.id.buttonEscolherPeloDia);
+            Button buttonEscolherPeloMes = bottomSheetView.findViewById(R.id.buttonEscolherPeloMes);
+
+            buttonEscolherPeloMes.setOnClickListener(view1 -> {
+                ViewGroup viewGroup = view.findViewById(android.R.id.content);
+
+                Spinner spinner;
+                Button buttonPesquisarBoleto;
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                View inflate = LayoutInflater.from(context).inflate(R.layout.dialog_layout_escolher_mes, viewGroup, false);
+                builder.setView(inflate);
+                builder.setCancelable(true);
+
+                spinner = inflate.findViewById(R.id.spinnerMesAno);
+                buttonPesquisarBoleto = inflate.findViewById(R.id.buttonPesquisarBoletoDialog);
+
+                carregarSpinnerMesesDoAno(spinner);
+
+                final AlertDialog dialog = builder.create();
+
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        if (i != 0) {
+                            buttonPesquisarBoleto.setVisibility(View.VISIBLE);
+                        }else {
+                            buttonPesquisarBoleto.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
+
+                buttonPesquisarBoleto.setOnClickListener(view2 -> {
+                    if (spinner.getSelectedItem().toString().equals("Janeiro")) {
+                        buscarBoletoPorMes("01/2023");
+                        dialog.dismiss();
+                        bottomSheetDialog.dismiss();
+                    }else if (spinner.getSelectedItem().toString().equals("Fevereiro")) {
+                        buscarBoletoPorMes("02/2023");
+                        dialog.dismiss();
+                        bottomSheetDialog.dismiss();
+                    }else if (spinner.getSelectedItem().toString().equals("Março")) {
+                        buscarBoletoPorMes("03/2023");
+                        dialog.dismiss();
+                        bottomSheetDialog.dismiss();
+                    }else if (spinner.getSelectedItem().toString().equals("Abril")) {
+                        buscarBoletoPorMes("04/2023");
+                        dialog.dismiss();
+                        bottomSheetDialog.dismiss();
+                    }else if (spinner.getSelectedItem().toString().equals("Maio")) {
+                        buscarBoletoPorMes("05/2023");
+                        dialog.dismiss();
+                        bottomSheetDialog.dismiss();
+                    }else if (spinner.getSelectedItem().toString().equals("Junho")) {
+                        buscarBoletoPorMes("06/2023");
+                        dialog.dismiss();
+                        bottomSheetDialog.dismiss();
+                    }else if (spinner.getSelectedItem().toString().equals("Julho")) {
+                        buscarBoletoPorMes("07/2023");
+                        dialog.dismiss();
+                        bottomSheetDialog.dismiss();
+                    }else if (spinner.getSelectedItem().toString().equals("Agosto")) {
+                        buscarBoletoPorMes("08/2023");
+                        dialog.dismiss();
+                        bottomSheetDialog.dismiss();
+                    }else if (spinner.getSelectedItem().toString().equals("Setembro")) {
+                        buscarBoletoPorMes("09/2023");
+                        dialog.dismiss();
+                        bottomSheetDialog.dismiss();
+                    }else if (spinner.getSelectedItem().toString().equals("Outubro")) {
+                        buscarBoletoPorMes("10/2023");
+                        dialog.dismiss();
+                        bottomSheetDialog.dismiss();
+                    }else if (spinner.getSelectedItem().toString().equals("Novembro")) {
+                        buscarBoletoPorMes("11/2023");
+                        dialog.dismiss();
+                        bottomSheetDialog.dismiss();
+                    }else if (spinner.getSelectedItem().toString().equals("Dezembro")) {
+                        buscarBoletoPorMes("12/2023");
+                        dialog.dismiss();
+                        bottomSheetDialog.dismiss();
+                    }
+                });
+
+                dialog.show();
+            });
+
+            buttonEscolherPeloDia.setOnClickListener(view1 -> {
+                abrirCalendario(view1);
+                bottomSheetDialog.dismiss();
+            });
+
+            bottomSheetDialog.setContentView(bottomSheetView);
+            bottomSheetDialog.show();
+        });
+
+        carregarContas();
 
         binding.recycleContaPaga.addOnItemTouchListener(
                 new RecyclerItemClickListener(
-                        getContext(),
+                        context,
                         binding.recycleContaPaga,
                         new RecyclerItemClickListener.OnItemClickListener() {
                             @Override
@@ -151,86 +264,8 @@ public class ContasPagasFragment extends Fragment {
         return binding.getRoot();
     }
 
-    private void layoutEscolherPorMes(View v) {
-        ViewGroup viewGroup = v.findViewById(android.R.id.content);
-
-        Spinner spinner;
-        Button buttonPesquisarBoleto;
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        View inflate = LayoutInflater.from(context).inflate(R.layout.dialog_layout_escolher_mes, viewGroup, false);
-        builder.setView(inflate);
-        builder.setCancelable(true);
-
-        spinner = inflate.findViewById(R.id.spinnerMesAno);
-        buttonPesquisarBoleto = inflate.findViewById(R.id.buttonPesquisarBoletoDialog);
-
-        carregarSpinnerMesesDoAno(spinner);
-
-        final AlertDialog dialog = builder.create();
-
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i != 0) {
-                    buttonPesquisarBoleto.setVisibility(View.VISIBLE);
-                }else {
-                    buttonPesquisarBoleto.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-
-        buttonPesquisarBoleto.setOnClickListener(view2 -> {
-            if (spinner.getSelectedItem().toString().equals("Janeiro")) {
-                buscarBoletoPorMes("01/2023");
-                dialog.dismiss();
-            }else if (spinner.getSelectedItem().toString().equals("Fevereiro")) {
-                buscarBoletoPorMes("02/2023");
-                dialog.dismiss();
-            }else if (spinner.getSelectedItem().toString().equals("Março")) {
-                buscarBoletoPorMes("03/2023");
-                dialog.dismiss();
-            }else if (spinner.getSelectedItem().toString().equals("Abril")) {
-                buscarBoletoPorMes("04/2023");
-                dialog.dismiss();
-            }else if (spinner.getSelectedItem().toString().equals("Maio")) {
-                buscarBoletoPorMes("05/2023");
-                dialog.dismiss();
-            }else if (spinner.getSelectedItem().toString().equals("Junho")) {
-                buscarBoletoPorMes("06/2023");
-                dialog.dismiss();
-            }else if (spinner.getSelectedItem().toString().equals("Julho")) {
-                buscarBoletoPorMes("07/2023");
-                dialog.dismiss();
-            }else if (spinner.getSelectedItem().toString().equals("Agosto")) {
-                buscarBoletoPorMes("08/2023");
-                dialog.dismiss();
-            }else if (spinner.getSelectedItem().toString().equals("Setembro")) {
-                buscarBoletoPorMes("09/2023");
-                dialog.dismiss();
-            }else if (spinner.getSelectedItem().toString().equals("Outubro")) {
-                buscarBoletoPorMes("10/2023");
-                dialog.dismiss();
-            }else if (spinner.getSelectedItem().toString().equals("Novembro")) {
-                buscarBoletoPorMes("11/2023");
-                dialog.dismiss();
-            }else if (spinner.getSelectedItem().toString().equals("Dezembro")) {
-                buscarBoletoPorMes("12/2023");
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
-    }
-
     private void buscarBoletoPorMes(String data) {
+        valor = 0.0;
 
         progressDialog = new ProgressDialog(getContext());
         progressDialog.show();
@@ -243,7 +278,7 @@ public class ContasPagasFragment extends Fragment {
                 .child(UsuarioFirebase.getIdentificadorUsuario())
                 .child("nomeFarmacia");
 
-        nomeFarmacia.addValueEventListener(new ValueEventListener() {
+        nomeFarmacia.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String nomeFarmacia = snapshot.getValue().toString();
@@ -251,11 +286,10 @@ public class ContasPagasFragment extends Fragment {
                 Query boletoRef = reference
                         .child("boletos")
                         .child(nomeFarmacia).orderByChild("mes").equalTo(data);
-                boletoRef.addValueEventListener(new ValueEventListener() {
+                boletoRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         boletos.clear();
-                        valor = 0.0;
 
                         if (snapshot.getValue() != null) {
                             progressDialog.dismiss();
@@ -264,19 +298,20 @@ public class ContasPagasFragment extends Fragment {
                                 Boleto boleto = ds.getValue(Boleto.class);
                                 if (boleto.getStatus() == 1) {
                                     boletos.add(ds.getValue(Boleto.class));
+                                    //recuperarNomeFarmacia();
                                     valor += boleto.getValor();
                                 }
 
                             }
 
                             DecimalFormat format = new DecimalFormat("0.00");
-                            binding.textValorBoletosPagos.setText(MoedaUtils.formatarMoeda(valor));
+                            binding.textValorBoletos.setText("R$ " + GetMask.getValor(valor));
                             boletosFiltered = new ArrayList<>(boletos);
-
                             contaPagaAdapter.setData(boletos);
                         }else {
-                            binding.textValorBoletosPagos.setText(MoedaUtils.formatarMoeda(0.0));
+                            binding.textValorBoletos.setText("R$ " + GetMask.getValor(0.0));
                             progressDialog.dismiss();
+                            recuperarNomeFarmacia();
                             boletosFiltered = new ArrayList<>(boletos);
                             contaPagaAdapter.setData(boletos);
                         }
@@ -325,25 +360,33 @@ public class ContasPagasFragment extends Fragment {
 
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView calendarView, int ano, int mes, int diadoMes) {
-                int mesAno = mes + 1;
+        calendarView.setOnDateChangeListener((calendarView1, ano, mes, diadoMes) -> {
+            int mesAno = mes + 1;
 
-                if (diadoMes < 10) {
-                    String data = "0" + diadoMes + "/0" + mesAno + "/" + ano;
-                    buscarBoletoPorData(data);
+            if (diadoMes < 10) {
+                String data;
+                if (mesAno < 10) {
+                    data = "0" + diadoMes + "/0" + mesAno + "/" + ano;
                 }else {
-                    String data = diadoMes + "/0" + mesAno + "/" + ano;
-                    buscarBoletoPorData(data);
+                    data = "0" + diadoMes + "/" + mesAno + "/" + ano;
                 }
-
+                buscarBoletoPorData(data);
+            }else {
+                String data;
+                if (mesAno < 10) {
+                    data = diadoMes + "/0" + mesAno + "/" + ano;
+                }else {
+                    data = diadoMes + "/" + mesAno + "/" + ano;
+                }
+                buscarBoletoPorData(data);
             }
+
         });
 
         builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
+                carregarContas();
             }
         });
 
@@ -359,6 +402,8 @@ public class ContasPagasFragment extends Fragment {
 
     public void buscarBoletoPorData(String data) {
 
+        valor = 0.0;
+
         progressDialog = new ProgressDialog(getContext());
         progressDialog.show();
         progressDialog.setContentView(R.layout.progress_dialog);
@@ -370,7 +415,7 @@ public class ContasPagasFragment extends Fragment {
                 .child(UsuarioFirebase.getIdentificadorUsuario())
                 .child("nomeFarmacia");
 
-        nomeFarmacia.addValueEventListener(new ValueEventListener() {
+        nomeFarmacia.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String nomeFarmacia = snapshot.getValue().toString();
@@ -378,34 +423,32 @@ public class ContasPagasFragment extends Fragment {
                 Query boletoRef = reference
                         .child("boletos")
                         .child(nomeFarmacia).orderByChild("dataValidade").equalTo(data);
-                boletoRef.addValueEventListener(new ValueEventListener() {
+                boletoRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         boletos.clear();
-                        valor = 0.0;
 
-                        if (snapshot.getValue() != null) {
+                        if (snapshot.exists()) {
                             //binding.textContasPendentes.setVisibility(View.GONE);
                             for (DataSnapshot ds: snapshot.getChildren()) {
                                 Boleto boleto = ds.getValue(Boleto.class);
                                 if (boleto.getStatus() == 1) {
                                     boletos.add(ds.getValue(Boleto.class));
+                                    recuperarNomeFarmacia();
                                     valor += boleto.getValor();
                                     progressDialog.dismiss();
 
-                                }else {
-                                    progressDialog.dismiss();
-                                    boletosFiltered = new ArrayList<>(boletos);
-                                    contaPagaAdapter.setData(boletos);
                                 }
 
                             }
-                            binding.textValorBoletosPagos.setText(MoedaUtils.formatarMoeda(valor));
+                            progressDialog.dismiss();
+                            binding.textValorBoletos.setText("R$ " + GetMask.getValor(valor));
                             boletosFiltered = new ArrayList<>(boletos);
                             contaPagaAdapter.setData(boletos);
                         }else {
-                            binding.textValorBoletosPagos.setText(MoedaUtils.formatarMoeda(0.0));
+                            binding.textValorBoletos.setText("R$ " + GetMask.getValor(0.0));
                             progressDialog.dismiss();
+                            recuperarNomeFarmacia();
                             boletosFiltered = new ArrayList<>(boletos);
                             contaPagaAdapter.setData(boletos);
                             //binding.textContasPendentes.setVisibility(View.VISIBLE);
@@ -454,7 +497,7 @@ public class ContasPagasFragment extends Fragment {
 
     public void detalhesConta(Boleto boleto) {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
-                getContext(), R.style.BottomSheetTheme
+                context, R.style.BottomSheetTheme
         );
 
         View bottomSheetView = LayoutInflater.from(getContext())
@@ -495,7 +538,6 @@ public class ContasPagasFragment extends Fragment {
         }
 
         buttonAddComprovante.setOnClickListener(view -> {
-            bottomSheetDialog.dismiss();
             Intent intent = new Intent(context, EscolherComprovanteActivity.class);
             intent.putExtra("info_boleto", boleto);
             startActivity(intent);
@@ -508,67 +550,85 @@ public class ContasPagasFragment extends Fragment {
 
     public void carregarContas() {
 
-        recuperarNomeFarmacia();
-    }
-
-    private void recuperarNomeFarmacia() {
-
         progressDialog = new ProgressDialog(context);
         progressDialog.show();
         progressDialog.setContentView(R.layout.progress_dialog);
         progressDialog.setCancelable(false);
         progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
+        DatabaseReference nomeFarmaciaRef = reference
+                .child("usuario")
+                .child(UsuarioFirebase.getIdentificadorUsuario())
+                .child("nomeFarmacia");
+
+        nomeFarmaciaRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                nomeFarmacia = snapshot.getValue().toString();
+
+                Query boletoRef = reference
+                        .child("boletos")
+                        .child(nomeFarmacia).orderByChild("status").equalTo(1);
+                boletoRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        boletos.clear();
+                        valor = 0.0;
+
+                        if (snapshot.exists()) {
+                            //binding.textContasPagas.setVisibility(View.GONE);
+                            for (DataSnapshot ds: snapshot.getChildren()) {
+                                Boleto boleto = ds.getValue(Boleto.class);
+                                boletos.add(ds.getValue(Boleto.class));
+
+                                assert boleto != null;
+                                if (boleto.getValor() != null) {
+                                    valor += boleto.getValor();
+                                }
+
+                            }
+                            contaPagaAdapter.notifyDataSetChanged();
+                            progressDialog.dismiss();
+                            boletosFiltered = new ArrayList<>(boletos);
+                            contaPagaAdapter.setData(boletos);
+                            binding.textValorBoletos.setText("R$ " + GetMask.getValor(valor));
+                        }else {
+                            contaPagaAdapter.notifyDataSetChanged();
+                            boletosFiltered = new ArrayList<>(boletos);
+                            contaPagaAdapter.setData(boletos);
+                            binding.textValorBoletos.setText("R$ " + GetMask.getValor(0));
+                            progressDialog.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void recuperarNomeFarmacia() {
+
         DatabaseReference nomeRef = reference
                 .child("usuario")
                 .child(UsuarioFirebase.getIdentificadorUsuario())
                 .child("nomeFarmacia");
 
-        nomeRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        nomeRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 if (snapshot.getValue() != null) {
                     nomeFarmacia = snapshot.getValue().toString();
-                    Query boletoRef = reference
-                            .child("boletos")
-                            .child(nomeFarmacia).orderByChild("status").equalTo(1);
-                    boletoRef.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            boletos.clear();
-                            valor = 0.0;
-
-                            if (snapshot.exists()) {
-                                for (DataSnapshot ds: snapshot.getChildren()) {
-                                    Boleto boleto = ds.getValue(Boleto.class);
-                                    boletos.add(ds.getValue(Boleto.class));
-
-                                    assert boleto != null;
-                                    valor += boleto.getValor();
-
-                                }
-
-                                boletosFiltered = new ArrayList<>(boletos);
-                                contaPagaAdapter.setData(boletos);
-                                binding.textValorBoletosPagos.setText(MoedaUtils.formatarMoeda(valor));
-                                progressDialog.dismiss();
-                                binding.cardBuscarPoMes.setVisibility(View.VISIBLE);
-                                binding.cardBuscarPorDia.setVisibility(View.VISIBLE);
-                                binding.cardTodosBoletosPagos.setVisibility(View.VISIBLE);
-                            }else {
-                                boletosFiltered = new ArrayList<>(boletos);
-                                contaPagaAdapter.setData(boletos);
-                                binding.textValorBoletosPagos.setText(MoedaUtils.formatarMoeda(0));
-                                progressDialog.dismiss();
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
+                    //binding.textNomeFarmaciaContasPagas.setText("Você está na " + nomeFarmacia);
                 }else {
                     Toast.makeText(context, "Erro", Toast.LENGTH_SHORT).show();
                 }
@@ -578,7 +638,6 @@ public class ContasPagasFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-
         });
     }
 
@@ -590,6 +649,11 @@ public class ContasPagasFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        carregarContas();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

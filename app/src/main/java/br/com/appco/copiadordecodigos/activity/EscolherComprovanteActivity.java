@@ -4,11 +4,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
-import androidx.fragment.app.Fragment;
 
 import android.Manifest;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -36,7 +33,6 @@ import java.util.List;
 import br.com.appco.copiadordecodigos.R;
 import br.com.appco.copiadordecodigos.controller.ConfiguracoesFirebase;
 import br.com.appco.copiadordecodigos.databinding.ActivityEscolherComprovanteBinding;
-import br.com.appco.copiadordecodigos.fragment.ContasPagasFragment;
 import br.com.appco.copiadordecodigos.model.Boleto;
 
 public class EscolherComprovanteActivity extends AppCompatActivity {
@@ -214,18 +210,12 @@ public class EscolherComprovanteActivity extends AppCompatActivity {
                 boleto1.setNomeFarmacia(boleto.getNomeFarmacia());
                 boleto1.salvarImagem(boleto.getId(), boleto.getNomeFarmacia(), imageUrlUploaded, (error, ref) -> {
                     progressDialog.dismiss();
-                    Toast.makeText(this, "Imagem adicionada com sucesso", Toast.LENGTH_SHORT).show();
-                    finish();
+                    Toast.makeText(this, "Comprovante adicionado com sucesso", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(EscolherComprovanteActivity.this, ContasActivity.class));
                 });
             });
         });
 
-    }
-
-    public void abrirFragment() {
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.frame_layout, new ContasPagasFragment())
-                .commit();
     }
 
     private final ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(
