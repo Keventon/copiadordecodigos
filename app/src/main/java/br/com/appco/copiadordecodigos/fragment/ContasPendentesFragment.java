@@ -464,7 +464,6 @@ public class ContasPendentesFragment extends Fragment {
                 }else {
                     data = "0" + diadoMes + "/" + mesAno + "/" + ano;
                 }
-                Toast.makeText(context, data, Toast.LENGTH_SHORT).show();
                 buscarBoletoPorData(data);
             }else {
                 String data;
@@ -473,7 +472,6 @@ public class ContasPendentesFragment extends Fragment {
                 }else {
                     data = diadoMes + "/" + mesAno + "/" + ano;
                 }
-                Toast.makeText(context, data, Toast.LENGTH_SHORT).show();
                 buscarBoletoPorData(data);
             }
 
@@ -548,29 +546,6 @@ public class ContasPendentesFragment extends Fragment {
 
                     }
                 });
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    private void verificarNivelAcesso() {
-        DatabaseReference acessoRef = reference
-                .child("usuario")
-                .child(UsuarioFirebase.getIdentificadorUsuario())
-                .child("identificador");
-        acessoRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String acesso = snapshot.getValue().toString();
-                if (acesso.equals("A")) {
-                    //binding.textCadastrarFuncionarioContaPendente.setVisibility(View.VISIBLE);
-                }else {
-                    //binding.textCadastrarFuncionarioContaPendente.setVisibility(View.GONE);
-                }
             }
 
             @Override
@@ -656,7 +631,7 @@ public class ContasPendentesFragment extends Fragment {
                                 bottomSheetDialog.dismiss();
                                 startActivity(new Intent(context, ContasActivity.class));
                             }else {
-                                Toast.makeText(context, "Você não tem permissão para reover boletos", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "Você não tem permissão para remover boletos", Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -816,20 +791,15 @@ public class ContasPendentesFragment extends Fragment {
                     if (diadoMes < 10) {
                         if (mesAno < 10) {
                             data = "0" + diadoMes + "/0" + mesAno + "/" + ano;
-                            Toast.makeText(context, data, Toast.LENGTH_SHORT).show();
                         }else {
                             data = "0" + diadoMes + "/" + mesAno + "/" + ano;
-                            Toast.makeText(context, data, Toast.LENGTH_SHORT).show();
                         }
                     }else {
                         if (mesAno < 10) {
                             data = diadoMes + "/0" + mesAno + "/" + ano;
-                            Toast.makeText(context, data, Toast.LENGTH_SHORT).show();
                         }else {
                             data = diadoMes + "/" + mesAno + "/" + ano;
-                            Toast.makeText(context, data, Toast.LENGTH_SHORT).show();
                         }
-                        Toast.makeText(context, data, Toast.LENGTH_SHORT).show();
                     }
 
                     Boleto boleto1 = new Boleto();

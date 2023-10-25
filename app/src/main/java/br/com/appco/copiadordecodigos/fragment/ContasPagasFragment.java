@@ -370,7 +370,6 @@ public class ContasPagasFragment extends Fragment {
                 }else {
                     data = "0" + diadoMes + "/" + mesAno + "/" + ano;
                 }
-                Toast.makeText(context, data, Toast.LENGTH_SHORT).show();
                 buscarBoletoPorData(data);
             }else {
                 String data;
@@ -379,7 +378,6 @@ public class ContasPagasFragment extends Fragment {
                 }else {
                     data = diadoMes + "/" + mesAno + "/" + ano;
                 }
-                Toast.makeText(context, data, Toast.LENGTH_SHORT).show();
                 buscarBoletoPorData(data);
             }
 
