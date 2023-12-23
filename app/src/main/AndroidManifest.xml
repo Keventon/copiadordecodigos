@@ -25,6 +25,12 @@
         android:theme="@style/Theme.CopiadorDeCodigos"
         tools:targetApi="31">
         <activity
+            android:name=".activity.ConfiguracoesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.CadastroActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.AssinaturaActivity"
             android:exported="false" />
         <activity

@@ -43,6 +43,8 @@ public class LoginActivity extends AppCompatActivity {
             recuperarCampos();
         });
 
+        binding.textRealizarCadastro.setOnClickListener(view -> startActivity(new Intent(LoginActivity.this, CadastroActivity.class)));
+
     }
 
     public void recuperarCampos() {

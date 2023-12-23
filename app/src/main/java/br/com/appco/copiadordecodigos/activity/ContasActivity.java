@@ -3,16 +3,12 @@ package br.com.appco.copiadordecodigos.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,10 +20,7 @@ import br.com.appco.copiadordecodigos.controller.UsuarioFirebase;
 import br.com.appco.copiadordecodigos.databinding.ActivityContasBinding;
 import br.com.appco.copiadordecodigos.fragment.ContasPagasFragment;
 import br.com.appco.copiadordecodigos.fragment.ContasPendentesFragment;
-import br.com.appco.copiadordecodigos.fragment.SobreFragment;
-import br.com.appco.copiadordecodigos.model.Usuario;
-import br.com.appco.copiadordecodigos.util.Base64Custom;
-import br.com.appco.copiadordecodigos.util.FirebaseHelper;
+import br.com.appco.copiadordecodigos.fragment.PerfilFragment;
 
 public class ContasActivity extends AppCompatActivity {
 
@@ -37,7 +30,7 @@ public class ContasActivity extends AppCompatActivity {
     private final Fragment
             fragmentContaPendente = new ContasPendentesFragment(),
             fragmentContaPaga = new ContasPagasFragment(),
-            fragmentSobre = new SobreFragment();
+            fragmentPerfil = new PerfilFragment();
 
     public BottomNavigationView getBottomMenuHome() {
         return binding.bottomNavigationView;
@@ -60,7 +53,7 @@ public class ContasActivity extends AppCompatActivity {
                     mudarFragment(fragmentContaPaga);
                     return true;
                 case R.id.sobre:
-                    mudarFragment(fragmentSobre);
+                    mudarFragment(fragmentPerfil);
                     return true;
             }
             return false;

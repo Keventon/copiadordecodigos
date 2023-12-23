@@ -60,6 +60,7 @@ dependencies {
     implementation 'com.github.BlacKCaT27:CurrencyEditText:2.0.2'
 
     implementation 'io.github.ParkSangGwon:tedpermission-normal:3.3.0'
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 
     //Dependencia mascara telefone
     implementation 'com.github.santalu:mask-edittext:1.0.7'

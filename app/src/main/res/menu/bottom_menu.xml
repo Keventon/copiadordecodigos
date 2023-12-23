@@ -3,6 +3,6 @@
 
     <item android:id="@+id/conta_pendente" android:title="Boletos pendentes" android:icon="@drawable/ic_contas_pendentes_24dp"/>
     <item android:id="@+id/conta_paga" android:title="Boletos pagos" android:icon="@drawable/ic_contas_finlaizadas_24dp"/>
-    <item android:id="@+id/sobre" android:title="Sobre" android:icon="@drawable/ic_sobre_24dp"/>
+    <item android:id="@+id/sobre" android:title="Perfil" android:icon="@drawable/ic_loja"/>
 
 </menu>
