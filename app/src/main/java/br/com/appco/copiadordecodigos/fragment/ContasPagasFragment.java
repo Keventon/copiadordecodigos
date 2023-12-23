@@ -69,6 +69,7 @@ import br.com.appco.copiadordecodigos.model.Boleto;
 import br.com.appco.copiadordecodigos.model.Conta;
 import br.com.appco.copiadordecodigos.util.GetMask;
 import br.com.appco.copiadordecodigos.util.MoedaUtils;
+import br.com.appco.copiadordecodigos.util.MonthYearPickerDialog;
 
 public class ContasPagasFragment extends Fragment {
 
@@ -136,91 +137,9 @@ public class ContasPagasFragment extends Fragment {
             Button buttonEscolherPeloMes = bottomSheetView.findViewById(R.id.buttonEscolherPeloMes);
 
             buttonEscolherPeloMes.setOnClickListener(view1 -> {
-                ViewGroup viewGroup = view.findViewById(android.R.id.content);
-
-                Spinner spinner;
-                Button buttonPesquisarBoleto;
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                View inflate = LayoutInflater.from(context).inflate(R.layout.dialog_layout_escolher_mes, viewGroup, false);
-                builder.setView(inflate);
-                builder.setCancelable(true);
-
-                spinner = inflate.findViewById(R.id.spinnerMesAno);
-                buttonPesquisarBoleto = inflate.findViewById(R.id.buttonPesquisarBoletoDialog);
-
-                carregarSpinnerMesesDoAno(spinner);
-
-                final AlertDialog dialog = builder.create();
-
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-                spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        if (i != 0) {
-                            buttonPesquisarBoleto.setVisibility(View.VISIBLE);
-                        }else {
-                            buttonPesquisarBoleto.setVisibility(View.GONE);
-                        }
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
-
-                    }
-                });
-
-                buttonPesquisarBoleto.setOnClickListener(view2 -> {
-                    if (spinner.getSelectedItem().toString().equals("Janeiro")) {
-                        buscarBoletoPorMes("01/2023");
-                        dialog.dismiss();
-                        bottomSheetDialog.dismiss();
-                    }else if (spinner.getSelectedItem().toString().equals("Fevereiro")) {
-                        buscarBoletoPorMes("02/2023");
-                        dialog.dismiss();
-                        bottomSheetDialog.dismiss();
-                    }else if (spinner.getSelectedItem().toString().equals("Março")) {
-                        buscarBoletoPorMes("03/2023");
-                        dialog.dismiss();
-                        bottomSheetDialog.dismiss();
-                    }else if (spinner.getSelectedItem().toString().equals("Abril")) {
-                        buscarBoletoPorMes("04/2023");
-                        dialog.dismiss();
-                        bottomSheetDialog.dismiss();
-                    }else if (spinner.getSelectedItem().toString().equals("Maio")) {
-                        buscarBoletoPorMes("05/2023");
-                        dialog.dismiss();
-                        bottomSheetDialog.dismiss();
-                    }else if (spinner.getSelectedItem().toString().equals("Junho")) {
-                        buscarBoletoPorMes("06/2023");
-                        dialog.dismiss();
-                        bottomSheetDialog.dismiss();
-                    }else if (spinner.getSelectedItem().toString().equals("Julho")) {
-                        buscarBoletoPorMes("07/2023");
-                        dialog.dismiss();
-                        bottomSheetDialog.dismiss();
-                    }else if (spinner.getSelectedItem().toString().equals("Agosto")) {
-                        buscarBoletoPorMes("08/2023");
-                        dialog.dismiss();
-                        bottomSheetDialog.dismiss();
-                    }else if (spinner.getSelectedItem().toString().equals("Setembro")) {
-                        buscarBoletoPorMes("09/2023");
-                        dialog.dismiss();
-                        bottomSheetDialog.dismiss();
-                    }else if (spinner.getSelectedItem().toString().equals("Outubro")) {
-                        buscarBoletoPorMes("10/2023");
-                        dialog.dismiss();
-                        bottomSheetDialog.dismiss();
-                    }else if (spinner.getSelectedItem().toString().equals("Novembro")) {
-                        buscarBoletoPorMes("11/2023");
-                        dialog.dismiss();
-                        bottomSheetDialog.dismiss();
-                    }else if (spinner.getSelectedItem().toString().equals("Dezembro")) {
-                        buscarBoletoPorMes("12/2023");
-                        dialog.dismiss();
-                        bottomSheetDialog.dismiss();
-                    }
+                MonthYearPickerDialog dialog = new MonthYearPickerDialog(context, (MonthYearPickerDialog.DatePickerListener) (year, month) -> {
+                    String dataFormatada = String.format("%02d/%d", month + 1, year);
+                    buscarBoletoPorMes(dataFormatada);
                 });
 
                 dialog.show();

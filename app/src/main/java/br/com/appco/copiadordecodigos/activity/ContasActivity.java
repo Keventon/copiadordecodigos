@@ -6,23 +6,33 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import br.com.appco.copiadordecodigos.R;
+import br.com.appco.copiadordecodigos.controller.ConfiguracoesFirebase;
+import br.com.appco.copiadordecodigos.controller.UsuarioFirebase;
 import br.com.appco.copiadordecodigos.databinding.ActivityContasBinding;
 import br.com.appco.copiadordecodigos.fragment.ContasPagasFragment;
 import br.com.appco.copiadordecodigos.fragment.ContasPendentesFragment;
 import br.com.appco.copiadordecodigos.fragment.SobreFragment;
 import br.com.appco.copiadordecodigos.model.Usuario;
 import br.com.appco.copiadordecodigos.util.Base64Custom;
+import br.com.appco.copiadordecodigos.util.FirebaseHelper;
 
 public class ContasActivity extends AppCompatActivity {
 
     ActivityContasBinding binding;
+    private DatabaseReference firebaseRef = ConfiguracoesFirebase.getFirebase();
 
     private final Fragment
             fragmentContaPendente = new ContasPendentesFragment(),
@@ -74,6 +84,37 @@ public class ContasActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.frame_layout, fragment)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+    }
+
+    private void verificarAssinatura() {
+        DatabaseReference assinaturaRef = firebaseRef
+                .child("usuario")
+                .child(UsuarioFirebase.getIdentificadorUsuario())
+                .child("assinaturaPaga");
+        assinaturaRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                if (snapshot.exists()) {
+                    int assinatura = Integer.parseInt(snapshot.getValue().toString());
+
+                    if (assinatura == 0) {
+                        startActivity(new Intent(ContasActivity.this, AssinaturaActivity.class));
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        verificarAssinatura();
     }
 
     @Override
