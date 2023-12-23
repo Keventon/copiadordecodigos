@@ -2,6 +2,8 @@
     <string name="app_name">Minhas Contas</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="text_info_assinatura">Parece que você não pagou sua assinatura este mês. Entre em contato agora mesmo e regularize sua pendência para continuar usando o aplicativo normalmente.</string>
+    <string name="text_info_assinatura_observacao">Observação:\nAo clicar no botão, você será direcionado ao WhatsApp.</string>
 
 
     <string-array name="farmacias">
