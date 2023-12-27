@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.CadastroActivity">
+    tools:context=".activity.Cadastro3Activity">
 
     <View
         android:id="@+id/topView"
@@ -37,7 +37,7 @@
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.279"
+        app:layout_constraintHorizontal_bias="0.322"
         app:layout_constraintStart_toEndOf="@+id/imageVoltar"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -78,6 +78,8 @@
             android:layout_width="0dp"
             android:layout_marginEnd="4dp"
             android:layout_height="wrap_content"
+            android:progressTint="@color/verde"
+            android:progress="100"
             android:indeterminate="false"
             android:layout_weight="1" />
 
@@ -86,8 +88,10 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:indeterminate="false"
             android:layout_marginEnd="4dp"
+            android:progressTint="@color/verde"
+            android:progress="100"
+            android:indeterminate="false"
             android:layout_weight="1" />
 
         <ProgressBar
@@ -115,13 +119,13 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
         <EditText
-            android:id="@+id/editEndereco"
+            android:id="@+id/editNomeProprietario"
             style="@style/modifiedEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:background="@android:color/transparent"
-            android:hint="Endereço"
+            android:hint="Nome"
             android:inputType="textCapWords|textCapSentences"
             android:maxLines="5"
             android:paddingStart="30dp"
@@ -136,11 +140,11 @@
 
         <ImageView
             android:id="@+id/icone_endereco"
-            android:layout_width="31dp"
-            android:layout_height="32dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_centerVertical="true"
             android:layout_marginStart="16dp"
-            android:src="@drawable/ic_localizacao"
+            android:src="@drawable/ic_pessoa"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -163,14 +167,14 @@
         app:layout_constraintTop_toBottomOf="@+id/relativeLayoutCodigoBarra">
 
         <EditText
-            android:id="@+id/editNumEndereco"
+            android:id="@+id/editSobrenomeProprietario"
             style="@style/modifiedEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:background="@android:color/transparent"
-            android:hint="Nº Endereço"
-            android:inputType="number"
+            android:hint="Sobrenome"
+            android:inputType="textCapWords|textCapSentences"
             android:maxLines="5"
             android:paddingStart="30dp"
             android:paddingTop="20dp"
@@ -188,7 +192,7 @@
             android:layout_height="25dp"
             android:layout_centerVertical="true"
             android:layout_marginStart="16dp"
-            android:src="@drawable/ic_localizacao"
+            android:src="@drawable/ic_pessoa"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -211,13 +215,13 @@
         app:layout_constraintTop_toBottomOf="@+id/relativeLayoutNumEndereco">
 
         <EditText
-            android:id="@+id/editPontoReferencia"
+            android:id="@+id/editNomeLoja"
             style="@style/modifiedEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:background="@android:color/transparent"
-            android:hint="Ponto de referência"
+            android:hint="Nome da sua loja"
             android:inputType="textCapWords|textCapSentences"
             android:maxLines="5"
             android:paddingStart="30dp"
@@ -236,7 +240,56 @@
             android:layout_height="25dp"
             android:layout_centerVertical="true"
             android:layout_marginStart="16dp"
-            android:src="@drawable/ic_localizacao"
+            android:src="@drawable/ic_pessoa"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/relativeLayoutTelefone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:background="@drawable/blue_border_rounded_cornwe"
+        android:backgroundTint="@color/cinza_background"
+        android:padding="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayoutPontoReferencia">
+
+        <com.santalu.maskedittext.MaskEditText
+            android:id="@+id/editTelefone"
+            style="@style/modifiedEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:background="@android:color/transparent"
+            android:hint="Telefone para contato"
+            android:maxLines="5"
+            android:paddingStart="30dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:textCursorDrawable="@drawable/cursor_color_verde"
+            android:textSize="18sp"
+            android:inputType="number"
+            app:met_mask="+55 (##) #####-####"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/icone_telefone"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/icone_telefone"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_telefone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -247,13 +300,13 @@
         android:id="@+id/buttonCadastro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        app:textButton="Acessar"
+        android:layout_marginTop="24dp"
+        app:textButton="Continuar cadastro"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayoutPontoReferencia" />
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayoutTelefone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

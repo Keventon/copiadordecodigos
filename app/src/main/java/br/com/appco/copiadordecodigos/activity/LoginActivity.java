@@ -17,6 +17,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import br.com.appco.copiadordecodigos.R;
+import br.com.appco.copiadordecodigos.activity.components.ButtonMain;
+import br.com.appco.copiadordecodigos.activity.components.CustomAlertDialog;
 import br.com.appco.copiadordecodigos.controller.ConfiguracoesFirebase;
 import br.com.appco.copiadordecodigos.databinding.ActivityLoginBinding;
 import br.com.appco.copiadordecodigos.model.Usuario;
@@ -26,6 +28,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
     private FirebaseAuth autenticacao;
+    private ButtonMain buttonMain;
+    private CustomAlertDialog dialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +38,11 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         binding.progressBar.setVisibility(View.GONE);
+        buttonMain = binding.buttonAcessar;
 
         autenticacao = ConfiguracoesFirebase.getFirebaseAutenticacao();
 
-        binding.buttonAcessar.setOnClickListener(view -> {
+        buttonMain.binding.constrainLayout.setOnClickListener(view -> {
             binding.editCampoEmail.setClickable(false);
             binding.editCampoSenha.setClickable(false);
             recuperarCampos();
@@ -82,7 +87,23 @@ public class LoginActivity extends AppCompatActivity {
                 binding.editCampoEmail.setClickable(true);
                 binding.editCampoSenha.setClickable(true);
                 binding.progressBar.setVisibility(View.GONE);
-                Toast.makeText(this, "Email ou senha incorretos", Toast.LENGTH_SHORT).show();
+
+                dialog = new CustomAlertDialog(
+                        LoginActivity.this,
+                        R.drawable.warning_message_with_background,
+                        "Aviso",
+                        "Verifique se seu e-mail e senha estão corretos.",
+                        "Tentar novamente",
+                        "Voltar",
+                        false,
+                        R.drawable.button_custom_alert_button_orange,
+                        v -> dialog.dismiss(),
+                        v -> {
+
+                        }
+                );
+
+                dialog.show();
             }
         });
     }

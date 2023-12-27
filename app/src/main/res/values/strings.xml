@@ -16,6 +16,112 @@
 
     </string-array>
 
+    <string-array name="estado">
+        <item>PA</item>
+    </string-array>
+
+    <string-array name="bairrosBelem">
+        <item>Selecione um bairro</item>
+        <item>Aeroporto</item>
+        <item>Água Boa</item>
+        <item>Águas Lindas</item>
+        <item>Águas Negras</item>
+        <item>Agulha</item>
+        <item>Ariramba</item>
+        <item>Aurá</item>
+        <item>Baia do Sol</item>
+        <item>Barreiro</item>
+        <item>Batista Campos</item>
+        <item>Benguí</item>
+        <item>Bonfim</item>
+        <item>Brasília</item>
+        <item>Cabanagem</item>
+        <item>Campina(Comércio)</item>
+        <item>Campina de Icoaraci</item>
+        <item>Canudos</item>
+        <item>Carananduba</item>
+        <item>Caruara</item>
+        <item>Castanheira</item>
+        <item>Chapéu Virado</item>
+        <item>Cidade Velha</item>
+        <item>Condor</item>
+        <item>Coqueiro</item>
+        <item>Cremação</item>
+        <item>Cruzeiro</item>
+        <item>Curió-Utinga</item>
+        <item>Farol</item>
+        <item>Fátima(Matinha)</item>
+        <item>Guamá</item>
+        <item>Guanabara</item>
+        <item>Itaiteua</item>
+        <item>Jurunas</item>
+        <item>Mangueirão</item>
+        <item>Mangueiras</item>
+        <item>Maracacuera</item>
+        <item>Maracajá</item>
+        <item>Maracangalha</item>
+        <item>Marahú</item>
+        <item>Marambaia</item>
+        <item>Marco</item>
+        <item>Montese(Terra Firme)</item>
+        <item>Murubira</item>
+        <item>Natal do Murubira</item>
+        <item>Nazaré</item>
+        <item>Paracuri</item>
+        <item>Paraíso</item>
+        <item>Parque Guajará</item>
+        <item>Parque Verde</item>
+        <item>Pedreira</item>
+        <item>Ponta Grossa</item>
+        <item>Porto Arthur</item>
+        <item>Praia Grande</item>
+        <item>Pratinha</item>
+        <item>Reduto</item>
+        <item>Sacramenta</item>
+        <item>São Brás</item>
+        <item>São Clemente</item>
+        <item>São Francisco</item>
+        <item>São João de Outeiro</item>
+        <item>Souza</item>
+        <item>Sucurijuquara</item>
+        <item>Tapanã</item>
+        <item>Telégrafo</item>
+        <item>Umarizal</item>
+        <item>Una</item>
+        <item>Universitário</item>
+        <item>Val-de-Cães</item>
+        <item>Vila</item>
+    </string-array>
+
+    <string-array name="cidades">
+        <item>Selecione uma cidade</item>
+        <item>Belém</item>
+        <item>Cametá</item>
+    </string-array>
+
+    <string-array name="bairrosCameta">
+        <item>Selecione um bairro</item>
+        <item>Aldeia</item>
+        <item>Bairro Novo</item>
+        <item>Baixa Verde</item>
+        <item>Bom Sucesso</item>
+        <item>Brasília</item>
+        <item>Cametá Park</item>
+        <item>Casas na BR</item>
+        <item>Castanhal</item>
+        <item>Centro</item>
+        <item>Cidade Nova</item>
+        <item>Cinturão Verde</item>
+        <item>Marambaia</item>
+        <item>Matinha</item>
+        <item>Nova Cametá</item>
+        <item>Nova Esperança</item>
+        <item>Primavera</item>
+        <item>Santa Maria</item>
+        <item>São Benedito</item>
+        <item>Trigueiro</item>
+    </string-array>
+
     <string-array name="mesesDoAno">
 
         <item>Escolha um mês</item>

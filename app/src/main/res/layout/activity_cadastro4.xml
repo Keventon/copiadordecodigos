@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.CadastroActivity">
+    tools:context=".activity.Cadastro4Activity">
 
     <View
         android:id="@+id/topView"
@@ -78,6 +78,8 @@
             android:layout_width="0dp"
             android:layout_marginEnd="4dp"
             android:layout_height="wrap_content"
+            android:progressTint="@color/verde"
+            android:progress="100"
             android:indeterminate="false"
             android:layout_weight="1" />
 
@@ -86,6 +88,8 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:progressTint="@color/verde"
+            android:progress="100"
             android:indeterminate="false"
             android:layout_marginEnd="4dp"
             android:layout_weight="1" />
@@ -95,6 +99,8 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:progressTint="@color/verde"
+            android:progress="100"
             android:indeterminate="false"
             android:layout_weight="1" />
     </LinearLayout>
@@ -115,13 +121,13 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
         <EditText
-            android:id="@+id/editEndereco"
+            android:id="@+id/editEmail"
             style="@style/modifiedEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:background="@android:color/transparent"
-            android:hint="Endereço"
+            android:hint="Seu melhor e-mail"
             android:inputType="textCapWords|textCapSentences"
             android:maxLines="5"
             android:paddingStart="30dp"
@@ -140,7 +146,7 @@
             android:layout_height="32dp"
             android:layout_centerVertical="true"
             android:layout_marginStart="16dp"
-            android:src="@drawable/ic_localizacao"
+            android:src="@drawable/outline_email"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -162,25 +168,35 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayoutCodigoBarra">
 
-        <EditText
-            android:id="@+id/editNumEndereco"
-            style="@style/modifiedEditText"
-            android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:background="@android:color/transparent"
-            android:hint="Nº Endereço"
-            android:inputType="number"
-            android:maxLines="5"
-            android:paddingStart="30dp"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
-            android:textCursorDrawable="@drawable/cursor_color_verde"
-            android:textSize="18sp"
+            app:hintEnabled="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/_icone_codigo_barra"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:passwordToggleEnabled="true">
+
+            <EditText
+                android:id="@+id/editSenha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/senha_icone"
+                android:background="@android:color/transparent"
+                android:hint="Senha"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:minLines="1"
+                android:paddingStart="30dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="20dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="20dp"
+                android:textCursorDrawable="@drawable/cursor_color"
+                android:textSize="17sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
             android:id="@+id/_icone_codigo_barra"
@@ -188,7 +204,7 @@
             android:layout_height="25dp"
             android:layout_centerVertical="true"
             android:layout_marginStart="16dp"
-            android:src="@drawable/ic_localizacao"
+            android:src="@drawable/outline_lock"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -210,25 +226,35 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayoutNumEndereco">
 
-        <EditText
-            android:id="@+id/editPontoReferencia"
-            style="@style/modifiedEditText"
-            android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:background="@android:color/transparent"
-            android:hint="Ponto de referência"
-            android:inputType="textCapWords|textCapSentences"
-            android:maxLines="5"
-            android:paddingStart="30dp"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
-            android:textCursorDrawable="@drawable/cursor_color_verde"
-            android:textSize="18sp"
+            app:hintEnabled="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/icone_ponto_referencia"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:passwordToggleEnabled="true">
+
+            <EditText
+                android:id="@+id/editConfirmarSenha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/senha_icone"
+                android:background="@android:color/transparent"
+                android:hint="Confirme sua senha"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:minLines="1"
+                android:paddingStart="30dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="20dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="20dp"
+                android:textCursorDrawable="@drawable/cursor_color"
+                android:textSize="17sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
             android:id="@+id/icone_ponto_referencia"
@@ -236,7 +262,7 @@
             android:layout_height="25dp"
             android:layout_centerVertical="true"
             android:layout_marginStart="16dp"
-            android:src="@drawable/ic_localizacao"
+            android:src="@drawable/outline_lock"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -248,9 +274,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="52dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        app:textButton="Acessar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

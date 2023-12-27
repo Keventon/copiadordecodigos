@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="ButtonBackground">
+
+        <attr name="textButton" format="string"/>
+        <attr name="enabledButton" format="boolean"/>
+        <attr name="isVisible" format="boolean"/>
+
+    </declare-styleable>
+
+    <declare-styleable name="CustomAlertButton">
+
+        <attr name="textCustomButton" format="string"/>
+        <attr name="backgroundColorButton" format="reference"/>
+        <attr name="isVisibleCustomButton" format="boolean"/>
+
+    </declare-styleable>
+
+    <declare-styleable name="CustomTextInput">
+
+        <attr name="hintText" format="string"/>
+        <attr name="textInput" format="string"/>
+        <attr name="icon" format="reference"/>
+        <attr name="isVisibleIcon" format="boolean"/>
+        <attr name="borderEditText" format="reference"/>
+
+    </declare-styleable>
+
+</resources>

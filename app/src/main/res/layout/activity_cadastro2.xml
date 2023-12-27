@@ -20,24 +20,24 @@
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
         android:src="@drawable/ic_voltar_24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView12"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView12"
         app:tint="@color/white" />
 
     <TextView
         android:id="@+id/textView12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="32dp"
         android:gravity="start"
         android:text="Realize seu cadastro"
         android:textColor="@color/white"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.203"
+        app:layout_constraintHorizontal_bias="0.296"
         app:layout_constraintStart_toEndOf="@+id/imageVoltar"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -49,6 +49,57 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topView" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view2">
+
+        <ProgressBar
+            android:id="@+id/progressBar1"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:progressTint="@color/verde"
+            android:progress="100"
+            android:indeterminate="false"
+            android:layout_weight="1" />
+
+        <ProgressBar
+            android:id="@+id/progressBar2"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_marginEnd="4dp"
+            android:layout_height="wrap_content"
+            android:progressTint="@color/verde"
+            android:progress="100"
+            android:indeterminate="false"
+            android:layout_weight="1" />
+
+        <ProgressBar
+            android:id="@+id/progressBar3"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:indeterminate="false"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1" />
+
+        <ProgressBar
+            android:id="@+id/progressBar4"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:indeterminate="false"
+            android:layout_weight="1" />
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/relativeLayoutCodigoBarra"
@@ -63,7 +114,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view2">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
         <Spinner
             android:id="@+id/spinnerCidade"
@@ -193,18 +244,14 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <Button
+    <br.com.appco.copiadordecodigos.activity.components.ButtonMain
         android:id="@+id/buttonContinuarCadastro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:textButton="Continuar cadastro"
         android:layout_marginTop="52dp"
-        android:background="@drawable/button_background"
-        android:text="Continuar cadastro"
-        android:textColor="@color/white"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        android:textAllCaps="false"
-        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
